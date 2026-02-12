@@ -10,7 +10,7 @@ This file defines the strict rules for organizing folders, explaining technical 
 ## 📁 1. Folder & File Organization Rules
 - **Naming Convention**: All active script files must follow the numbering pattern: `[Section.Sub-section]_filename.py` (e.g., `[1.1]_Embeddings.py`).
 - **README per Week**: Every week folder must contain a `README.md` that serves as the "source of truth" for that unit.
-- **MMD Files**: Every week should have at least one Mermaid (`.mmd`) file explaining the core architecture or the specific script logic.
+- **MMD Files**: Every week should have at least one Mermaid (`.mmd`) file explaining the core архитекure or the specific script logic.
 
 ## 📚 2. Topic Explanation Rules (The "Jargon" Rule)
 When explaining a new technical concept or "jargon," follow this 3-step structure used in Week 4:
@@ -31,7 +31,23 @@ When explaining a new technical concept or "jargon," follow this 3-step structur
 **Standard Jargon List to maintain:**
 - Chunking, Embeddings, Cosine Similarity, Top-K, Vector DBs, Semantic Caching, RAG Pipelines.
 
+## 📝 2.1 The Explanation Format (The Walkthrough Rule)
+When explaining a complex Mermaid diagram or architecture flow, ALWAYS use the following structure:
+1. **Step-by-Step Breakdown**: Number each logical phase (e.g., 1. Pre-processing, 2. Retrieval).
+2. **Component Function**: Explain exactly what that specific node/block does in the AI context.
+3. **The DE Equivalent**: Explicitly map the AI concept to a Data Engineering concept (e.g., "Like a B-Tree Index" or "Like a Window Function").
+4. **Conclusion/Why**: Briefly state the benefit of this specific architecture (e.g., "Ensures data quality" or "Optimizes for cost").
+
+
 ## 🎨 3. Mermaid Diagram Design Standards
+
+### Best Practices for Mermaid Syntax (CRITICAL)
+1.  **Use `flowchart TD`**: Prefer `flowchart` over `graph` for better subgraph and direction support.
+2.  **Quote Node Labels**: ALWAYS quote node labels that contain whitespace or special characters (especially parentheses).
+    *   ❌ `Node(Label (Text))` -> Syntax Error
+    *   ✅ `Node["Label (Text)"]` -> Correct
+3.  **Separate Styling**: Define styles in a separate block at the end using `class NodeName ClassName`, rather than inline `:::ClassName` which can cause parser issues.
+4.  **Direction in Subgraphs**: Explicitly use `direction TB` (Top-Bottom) inside subgraphs if vertical layout is needed.
 
 ### Color Palette
 - **Logic/Prompt/Decision**: `#2d3436` (Charcoal) -> `:::logic`
@@ -60,3 +76,37 @@ All diagrams must optionally (strongly encouraged for complex agents) include a 
 3.  **Style**: Use a white background for the specific stack node to differentiate it from the logic flow.
 4.  **DE Metaphors**: When applicable, explicitly mention the Data Engineering equivalent in the node label using the format: `(like [Tool] in DE)`.
     *   Example: `<b>ChromaDB</b><br/>Vector DB (like Snowflake in DE)`
+
+## 🔗 4. Script-to-Architecture Mapping Rule (The Traceability Rule)
+
+Every Python script MUST be explicitly linked to its corresponding architecture component in **both** the Mermaid diagram and the README.
+
+### 4.1 In Mermaid Diagrams (`.mmd` files)
+1.  **Script Nodes**: Add a dedicated node for each script inside the `Tech_Stack` subgraph.
+    *   Format: `ScriptName["<b>[X.Y]_filename.py</b><br/>Brief description"]`
+2.  **Visual Mapping**: Use dashed arrows (`-.->`) to connect each script node to the subgraph or node it implements.
+    *   Example: `HybridScript -.-> Hybrid_Search`
+
+```mermaid
+    subgraph Tech_Stack [Technology Stack & Script Mapping]
+        HybridScript["<b>[1.0]_hybrid_search.py</b><br/>Implements BM25 + Vector Search"]
+        AgentScript["<b>[4.0]_rag_agent.py</b><br/>Orchestrates Entire Pipeline"]
+    end
+    HybridScript -.-> Hybrid_Search
+    AgentScript -.-> Start
+```
+
+### 4.2 In README Files (`README.md`)
+1.  **"Implemented in" Tag**: Every Architecture Breakdown section header MUST include a bold `**Implemented in:**` line pointing to the script file.
+2.  **Format**:
+    ```markdown
+    ### 1. Hybrid Search (The Search Engine)
+    **Implemented in:** `[1.0]_hybrid_search.py`
+    Description of the component...
+    ```
+3.  **Orchestrator Script**: If one script combines all components, add a final section titled "The Orchestrator" mapping it.
+
+### Why This Rule Exists
+- **Traceability**: Anyone reading the README can immediately jump to the relevant code.
+- **Onboarding**: New readers understand which file does what without digging through code.
+- **DE Equivalent**: Like a **Data Lineage Graph** (e.g., dbt docs, Atlan) that maps transformations back to their source models.

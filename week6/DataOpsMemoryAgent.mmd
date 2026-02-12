@@ -1,40 +1,29 @@
 flowchart TD
-    %% Global Graph Configuration
+    %% Input Layer
+    Start(["Pipeline Failure Event"]) --> InputData["<b>Failure Metadata</b><br/>Error Msg, Stack Trace,<br/>Table Names"]
 
-    %% --- Section 1: Technology Stack Reference ---
-    subgraph Tech_Stack [System Technology Stack]
-        Stack1["<b>scikit-learn</b><br/>Vectorization & Similarity<br/>(like Spark ML in DE)"]:::process
-        Stack2["<b>Python Dict/Pickle</b><br/>State Storage<br/>(like Redis in DE)"]:::storage
-        Stack3["<b>Custom Logic</b><br/>Pattern Matching<br/>(like UDFs in DE)"]:::logic
-    end
-
-    %% --- Section 2: Input Flow ---
-    subgraph Input_Flow [Input Data]
-        Start([Pipeline Failure Event]):::user
-        InputData["<b>Failure Metadata</b><br/>Error Msg, Stack Trace,<br/>Table Names"]:::storage
-    end
-
-    %% --- Section 3: Core Agent Logic ---
+    %% Core Agent Logic Subgraph
     subgraph Agent_Core [DataOps Memory Agent]
         direction TB
         
         %% Vectorization Step
-        Vectorize["<b>TF-IDF Vectorization</b><br/>Convert text to embeddings"]:::process
+        Vectorize["TF-IDF Vectorization<br/>(Text to Embeddings)"]
         
         %% Memory Interaction
         subgraph Memory_System [Vector Memory System]
-            Storage[("<b>Long-term Memory</b><br/>Stored Failures")]:::storage
-            Search["<b>Semantic Search</b><br/>Find Top-k Similar Failures"]:::logic
+            direction LR
+            Storage[("Long-term Memory<br/>(Stored Failures)")]
+            Search["Semantic Search<br/>(Find Top-k Similar)"]
         end
         
         %% Analysis
-        Classify["<b>Error Classifier</b><br/>Schema, Timeout, DQ, etc."]:::process
-        Pattern["<b>Pattern Recognition</b><br/>Detect Recurring Issues"]:::logic
-        Suggest["<b>Remediation Engine</b><br/>Generate Fixes"]:::process
+        Classify["Error Classifier<br/>(Schema, Timeout, DQ, etc.)"]
+        Pattern["Pattern Recognition<br/>(Detect Recurring Issues)"]
+        Suggest["Remediation Engine<br/>(Generate Fixes)"]
     end
 
-    %% --- Section 4: Output ---
-    End([<b>Actionable Alerts</b><br/>Root Cause & Suggestions]):::user
+    %% Output Layer
+    End(["<b>Actionable Alerts</b><br/>Root Cause & Suggestions"])
 
     %% Connections
     Start --> InputData
@@ -47,17 +36,34 @@ flowchart TD
     Pattern --> Suggest
     Suggest --> End
 
+    %% Technology Stack & Script Mapping
+    subgraph Tech_Stack [Technology Stack & Script Mapping]
+        Stack1["<b>scikit-learn</b><br/>Vectorization & Similarity (like Spark ML in DE)"]
+        Stack2["<b>Python Dict/Pickle</b><br/>State Storage (like Redis in DE)"]
+        Stack3["<b>Custom Logic</b><br/>Pattern Matching (like UDFs in DE)"]
+        CoreScript["<b>dataops_memory_agent.py</b><br/>Core Agent Logic"]
+        TestScript["<b>test_agent.py</b><br/>Golden Dataset Validation"]
+        DemoScript["<b>demo_agent.py</b><br/>Interactive Scenarios"]
+    end
+
     %% Tech Stack Connections
     Stack1 -.-> Vectorize
     Stack1 -.-> Search
     Stack2 -.-> Storage
     Stack3 -.-> Classify
 
-    %% Styling to match Subgraphs
+    %% Script-to-Architecture Mapping
+    CoreScript -.-> Agent_Core
+    TestScript -.-> End
+    DemoScript -.-> Start
+
+    %% Apply Styles
+    class Start,End user
+    class Vectorize,Classify,Suggest process
+    class Storage,InputData storage
+    class Search,Pattern logic
+
     style Tech_Stack fill:#fff,stroke:#2d3436,stroke-width:1px,color:#2d3436
-    style Input_Flow fill:#f1f2f6,stroke:#2f3542,stroke-width:1px,color:#2d3436
-    style Agent_Core fill:#f1f2f6,stroke:#2f3542,stroke-width:1px,color:#2d3436
-    style Memory_System fill:#dfe6e9,stroke:#b2bec3,stroke-width:1px,color:#2d3436
 
     %% Global Style Block
     classDef logic fill:#2d3436,stroke:#dfe6e9,stroke-width:2px,color:#fff

@@ -1,33 +1,26 @@
 flowchart TD
-    %% Global Graph Configuration
+    %% Input Layer
+    Config["Configuration<br/>(size, overlap, model)"]
+    Doc["Raw Document Text"]
     
-    %% --- Section 1: Technology Stack Reference ---
-    subgraph Tech_Stack [System Technology Stack]
-        Stack1["<b>Sentence Transformers</b><br/>Embeddings (like Encoding in DE)"]:::process
-        Stack2["<b>Numpy & Pandas</b><br/>Data Handling (like Pandas in DE)"]:::logic
-        Stack3["<b>Matplotlib</b><br/>Visual Scorecard (like Tableau in DE)"]:::user
-    end
-
-    %% --- Section 2: Input & Config ---
-    Config["fa:fa-cog Configuration<br/>(size, overlap, model)"]:::logic
-    Doc["fa:fa-file-alt Raw Document Text"]:::user
-    
-    %% --- Section 3: Strategies ---
-    subgraph Strategies ["fa:fa-layer-group Chunking Strategies"]
-        Fixed["fa:fa-border-all Fixed Size<br/>(Sliding Window)"]:::process
-        Sentence["fa:fa-align-left Sentence Based<br/>(Boundary Aware)"]:::process
-        Section["fa:fa-sitemap Section Based<br/>(Header Aware)"]:::process
-        Semantic["fa:fa-brain Semantic Similarity<br/>(Meaning Based)"]:::process
+    %% Strategies Subgraph
+    subgraph Strategies ["Chunking Strategies"]
+        direction TB
+        Fixed["Fixed Size<br/>(Sliding Window)"]
+        Sentence["Sentence Based<br/>(Boundary Aware)"]
+        Section["Section Based<br/>(Header Aware)"]
+        Semantic["Semantic Similarity<br/>(Meaning Based)"]
     end
     
-    %% --- Section 4: Engine ---
-    subgraph Processing ["fa:fa-cogs Engine"]
-        Validate["fa:fa-check-double Validation Engine<br/>(Quality Scoring)"]:::process
-        Embed["fa:fa-project-diagram Embedding Engine<br/>(Sentence Transformers)"]:::process
+    %% Processing Subgraph
+    subgraph Processing ["Processing Engine"]
+        direction TB
+        Validate["Validation Engine<br/>(Quality Scoring)"]
+        Embed["Embedding Engine<br/>(Sentence Transformers)"]
     end
     
-    Retrieve["fa:fa-search Retrieval Test<br/>(Finding Answers)"]:::logic
-    Output["fa:fa-chart-bar Visual Scorecard<br/>(Performance Report)"]:::user
+    Retrieve["Retrieval Test<br/>(Finding Answers)"]
+    Output["Visual Scorecard<br/>(Performance Report)"]
 
     %% Connections
     Config --> Strategies
@@ -40,15 +33,29 @@ flowchart TD
     Embed --> Retrieve
     Retrieve --> Output
 
-    %% Visual Connections between Stack and Logic
+    %% Technology Stack & Script Mapping
+    subgraph Tech_Stack [Technology Stack & Script Mapping]
+        Stack1["<b>Sentence Transformers</b><br/>Embeddings (like Encoding in DE)"]
+        Stack2["<b>Numpy & Pandas</b><br/>Data Handling (like Pandas in DE)"]
+        Stack3["<b>Matplotlib</b><br/>Visual Scorecard (like Tableau in DE)"]
+        ChunkScript["<b>[0.1]_chunk_system.py</b><br/>Chunking & Validation"]
+    end
+
+    %% Visual Connections
     Stack1 -.-> Embed
     Stack2 -.-> Validate
     Stack3 -.-> Output
 
-    %% Styling to match Subgraphs
+    %% Script-to-Architecture Mapping
+    ChunkScript -.-> Strategies
+    ChunkScript -.-> Processing
+
+    %% Apply Styles
+    class Config,Retrieve logic
+    class Doc,Output user
+    class Fixed,Sentence,Section,Semantic,Validate,Embed process
+
     style Tech_Stack fill:#fff,stroke:#2d3436,stroke-width:1px,color:#2d3436
-    style Strategies fill:#f1f2f6,stroke:#2f3542,stroke-width:1px,color:#2d3436
-    style Processing fill:#f1f2f6,stroke:#2f3542,stroke-width:1px,color:#2d3436
 
     %% Global Style Block
     classDef logic fill:#2d3436,stroke:#dfe6e9,stroke-width:2px,color:#fff

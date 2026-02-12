@@ -12,6 +12,34 @@ This script demonstrates an **Enhanced Chunking Strategy** that goes beyond simp
 - **Table Preservation:** Converts tables to Markdown to maintain their semantic structure for better RAG performance.
 - **Contextual Retrieval:** Uses sentence embeddings to find relevant chunks and applies "boosts" to specific types (like tables) when the query asks for data.
 
+## 🏗️ Architecture Breakdown
+
+### 1. Advanced Parsing (Multi-Modal Ingestion)
+**Implemented in:** `[1.1]_advancedchunkingsystem.py`
+Instead of treating a document as an blob of text, we identify its constituent parts.
+- **LlamaParse/Unstructured**: Extracts specialized elements like **Tables**, **Headers**, and **Images**.
+- **DE Equivalent**: Like an **ETL Ingestion Framework** that handles different source formats (Parquet, Avro, JSON) and extracts structured schemas from them.
+
+### 2. Element-Aware Chunking (Transformation)
+**Implemented in:** `[0.1]_chunk_system.py`
+We apply different rules based on the element type.
+- **Table Handling**: Tables are converted to Markdown/JSON to preserve row-column relationships.
+- **Narrative Text**: Chunks are split at sentence boundaries to maintain context.
+- **DE Equivalent**: Like **Data Partitioning** where you split data into partitions (e.g., by Date or Region) to optimize query performance and maintain logical grouping.
+
+### 3. Chunk Validation & Scoring (Quality Assurance)
+**Implemented in:** `[0.1]_chunk_system.py`
+We evaluate the quality of our segments before indexing.
+- **Chunk Quality Engine**: Measures if a chunk has enough information or if it's just "noise."
+- **DE Equivalent**: Like **Data Quality Hooks (DQ Checks)** that validate schema integrity and business rules before data reaches the warehouse.
+
+### 4. Contextual Boosting (Retrieval Optimization)
+**Implemented in:** `[1.1]_advancedchunkingsystem.py`
+We help the system find the *right* kind of data.
+- **Relevance Boosting**: If a query looks for numerical data, we boost the score of "Table" elements.
+- **DE Equivalent**: Like a **Predicated Pushdown** or **Index HINT** that tells the database engine to prioritize specific partitions for faster data retrieval.
+
+
 ---
 
 ## 📚 Jargons & Concepts

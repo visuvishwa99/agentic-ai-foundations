@@ -1,0 +1,77 @@
+graph TD
+    %% User Interaction
+    Start([User Query]) --> QueryEnhancer{Query Enhancement}
+
+    %% Subgraph: Query Enhancement
+    subgraph Query_Enhancement [Query Pre-processing]
+        QueryEnhancer -- HyDE --> HypoDocs[Hypothetical Documents]
+        QueryEnhancer -- Query Decomposition --> SubQueries[Sub-Queries]
+    end
+
+    HypoDocs --> Embedding(Embedding Model)
+    SubQueries --> Embedding
+
+    %% Subgraph: Hybrid Search
+    subgraph Hybrid_Search [Hybrid Search Retrieval]
+        Embedding --> VectorRetriever["Vector Retriever (Semantic)"]
+        Start --> KeywordRetriever["BM25 Retriever (Keyword)"]
+        
+        VectorRetriever --> RetrievedDocs[Retrieved Documents]
+        KeywordRetriever --> RetrievedDocs
+    end
+
+    %% Subgraph: Reranking
+    subgraph Reranking [Reranking & Filtering]
+        RetrievedDocs --> Reranker{"Cross-Encoder / Cohere Reranker"}
+        Reranker --> TopKDocs[Top-K Re-ranked Documents]
+    end
+
+    %% Subgraph: Generation & Validation
+    subgraph Generation [Answer Generation]
+        TopKDocs --> LLM("LLM Context")
+        Start --> LLM
+        LLM --> PydanticValidator{"Pydantic Validation"}
+        PydanticValidator -- Valid --> Output([Structured Output])
+        PydanticValidator -- Invalid --> Retry(Retry Logic)
+        Retry --> LLM
+    end
+
+    %% Tech Stack Subgraph (Optional but recommended)
+    %% Subgraph: Technology Stack & Scripts
+    subgraph Tech_Stack [Technology Stack & Script Mapping]
+        direction TB
+        HybridScript["<b>[1.0]_hybrid_search.py</b><br/>Implements BM25 + Vector Search"]:::process
+        RerankScript["<b>[2.0]_reranking.py</b><br/>Implements Cross-Encoder Scoring"]:::process
+        StructScript["<b>[3.0]_structured_output.py</b><br/>Implements JSON/Pydantic"]:::process
+        AgentScript["<b>[4.0]_rag_agent.py</b><br/>Orchestrates Entire Pipeline"]:::process
+        
+        LangChain(LangChain/LangGraph) -.-> QueryEnhancer
+        Chroma(ChromaDB/FAISS) -.-> VectorRetriever
+        BM25(BM25) -.-> KeywordRetriever
+        Cohere(Cohere/HuggingFace) -.-> Reranker
+        Pydantic(Pydantic) -.-> PydanticValidator
+    end
+
+    %% Map Scripts to Logic Flow
+    HybridScript -.-> Hybrid_Search
+    RerankScript -.-> Reranking
+    StructScript -.-> PydanticValidator
+    AgentScript -.-> Start
+    AgentScript -.-> Output
+
+
+    %% Connect Tech Stack to Logic Flow
+    style Tech_Stack fill:#fff,stroke:#333,stroke-dasharray: 5 5
+
+    %% Apply Classes
+    class Start,Output user
+    class VectorRetriever,KeywordRetriever storage
+    class QueryEnhancer,HypoDocs,SubQueries,Embedding,Reranker,LLM,Retry process
+    class RetrievedDocs,TopKDocs,PydanticValidator logic
+
+    %% Global Style Block
+    classDef logic fill:#2d3436,stroke:#dfe6e9,stroke-width:2px,color:#fff
+    classDef storage fill:#0984e3,stroke:#74b9ff,stroke-width:2px,color:#fff
+    classDef process fill:#6c5ce7,stroke:#a29bfe,stroke-width:2px,color:#fff
+    classDef user fill:#00b894,stroke:#55efc4,stroke-width:2px,color:#fff
+    classDef group fill:#f1f2f6,stroke:#2f3542,stroke-width:1px,color:#2d3436

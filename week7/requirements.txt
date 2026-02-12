@@ -1,0 +1,10 @@
+langchain
+langchain-community
+langchain-ollama
+faiss-cpu
+chromadb
+rank_bm25
+pydantic
+sentence-transformers
+cohere
+tiktoken

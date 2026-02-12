@@ -13,6 +13,33 @@ This script implements a **Stateful Monitoring Agent** using **LangGraph**. Unli
 -   **Resilience:** Includes a retry counter to handle transient failures before escalating.
 -   **Observability:** Integrated with **LangSmith** for full trace visibility of the agent's "thought process."
 
+## 🏗️ Architecture Breakdown
+
+### 1. Cyclic Graph (The Orchestration)
+**Implemented in:** `AlertingAgent.py`
+Unlike linear pipelines, agents often need to revisit previous steps based on tool outputs.
+- **LangGraph**: Manages the state and transitions between nodes (Reasoning → Tool Execution → Condition → Reasoning).
+- **DE Equivalent**: Like **Airflow or Dagster** managing a complex DAG with conditional branches (`BranchPythonOperator`) and retries.
+
+### 2. Tool Binding (The Connectivity)
+**Implemented in:** `AlertingAgent.py`
+The LLM is connected to external systems to perform actions.
+- **Function Calling**: The model decides *which* tool to use and *what* arguments to pass.
+- **DE Equivalent**: Like a **Service Connection (Hook)** in Airflow that allows a DAG to securely connect to Snowflake, S3, or Slack.
+
+### 3. Agent State (The Persistence)
+**Implemented in:** `AlertingAgent.py`
+A shared memory object that stores the context of the current run.
+- **TypedDict State**: Captures `log_content`, `job_id`, and `retry_count`.
+- **DE Equivalent**: Like **XComs** in Airflow or **Context** in Dagster; used to pass metadata between different tasks in a pipeline.
+
+### 4. Router Logic (The Control Flow)
+**Implemented in:** `AlertingAgent.py`
+Determines whether to continue looping or terminate the run.
+- **Conditional Edges**: Logic checks if the LLM called a tool or if it finalizes the response.
+- **DE Equivalent**: Like a **CASE statement** in SQL or an `if-else` block in an Airflow `PythonOperator` that determines the downstream task.
+
+
 ---
 
 ## 📚 Jargons & Concepts

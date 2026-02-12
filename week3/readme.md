@@ -5,9 +5,34 @@ This project explores the foundations of modern AI applications, focusing on how
 ## 🗺️ System Architecture
 The following diagram illustrates the workflow from user query to cached results or a full RAG pipeline:
 
-```mermaid
 [Refer to week3_architecture.mmd]
-```
+
+## 🏗️ Architecture Breakdown
+
+### 1. Semantic Caching (The Fast Path)
+**Implemented in:** `[3.1]_semantic_cache.py`
+Before performing a full search, we check if a similar question has been asked recently.
+- **Semantic Cache**: Uses vector similarity to reuse previous answers even if the query isn't an exact match.
+- **DE Equivalent**: Like a **Materialized View** or a **TTL-based Cache** (Redis) that stores pre-calculated results for expensive join queries.
+
+### 2. Vectorization & Embedding
+**Implemented in:** `[1.1]_Cosine_Similarity.py`, `[1.2]_Embeddings.py`, `[1.3]_vector.py`
+We transform raw text into numerical representation.
+- **Embedding Model**: Encodes semantic meaning into a high-dimensional vector.
+- **DE Equivalent**: Like **Data Encoding** or **Hashing** specifically designed for similarity rather than exact matching.
+
+### 3. Vector Search (The Retrieval)
+**Implemented in:** `[2.1]_FAISS.py`, `[2.2]_chromeDB.py`
+We search our databases for the most relevant pieces of information.
+- **FAISS/ChromaDB**: Efficient high-dimensional indexing for similarity search.
+- **DE Equivalent**: Like a **Database Index** optimized for `JOIN` operations across massive tables, but using distance metrics instead of primary keys.
+
+### 4. RAG Pipeline (The Orchestrator)
+**Implemented in:** `[4.1]_capstone_RAG.py`
+We combine user intent with retrieved data to produce a grounded answer.
+- **Augmented Prompt**: Merges the User Query + Retrieved Documents.
+- **DE Equivalent**: Like a **Data Enrichment (Lookup)** step in an ETL pipeline where a source record is joined with master data before final loading.
+
 
 ## 🚀 Key Components (Sorted)
 

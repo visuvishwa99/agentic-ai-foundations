@@ -1,55 +1,62 @@
 flowchart TD
-    %% Global Graph Configuration
-    
-    %% --- Section 1: Technology Stack Reference ---
-    subgraph Tech_Stack [System Technology Stack]
-        Stack1["<b>LlamaParse</b><br/>PDF Parsing (like OCR in DE)"]:::process
-        Stack2["<b>Unstructured.io</b><br/>Universal Parsing (like Ingestion in DE)"]:::process
-        Stack3["<b>ChromaDB</b><br/>Vector DB (like Snowflake in DE)"]:::storage
-    end
-
-    %% --- Section 2: Ingestion Pipeline ---
+    %% Ingestion Pipeline Subgraph
     subgraph Ingestion [Ingestion Pipeline]
-        Input([Input Document]):::user --> DocType{Document Type?}:::logic
+        direction TB
+        Input(["Input Document"]) --> DocType{"Document Type?"}
         
-        DocType -->|PDF with tables| Parser1[LlamaParse]:::process
-        DocType -->|Word/HTML| Parser2[Unstructured.io]:::process
-        DocType -->|Image/Scan| Parser3[Unstructured + OCR]:::process
+        DocType -->|PDF with tables| Parser1["LlamaParse"]
+        DocType -->|Word/HTML| Parser2["Unstructured.io"]
+        DocType -->|Image/Scan| Parser3["Unstructured + OCR"]
         
-        Parser1 --> Struct[Structured Output]:::storage
+        Parser1 --> Struct["Structured Output"]
         Parser2 --> Struct
         Parser3 --> Struct
         
-        Struct --> ElemType{Element Type?}:::logic
+        Struct --> ElemType{"Element Type?"}
         
-        ElemType -->|Text| C1[Text Chunks]:::storage
-        ElemType -->|Table| C2[Table as JSON/MD]:::storage
-        ElemType -->|Image| C3[Image + Caption]:::storage
+        ElemType -->|Text| C1["Text Chunks"]
+        ElemType -->|Table| C2["Table as JSON/MD"]
+        ElemType -->|Image| C3["Image + Caption"]
         
-        C1 --> ChunkSys[Chunking System]:::process
+        C1 --> ChunkSys["Chunking System"]
         C2 --> ChunkSys
         C3 --> ChunkSys
         
-        ChunkSys --> Embed[Embedded Chunks]:::storage
-        Embed --> VDB[(Vector Database)]:::storage
+        ChunkSys --> Embed["Embedded Chunks"]
+        Embed --> VDB[("Vector Database")]
     end
     
-    %% --- Section 3: Retrieval ---
+    %% Retrieval flow Subgraph
     subgraph Retrieval_Flow [Retrieval Flow]
-        Query([User Query]):::user --> Retrieve[Retrieval Engine]:::process
+        direction TB
+        Query(["User Query"]) --> Retrieve["Retrieval Engine"]
         VDB --> Retrieve
-        Retrieve --> Result([Relevant Context]):::user
+        Retrieve --> Result(["Relevant Context"])
     end
 
-    %% Visual Connections between Stack and Logic
+    %% Technology Stack & Script Mapping
+    subgraph Tech_Stack [Technology Stack & Script Mapping]
+        Stack1["<b>LlamaParse</b><br/>PDF Parsing (like OCR in DE)"]
+        Stack2["<b>Unstructured.io</b><br/>Universal Parsing (like Ingestion in DE)"]
+        Stack3["<b>ChromaDB</b><br/>Vector DB (like Snowflake in DE)"]
+        AdvScript["<b>[1.1]_advancedchunkingsystem.py</b><br/>Advanced Parsing & Boosting"]
+    end
+
+    %% Visual Connections
     Stack1 -.-> Parser1
     Stack2 -.-> Parser2
     Stack3 -.-> VDB
 
-    %% Styling to match Subgraphs
+    %% Script-to-Architecture Mapping
+    AdvScript -.-> Ingestion
+
+    %% Apply Styles
+    class Input,Result,Query user
+    class DocType,ElemType logic
+    class Parser1,Parser2,Parser3,ChunkSys,Retrieve process
+    class Struct,C1,C2,C3,Embed,VDB storage
+    
     style Tech_Stack fill:#fff,stroke:#2d3436,stroke-width:1px,color:#2d3436
-    style Ingestion fill:#f1f2f6,stroke:#2f3542,stroke-width:1px,color:#2d3436
-    style Retrieval_Flow fill:#f1f2f6,stroke:#2f3542,stroke-width:1px,color:#2d3436
 
     %% Global Style Block
     classDef logic fill:#2d3436,stroke:#dfe6e9,stroke-width:2px,color:#fff

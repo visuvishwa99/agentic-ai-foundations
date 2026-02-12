@@ -1,53 +1,60 @@
 flowchart TD
-    %% Global Graph Configuration
+    %% Start Interaction
+    Start(["Start Monitoring"]) --> AgentNode["Agent Reasoning<br/>(ChatOllama)"]
     
-    %% --- Section 1: Technology Stack Reference ---
-    subgraph Tech_Stack [System Technology Stack]
-        Stack1["<b>LangGraph</b><br/>Complex Agents & Loops<br/>(like Airflow in DE)"]:::logic
-        Stack2["<b>LangSmith</b><br/>Observability & Tracing<br/>(like DataDog in DE)"]:::storage
-        Stack3["<b>LangChain</b><br/>Linear Chains & Integrations<br/>(like Pandas in DE)"]:::process
-    end
-
-    %% --- Section 2: Agent State (Memory) ---
-    subgraph State_Schema [State Schema - <b>TypedDict</b>]
-        StateItems["<b>State Keys:</b><br/>Messages, Logs Content,<br/>Job Status, Retry Count"]:::storage
-    end
-
-    %% --- Section 3: Cyclic Workflow ---
-    subgraph Agent_Loop [Workflow - Powered by <b>LangGraph</b>]
-        Start([Start Monitoring]):::user --> AgentNode["Agent Reasoning<br/>(<b>ChatOllama</b>)"]:::process
+    %% Cyclic Workflow Subgraph
+    subgraph Agent_Loop [Workflow - Powered by LangGraph]
+        direction TB
+        AgentNode --> Router{"Tool Call?"}
         
-        AgentNode --> Router{"Tool Call?"}:::logic
+        Router -- Yes --> ToolNode["Execute Tools<br/>(LangChain Node)"]
+        Router -- No --> EndNode(["End / Finish"])
         
-        Router -- Yes --> ToolNode["Execute Tools<br/>(<b>LangChain Node</b>)"]:::process
-        Router -- No --> EndNode([End / Finish]):::user
-        
-        ToolNode --> RetryNode[Increment Retry]:::logic
+        ToolNode --> RetryNode["Increment Retry"]
         RetryNode -- Loop back --> AgentNode
     end
 
-    %% --- Section 4: Tools ---
-    subgraph Tools_Layer [Tools - <b>LangChain Core</b>]
-        T1[read_logs]:::process
-        T2[check_job_status]:::process
-        T3[post_to_discord]:::process
+    %% State Schema Subgraph
+    subgraph State_Schema ["State Schema (TypedDict)"]
+        direction TB
+        StateItems["<b>State Keys:</b><br/>Messages, Logs Content,<br/>Job Status, Retry Count"]
+    end
+
+    %% Tools Subgraph
+    subgraph Tools_Layer ["Tools - LangChain Core"]
+        direction LR
+        T1["read_logs"]
+        T2["check_job_status"]
+        T3["post_to_discord"]
     end
     
-    %% Visual Connections between Stack and Logic (Dash lines)
+    %% Technology Stack & Script Mapping
+    subgraph Tech_Stack [Technology Stack & Script Mapping]
+        Stack1["<b>LangGraph</b><br/>Complex Agents & Loops (like Airflow in DE)"]
+        Stack2["<b>LangSmith</b><br/>Observability & Tracing (like DataDog in DE)"]
+        Stack3["<b>LangChain</b><br/>Linear Chains & Integrations (like Pandas in DE)"]
+        AgentScript["<b>AlertingAgent.py</b><br/>Orchestrates Entire Agent"]
+    end
+
+    %% Visual Connections
     Stack1 -.-> Agent_Loop
     Stack3 -.-> Tools_Layer
     Stack2 -.-> Start
     
-    %% Connect Tools to Execution Node
     ToolNode -.-> T1
     ToolNode -.-> T2
     ToolNode -.-> T3
+
+    %% Script-to-Architecture Mapping
+    AgentScript -.-> Agent_Loop
     
-    %% Styling to match Subgraphs
+    %% Apply Styles
+    class Start,EndNode user
+    class AgentNode,ToolNode,T1,T2,T3 process
+    class Router,RetryNode logic
+    class StateItems storage
+
     style Tech_Stack fill:#fff,stroke:#2d3436,stroke-width:1px,color:#2d3436
-    style State_Schema fill:#f1f2f6,stroke:#2f3542,stroke-width:1px,color:#2d3436
-    style Agent_Loop fill:#f1f2f6,stroke:#2f3542,stroke-width:1px,color:#2d3436
-    style Tools_Layer fill:#f1f2f6,stroke:#2f3542,stroke-width:1px,color:#2d3436
 
     %% Global Style Block
     classDef logic fill:#2d3436,stroke:#dfe6e9,stroke-width:2px,color:#fff

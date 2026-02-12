@@ -10,6 +10,34 @@ An intelligent agent system that remembers pipeline failures, detects patterns, 
 - **Actionable Suggestions**: Generates specific remediation steps based on error patterns
 - **Comprehensive Testing**: Includes golden dataset with 10 test cases and 90%+ accuracy
 
+## 🏗️ Architecture Breakdown
+
+### 1. Vector Memory System (Long-Term Storage)
+**Implemented in:** `dataops_memory_agent.py`
+The agent stores past failures not just as text, but as mathematical vectors to allow for conceptual matching.
+- **TF-IDF Vectorization**: Converts error messages and stack traces into features.
+- **Semantic Search**: Calculates similarity between the current failure and past events.
+- **DE Equivalent**: Like a **Historical Error Logs Table** in a Data Warehouse, but with a **Semantic Index** instead of simple keyword filters.
+
+### 2. Error Classification (The Logic Layer)
+**Implemented in:** `dataops_memory_agent.py`
+Categorizes failures based on predefined patterns and keywords.
+- **Keyword Mapping**: Efficiently routes errors to categories (Schema, Quality, Connection).
+- **DE Equivalent**: Like a **Stored Procedure** or a **Transformation Job** that labels raw error data using a look-up table or CASE logic.
+
+### 3. Pattern Recognition (The Intelligence)
+**Implemented in:** `dataops_memory_agent.py`
+Identifies if the current failure is an isolated incident or part of a larger trend.
+- **Correlation Engine**: Checks if similar errors have occurred recently across different pipelines.
+- **DE Equivalent**: Like a **Window Function (`LAG`/`LEAD`)** or a **Time-Series Analysis** that detects spikes in failure rates within a specific timeframe.
+
+### 4. Remediation Engine (The Action)
+**Implemented in:** `dataops_memory_agent.py`
+Generates human-readable suggestions to resolve the issue.
+- **Suggestion Mapping**: Maps specific error categories and patterns to tested remediation steps.
+- **DE Equivalent**: Like an **Operation Playbook (SOP)** that is automatically triggered by an alerting system (like CloudWatch Events) to suggest a fix.
+
+
 ## Architecture
 
 ```
