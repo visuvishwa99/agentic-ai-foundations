@@ -1,0 +1,7 @@
+Traceback (most recent call last):
+  File "c:\Misc\Dataengineering\Projects\AI\repo_01132026\Projects\AI\week5\AlertingAgent.py", line 355, in <module>
+    print("""
+  File "C:\Misc\Dataengineering\Projects\AI\.conda\Lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode characters in position 6-65: character maps to <undefined>

@@ -1,0 +1,67 @@
+flowchart TD
+    %% Global Graph Configuration
+
+    %% --- Section 1: Technology Stack Reference ---
+    subgraph Tech_Stack [System Technology Stack]
+        Stack1["<b>scikit-learn</b><br/>Vectorization & Similarity<br/>(like Spark ML in DE)"]:::process
+        Stack2["<b>Python Dict/Pickle</b><br/>State Storage<br/>(like Redis in DE)"]:::storage
+        Stack3["<b>Custom Logic</b><br/>Pattern Matching<br/>(like UDFs in DE)"]:::logic
+    end
+
+    %% --- Section 2: Input Flow ---
+    subgraph Input_Flow [Input Data]
+        Start([Pipeline Failure Event]):::user
+        InputData["<b>Failure Metadata</b><br/>Error Msg, Stack Trace,<br/>Table Names"]:::storage
+    end
+
+    %% --- Section 3: Core Agent Logic ---
+    subgraph Agent_Core [DataOps Memory Agent]
+        direction TB
+        
+        %% Vectorization Step
+        Vectorize["<b>TF-IDF Vectorization</b><br/>Convert text to embeddings"]:::process
+        
+        %% Memory Interaction
+        subgraph Memory_System [Vector Memory System]
+            Storage[("<b>Long-term Memory</b><br/>Stored Failures")]:::storage
+            Search["<b>Semantic Search</b><br/>Find Top-k Similar Failures"]:::logic
+        end
+        
+        %% Analysis
+        Classify["<b>Error Classifier</b><br/>Schema, Timeout, DQ, etc."]:::process
+        Pattern["<b>Pattern Recognition</b><br/>Detect Recurring Issues"]:::logic
+        Suggest["<b>Remediation Engine</b><br/>Generate Fixes"]:::process
+    end
+
+    %% --- Section 4: Output ---
+    End([<b>Actionable Alerts</b><br/>Root Cause & Suggestions]):::user
+
+    %% Connections
+    Start --> InputData
+    InputData --> Vectorize
+    Vectorize --> Search
+    Storage <--> Search
+    Search --> Pattern
+    InputData --> Classify
+    Classify --> Pattern
+    Pattern --> Suggest
+    Suggest --> End
+
+    %% Tech Stack Connections
+    Stack1 -.-> Vectorize
+    Stack1 -.-> Search
+    Stack2 -.-> Storage
+    Stack3 -.-> Classify
+
+    %% Styling to match Subgraphs
+    style Tech_Stack fill:#fff,stroke:#2d3436,stroke-width:1px,color:#2d3436
+    style Input_Flow fill:#f1f2f6,stroke:#2f3542,stroke-width:1px,color:#2d3436
+    style Agent_Core fill:#f1f2f6,stroke:#2f3542,stroke-width:1px,color:#2d3436
+    style Memory_System fill:#dfe6e9,stroke:#b2bec3,stroke-width:1px,color:#2d3436
+
+    %% Global Style Block
+    classDef logic fill:#2d3436,stroke:#dfe6e9,stroke-width:2px,color:#fff
+    classDef storage fill:#0984e3,stroke:#74b9ff,stroke-width:2px,color:#fff
+    classDef process fill:#6c5ce7,stroke:#a29bfe,stroke-width:2px,color:#fff
+    classDef user fill:#00b894,stroke:#55efc4,stroke-width:2px,color:#fff
+    classDef group fill:#f1f2f6,stroke:#2f3542,stroke-width:1px,color:#2d3436

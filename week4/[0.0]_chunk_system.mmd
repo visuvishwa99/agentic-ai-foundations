@@ -1,0 +1,58 @@
+flowchart TD
+    %% Global Graph Configuration
+    
+    %% --- Section 1: Technology Stack Reference ---
+    subgraph Tech_Stack [System Technology Stack]
+        Stack1["<b>Sentence Transformers</b><br/>Embeddings (like Encoding in DE)"]:::process
+        Stack2["<b>Numpy & Pandas</b><br/>Data Handling (like Pandas in DE)"]:::logic
+        Stack3["<b>Matplotlib</b><br/>Visual Scorecard (like Tableau in DE)"]:::user
+    end
+
+    %% --- Section 2: Input & Config ---
+    Config["fa:fa-cog Configuration<br/>(size, overlap, model)"]:::logic
+    Doc["fa:fa-file-alt Raw Document Text"]:::user
+    
+    %% --- Section 3: Strategies ---
+    subgraph Strategies ["fa:fa-layer-group Chunking Strategies"]
+        Fixed["fa:fa-border-all Fixed Size<br/>(Sliding Window)"]:::process
+        Sentence["fa:fa-align-left Sentence Based<br/>(Boundary Aware)"]:::process
+        Section["fa:fa-sitemap Section Based<br/>(Header Aware)"]:::process
+        Semantic["fa:fa-brain Semantic Similarity<br/>(Meaning Based)"]:::process
+    end
+    
+    %% --- Section 4: Engine ---
+    subgraph Processing ["fa:fa-cogs Engine"]
+        Validate["fa:fa-check-double Validation Engine<br/>(Quality Scoring)"]:::process
+        Embed["fa:fa-project-diagram Embedding Engine<br/>(Sentence Transformers)"]:::process
+    end
+    
+    Retrieve["fa:fa-search Retrieval Test<br/>(Finding Answers)"]:::logic
+    Output["fa:fa-chart-bar Visual Scorecard<br/>(Performance Report)"]:::user
+
+    %% Connections
+    Config --> Strategies
+    Doc --> Strategies
+    
+    Strategies --> Validate
+    Strategies --> Embed
+    
+    Validate --> Output
+    Embed --> Retrieve
+    Retrieve --> Output
+
+    %% Visual Connections between Stack and Logic
+    Stack1 -.-> Embed
+    Stack2 -.-> Validate
+    Stack3 -.-> Output
+
+    %% Styling to match Subgraphs
+    style Tech_Stack fill:#fff,stroke:#2d3436,stroke-width:1px,color:#2d3436
+    style Strategies fill:#f1f2f6,stroke:#2f3542,stroke-width:1px,color:#2d3436
+    style Processing fill:#f1f2f6,stroke:#2f3542,stroke-width:1px,color:#2d3436
+
+    %% Global Style Block
+    classDef logic fill:#2d3436,stroke:#dfe6e9,stroke-width:2px,color:#fff
+    classDef storage fill:#0984e3,stroke:#74b9ff,stroke-width:2px,color:#fff
+    classDef process fill:#6c5ce7,stroke:#a29bfe,stroke-width:2px,color:#fff
+    classDef user fill:#00b894,stroke:#55efc4,stroke-width:2px,color:#fff
+    classDef group fill:#f1f2f6,stroke:#2f3542,stroke-width:1px,color:#2d3436

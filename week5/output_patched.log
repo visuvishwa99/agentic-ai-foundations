@@ -1,0 +1,156 @@
+C:\Misc\Dataengineering\Projects\AI\.conda\Lib\site-packages\langsmith\client.py:500: LangSmithMissingAPIKeyWarning: API key must be provided when using hosted LangSmith API
+  warnings.warn(
+Failed to multipart ingest runs: langsmith.utils.LangSmithAuthError: Authentication failed for https://api.smith.langchain.com/runs/multipart. HTTPError('401 Client Error: Unauthorized for url: https://api.smith.langchain.com/runs/multipart', '{"error":"Unauthorized"}\n')trace=019c025d-6bf8-7460-99ba-f2882ea9c8d0,id=019c025d-6bf8-7460-99ba-f2882ea9c8d0; trace=019c025d-6bf8-7460-99ba-f2882ea9c8d0,id=019c025d-6c24-7d23-841d-2c08a2e350cd; trace=019c025d-6bf8-7460-99ba-f2882ea9c8d0,id=019c025d-6c26-74d0-8023-0786442cd41d
+Failed to send compressed multipart ingest: langsmith.utils.LangSmithAuthError: Authentication failed for https://api.smith.langchain.com/runs/multipart. HTTPError('401 Client Error: Unauthorized for url: https://api.smith.langchain.com/runs/multipart', '{"error":"Unauthorized"}\n')trace=019c025d-6bf8-7460-99ba-f2882ea9c8d0,id=019c025d-6c26-74d0-8023-0786442cd41d; trace=019c025d-6bf8-7460-99ba-f2882ea9c8d0,id=019c025d-6ee4-7be1-819b-dce1baa412e1; trace=019c025d-6bf8-7460-99ba-f2882ea9c8d0,id=019c025d-6ee4-7be1-819b-dce1baa412e1; trace=019c025d-6bf8-7460-99ba-f2882ea9c8d0,id=019c025d-6c24-7d23-841d-2c08a2e350cd; trace=019c025d-6bf8-7460-99ba-f2882ea9c8d0,id=019c025d-6ee5-77d1-b885-7aa18ae6fba6; trace=019c025d-6bf8-7460-99ba-f2882ea9c8d0,id=019c025d-6ee6-7ed0-848c-eb283fd090c5; trace=019c025d-6bf8-7460-99ba-f2882ea9c8d0,id=019c025d-6ee6-7ed0-848c-eb283fd090c5; trace=019c025d-6bf8-7460-99ba-f2882ea9c8d0,id=019c025d-6ee5-77d1-b885-7aa18ae6fba6; trace=019c025d-6bf8-7460-99ba-f2882ea9c8d0,id=019c025d-6ee8-72a3-ae15-96b5b90ee165; trace=019c025d-6bf8-7460-99ba-f2882ea9c8d0,id=019c025d-6ee8-72a3-ae15-96b5b90ee165; trace=019c025d-6bf8-7460-99ba-f2882ea9c8d0,id=019c025d-6ee9-7190-9244-3f07d5b42217; trace=019c025d-6bf8-7460-99ba-f2882ea9c8d0,id=019c025d-6eea-72c3-856a-858117c60bcf; trace=019c025d-6bf8-7460-99ba-f2882ea9c8d0,id=019c025d-6eea-72c3-856a-858117c60bcf; trace=019c025d-6bf8-7460-99ba-f2882ea9c8d0,id=019c025d-70a4-7460-849c-edc9838c9cf2; trace=019c025d-6bf8-7460-99ba-f2882ea9c8d0,id=019c025d-70a4-7460-849c-edc9838c9cf2; trace=019c025d-6bf8-7460-99ba-f2882ea9c8d0,id=019c025d-6ee9-7190-9244-3f07d5b42217; trace=019c025d-6bf8-7460-99ba-f2882ea9c8d0,id=019c025d-70a6-7983-8e9c-4f0ec010c3a7; trace=019c025d-6bf8-7460-99ba-f2882ea9c8d0,id=019c025d-70a7-7802-97cc-39d0c746289a; trace=019c025d-6bf8-7460-99ba-f2882ea9c8d0,id=019c025d-70a7-7802-97cc-39d0c746289a; trace=019c025d-6bf8-7460-99ba-f2882ea9c8d0,id=019c025d-70a6-7983-8e9c-4f0ec010c3a7; trace=019c025d-6bf8-7460-99ba-f2882ea9c8d0,id=019c025d-70a8-7a93-90e7-0b22efd2b807; trace=019c025d-6bf8-7460-99ba-f2882ea9c8d0,id=019c025d-70a8-7a93-90e7-0b22efd2b807; trace=019c025d-6bf8-7460-99ba-f2882ea9c8d0,id=019c025d-70a8-7a93-90e7-0b3b7a2b9307; trace=019c025d-6bf8-7460-99ba-f2882ea9c8d0,id=019c025d-70a9-7f33-87df-c97d16fe9837; trace=019c025d-6bf8-7460-99ba-f2882ea9c8d0,id=019c025d-70a9-7f33-87df-c97d16fe9837; trace=019c025d-6bf8-7460-99ba-f2882ea9c8d0,id=019c025d-7253-7ed0-90c4-c645bd7a48d6; trace=019c025d-6bf8-7460-99ba-f2882ea9c8d0,id=019c025d-7253-7ed0-90c4-c645bd7a48d6; trace=019c025d-6bf8-7460-99ba-f2882ea9c8d0,id=019c025d-70a8-7a93-90e7-0b3b7a2b9307; trace=019c025d-6bf8-7460-99ba-f2882ea9c8d0,id=019c025d-7254-7793-84eb-a883700a7a5a; trace=019c025d-6bf8-7460-99ba-f2882ea9c8d0,id=019c025d-7255-7040-a48b-680ba3d7aa54; trace=019c025d-6bf8-7460-99ba-f2882ea9c8d0,id=019c025d-7255-7040-a48b-680ba3d7aa54; trace=019c025d-6bf8-7460-99ba-f2882ea9c8d0,id=019c025d-7254-7793-84eb-a883700a7a5a; trace=019c025d-6bf8-7460-99ba-f2882ea9c8d0,id=019c025d-7256-7a02-b398-5027661b5f29; trace=019c025d-6bf8-7460-99ba-f2882ea9c8d0,id=019c025d-7256-7a02-b398-5027661b5f29; trace=019c025d-6bf8-7460-99ba-f2882ea9c8d0,id=019c025d-7257-7831-a0da-07a97ccf832b; trace=019c025d-6bf8-7460-99ba-f2882ea9c8d0,id=019c025d-7257-7831-a0da-07b3c30bbc6b; trace=019c025d-6bf8-7460-99ba-f2882ea9c8d0,id=019c025d-7257-7831-a0da-07b3c30bbc6b; trace=019c025d-6bf8-7460-99ba-f2882ea9c8d0,id=019c025d-7385-7903-9616-98d1c3ff37ac; trace=019c025d-6bf8-7460-99ba-f2882ea9c8d0,id=019c025d-7385-7903-9616-98d1c3ff37ac; trace=019c025d-6bf8-7460-99ba-f2882ea9c8d0,id=019c025d-7257-7831-a0da-07a97ccf832b; trace=019c025d-6bf8-7460-99ba-f2882ea9c8d0,id=019c025d-7386-70c3-a84d-f373995bc0b1; trace=019c025d-6bf8-7460-99ba-f2882ea9c8d0,id=019c025d-7387-7d21-b6b1-d07707172ccb; trace=019c025d-6bf8-7460-99ba-f2882ea9c8d0,id=019c025d-7387-7d21-b6b1-d07707172ccb; trace=019c025d-6bf8-7460-99ba-f2882ea9c8d0,id=019c025d-7386-70c3-a84d-f373995bc0b1; trace=019c025d-6bf8-7460-99ba-f2882ea9c8d0,id=019c025d-7388-79c0-a723-63c25ddb779e; trace=019c025d-6bf8-7460-99ba-f2882ea9c8d0,id=019c025d-7388-79c0-a723-63c25ddb779e; trace=019c025d-6bf8-7460-99ba-f2882ea9c8d0,id=019c025d-7388-79c0-a723-63d398897f7f; trace=019c025d-6bf8-7460-99ba-f2882ea9c8d0,id=019c025d-7389-7ad3-a80f-e42ffc66bbdd
+
+    ============================================================
+           PRODUCTION LOG MONITORING AGENT                      
+      Features: LangGraph + Tools + Memory + Discord + Tracing       
+    ============================================================
+    
+[SUCCESS] Tracing enabled: https://smith.langchain.com
+[PROJECT] log-checker-discord-agent
+
+======================================================================
+STARTING AGENT: Log Monitor for 'api'
+Discord Channel: Configured
+Time: 2026-01-27 19:10:02
+======================================================================
+
+[REASONING] Agent thinking... (attempt 0)
+            [PATCH] Manually extracted 1 tool call(s)
+            Decision: Call 1 tool(s)
+
+----------------------------------------------------------------------
+STEP 1: AGENT
+----------------------------------------------------------------------
+[OUTPUT] Tool Call: read_logs
+         Input: {
+  "service_name": "api",
+  "last_n_lines": 10
+}
+[TOOL] Reading logs: api (last 10 lines)
+       Found 3 errors
+
+----------------------------------------------------------------------
+STEP 2: TOOLS
+----------------------------------------------------------------------
+
+----------------------------------------------------------------------
+STEP 3: RETRY_COUNTER
+----------------------------------------------------------------------
+[STATUS] Retry count: 1/3
+
+[REASONING] Agent thinking... (attempt 1)
+            [PATCH] Manually extracted 1 tool call(s)
+            Decision: Call 1 tool(s)
+
+----------------------------------------------------------------------
+STEP 4: AGENT
+----------------------------------------------------------------------
+[OUTPUT] Tool Call: read_logs
+         Input: {
+  "service_name": "api",
+  "last_n_lines": 3
+}
+[TOOL] Reading logs: api (last 3 lines)
+       Found 3 errors
+
+----------------------------------------------------------------------
+STEP 5: TOOLS
+----------------------------------------------------------------------
+
+----------------------------------------------------------------------
+STEP 6: RETRY_COUNTER
+----------------------------------------------------------------------
+[STATUS] Retry count: 2/3
+
+[REASONING] Agent thinking... (attempt 2)
+            [PATCH] Manually extracted 1 tool call(s)
+            Decision: Call 1 tool(s)
+
+----------------------------------------------------------------------
+STEP 7: AGENT
+----------------------------------------------------------------------
+[OUTPUT] Tool Call: read_logs
+         Input: {
+  "service_name": "api",
+  "last_n_lines": 3
+}
+[TOOL] Reading logs: api (last 3 lines)
+       Found 3 errors
+
+----------------------------------------------------------------------
+STEP 8: TOOLS
+----------------------------------------------------------------------
+
+----------------------------------------------------------------------
+STEP 9: RETRY_COUNTER
+----------------------------------------------------------------------
+[STATUS] Retry count: 3/3
+
+[REASONING] Agent thinking... (attempt 3)
+            [PATCH] Manually extracted 1 tool call(s)
+            Decision: Call 1 tool(s)
+
+----------------------------------------------------------------------
+STEP 10: AGENT
+----------------------------------------------------------------------
+[OUTPUT] Tool Call: read_logs
+         Input: {
+  "service_name": "api",
+  "last_n_lines": 3
+}
+[TOOL] Reading logs: api (last 3 lines)
+       Found 3 errors
+
+----------------------------------------------------------------------
+STEP 11: TOOLS
+----------------------------------------------------------------------
+[WARNING] Max retries reached
+
+----------------------------------------------------------------------
+STEP 12: RETRY_COUNTER
+----------------------------------------------------------------------
+[STATUS] Retry count: 4/3
+
+[REASONING] Agent thinking... (attempt 4)
+            Decision: Task complete
+
+----------------------------------------------------------------------
+STEP 13: AGENT
+----------------------------------------------------------------------
+[OUTPUT] Response: 
+
+======================================================================
+AGENT COMPLETED IN 13 STEPS
+======================================================================
+
+[INFO] View full trace at: https://smith.langchain.com
+
+======================================================================
+DISCORD INTEGRATION NOTES:
+======================================================================
+
+    1. GET WEBHOOK URL:
+       - Discord Server -> Channel Settings -> Integrations -> Webhooks
+       - Click "New Webhook" and copy the URL
+    
+    2. WEBHOOK URL FORMAT:
+       https://discord.com/api/webhooks/{webhook_id}/{webhook_token}
+    
+    3. COLOR CODING:
+       - Info: Blue (3447003)
+       - Warning: Yellow (16776960)
+       - Critical: Red (15158332)
+    
+    4. SECURITY:
+       - Store webhook in environment variable
+       - Never commit webhook URLs to git
+       - Rotate webhooks if exposed
+    
+    5. RATE LIMITS:
+       - Discord allows 30 requests per minute per webhook
+       - Agent respects this with retry delays
+    
+Failed to send compressed multipart ingest: langsmith.utils.LangSmithAuthError: Authentication failed for https://api.smith.langchain.com/runs/multipart. HTTPError('401 Client Error: Unauthorized for url: https://api.smith.langchain.com/runs/multipart', '{"error":"Unauthorized"}\n')trace=019c025d-6bf8-7460-99ba-f2882ea9c8d0,id=019c025d-7389-7ad3-a80f-e42ffc66bbdd; trace=019c025d-6bf8-7460-99ba-f2882ea9c8d0,id=019c025d-7fd5-7600-a584-3f7741ab94e2; trace=019c025d-6bf8-7460-99ba-f2882ea9c8d0,id=019c025d-7fd5-7600-a584-3f7741ab94e2; trace=019c025d-6bf8-7460-99ba-f2882ea9c8d0,id=019c025d-7388-79c0-a723-63d398897f7f; trace=019c025d-6bf8-7460-99ba-f2882ea9c8d0,id=019c025d-6bf8-7460-99ba-f2882ea9c8d0

@@ -1,0 +1,55 @@
+flowchart TD
+    %% Global Graph Configuration
+    
+    %% --- Section 1: Technology Stack Reference ---
+    subgraph Tech_Stack [System Technology Stack]
+        Stack1["<b>Sentence Transformers</b><br/>Embedding Model (like Encoding in DE)"]:::process
+        Stack2["<b>FAISS & ChromaDB</b><br/>Vector DB (like Snowflake in DE)"]:::storage
+        Stack3["<b>Qwen 2.5 Coder</b><br/>Generative LLM (like Transformation in DE)"]:::process
+    end
+
+    %% --- Section 2: Input Layer ---
+    User([fa:fa-user User Query]):::user --> Cache{fa:fa-database Semantic Cache}:::storage
+    
+    %% Semantic Caching Layer
+    Cache -- Match found --> Resp([fa:fa-bolt Cached Response]):::user
+    Cache -- No match --> Embed[fa:fa-project-diagram Embedding Model<br/>'all-MiniLM-L6-v2']:::process
+    
+    %% Vector Retrieval Layer
+    subgraph Storage ["Vector Storage & Search"]
+        direction LR
+        FAISS[fa:fa-search FAISS Index]:::storage
+        Chroma[fa:fa-table ChromaDB]:::storage
+        Cosine[fa:fa-calculator Cosine Similarity]:::process
+    end
+    
+    Embed --> Storage
+    Storage --> Context[fa:fa-list-ul Retrieved Context]:::process
+    
+    %% RAG Pipeline Layer
+    subgraph RAG ["Capstone RAG Pipeline"]
+        LLM[fa:fa-robot LLM<br/>Qwen 2.5 Coder]:::process
+        Prompt[fa:fa-file-alt Augmented Prompt]:::logic
+    end
+    
+    User -.-> Prompt
+    Context --> Prompt
+    Prompt --> LLM
+    LLM --> Resp
+
+    %% Visual Connections between Stack and Logic (Dash lines)
+    Stack1 -.-> Embed
+    Stack2 -.-> Storage
+    Stack3 -.-> LLM
+
+    %% Styling to match Subgraphs
+    style Tech_Stack fill:#fff,stroke:#2d3436,stroke-width:1px,color:#2d3436
+    style Storage fill:#f1f2f6,stroke:#2f3542,stroke-width:1px,color:#2d3436
+    style RAG fill:#f1f2f6,stroke:#2f3542,stroke-width:1px,color:#2d3436
+
+    %% Global Style Block
+    classDef logic fill:#2d3436,stroke:#dfe6e9,stroke-width:2px,color:#fff
+    classDef storage fill:#0984e3,stroke:#74b9ff,stroke-width:2px,color:#fff
+    classDef process fill:#6c5ce7,stroke:#a29bfe,stroke-width:2px,color:#fff
+    classDef user fill:#00b894,stroke:#55efc4,stroke-width:2px,color:#fff
+    classDef group fill:#f1f2f6,stroke:#2f3542,stroke-width:1px,color:#2d3436

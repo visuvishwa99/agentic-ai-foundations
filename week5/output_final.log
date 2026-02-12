@@ -1,0 +1,60 @@
+C:\Misc\Dataengineering\Projects\AI\.conda\Lib\site-packages\langsmith\client.py:500: LangSmithMissingAPIKeyWarning: API key must be provided when using hosted LangSmith API
+  warnings.warn(
+Failed to multipart ingest runs: langsmith.utils.LangSmithAuthError: Authentication failed for https://api.smith.langchain.com/runs/multipart. HTTPError('401 Client Error: Unauthorized for url: https://api.smith.langchain.com/runs/multipart', '{"error":"Unauthorized"}\n')trace=019c025b-f8ee-7a01-b8e5-a52b15dc6358,id=019c025b-f8ee-7a01-b8e5-a52b15dc6358; trace=019c025b-f8ee-7a01-b8e5-a52b15dc6358,id=019c025b-f926-7651-9e5d-3b6f616ffade; trace=019c025b-f8ee-7a01-b8e5-a52b15dc6358,id=019c025b-f927-7843-a631-e6d4ca1b54b5
+
+    ============================================================
+           PRODUCTION LOG MONITORING AGENT                      
+      Features: LangGraph + Tools + Memory + Discord + Tracing       
+    ============================================================
+    
+[SUCCESS] Tracing enabled: https://smith.langchain.com
+[PROJECT] log-checker-discord-agent
+
+======================================================================
+STARTING AGENT: Log Monitor for 'api'
+Discord Channel: Configured
+Time: 2026-01-27 19:08:27
+======================================================================
+
+[REASONING] Agent thinking... (attempt 0)
+            Decision: Task complete
+
+----------------------------------------------------------------------
+STEP 1: AGENT
+----------------------------------------------------------------------
+[OUTPUT] Response: ```json
+{"name": "read_logs", "arguments": {"service_name": "api", "last_n_lines": 10}}
+```
+
+======================================================================
+AGENT COMPLETED IN 1 STEPS
+======================================================================
+
+[INFO] View full trace at: https://smith.langchain.com
+
+======================================================================
+DISCORD INTEGRATION NOTES:
+======================================================================
+
+    1. GET WEBHOOK URL:
+       - Discord Server -> Channel Settings -> Integrations -> Webhooks
+       - Click "New Webhook" and copy the URL
+    
+    2. WEBHOOK URL FORMAT:
+       https://discord.com/api/webhooks/{webhook_id}/{webhook_token}
+    
+    3. COLOR CODING:
+       - Info: Blue (3447003)
+       - Warning: Yellow (16776960)
+       - Critical: Red (15158332)
+    
+    4. SECURITY:
+       - Store webhook in environment variable
+       - Never commit webhook URLs to git
+       - Rotate webhooks if exposed
+    
+    5. RATE LIMITS:
+       - Discord allows 30 requests per minute per webhook
+       - Agent respects this with retry delays
+    
+Failed to send compressed multipart ingest: langsmith.utils.LangSmithAuthError: Authentication failed for https://api.smith.langchain.com/runs/multipart. HTTPError('401 Client Error: Unauthorized for url: https://api.smith.langchain.com/runs/multipart', '{"error":"Unauthorized"}\n')trace=019c025b-f8ee-7a01-b8e5-a52b15dc6358,id=019c025b-f927-7843-a631-e6d4ca1b54b5; trace=019c025b-f8ee-7a01-b8e5-a52b15dc6358,id=019c025b-fbc5-7dc3-af00-436e0dd8b920; trace=019c025b-f8ee-7a01-b8e5-a52b15dc6358,id=019c025b-fbc5-7dc3-af00-436e0dd8b920; trace=019c025b-f8ee-7a01-b8e5-a52b15dc6358,id=019c025b-f926-7651-9e5d-3b6f616ffade; trace=019c025b-f8ee-7a01-b8e5-a52b15dc6358,id=019c025b-f8ee-7a01-b8e5-a52b15dc6358

@@ -1,0 +1,45 @@
+C:\Misc\Dataengineering\Projects\AI\.conda\Lib\site-packages\langsmith\client.py:500: LangSmithMissingAPIKeyWarning: API key must be provided when using hosted LangSmith API
+  warnings.warn(
+Failed to multipart ingest runs: langsmith.utils.LangSmithAuthError: Authentication failed for https://api.smith.langchain.com/runs/multipart. HTTPError('401 Client Error: Unauthorized for url: https://api.smith.langchain.com/runs/multipart', '{"error":"Unauthorized"}\n')trace=019c025b-7581-7d11-b5e7-f0a1dca0dc80,id=019c025b-7581-7d11-b5e7-f0a1dca0dc80; trace=019c025b-7581-7d11-b5e7-f0a1dca0dc80,id=019c025b-75bb-7633-95c5-b68781a17cba; trace=019c025b-7581-7d11-b5e7-f0a1dca0dc80,id=019c025b-75bc-7031-b272-e09b9aca50c3
+
+    ============================================================
+           PRODUCTION LOG MONITORING AGENT                      
+      Features: LangGraph + Tools + Memory + Discord + Tracing       
+    ============================================================
+    
+[SUCCESS] Tracing enabled: https://smith.langchain.com
+[PROJECT] log-checker-discord-agent
+
+======================================================================
+STARTING AGENT: Log Monitor for 'api'
+Discord Channel: Configured
+Time: 2026-01-27 19:07:54
+======================================================================
+
+[REASONING] Agent thinking... (attempt 0)
+            Decision: Task complete
+
+----------------------------------------------------------------------
+STEP 1: AGENT
+----------------------------------------------------------------------
+[OUTPUT] Response: ```json
+{"name": "read_logs", "arguments": {"service_name": "api", "last_n_lines": 10}}
+```
+
+======================================================================
+AGENT COMPLETED IN 1 STEPS
+======================================================================
+
+[INFO] View full trace at: https://smith.langchain.com
+
+======================================================================
+DISCORD INTEGRATION NOTES:
+======================================================================
+Traceback (most recent call last):
+  File "c:\Misc\Dataengineering\Projects\AI\repo_01132026\Projects\AI\week5\AlertingAgent.py", line 376, in <module>
+    print("""
+  File "C:\Misc\Dataengineering\Projects\AI\.conda\Lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode character '\u2192' in position 51: character maps to <undefined>
+Failed to send compressed multipart ingest: langsmith.utils.LangSmithAuthError: Authentication failed for https://api.smith.langchain.com/runs/multipart. HTTPError('401 Client Error: Unauthorized for url: https://api.smith.langchain.com/runs/multipart', '{"error":"Unauthorized"}\n')trace=019c025b-7581-7d11-b5e7-f0a1dca0dc80,id=019c025b-75bc-7031-b272-e09b9aca50c3; trace=019c025b-7581-7d11-b5e7-f0a1dca0dc80,id=019c025b-78f3-7003-bc41-2ac4e45e50f0; trace=019c025b-7581-7d11-b5e7-f0a1dca0dc80,id=019c025b-78f3-7003-bc41-2ac4e45e50f0; trace=019c025b-7581-7d11-b5e7-f0a1dca0dc80,id=019c025b-75bb-7633-95c5-b68781a17cba; trace=019c025b-7581-7d11-b5e7-f0a1dca0dc80,id=019c025b-7581-7d11-b5e7-f0a1dca0dc80
