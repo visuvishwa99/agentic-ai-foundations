@@ -7,12 +7,13 @@ trigger: always_on
 
 This file defines the strict rules for organizing folders, explaining technical topics, and creating visual diagrams across all weeks.
 
-## 📁 1. Folder & File Organization Rules
+## 1. Folder & File Organization Rules
 - **Naming Convention**: All active script files must follow the numbering pattern: `[Section.Sub-section]_filename.py` (e.g., `[1.1]_Embeddings.py`).
 - **README per Week**: Every week folder must contain a `README.md` that serves as the "source of truth" for that unit.
 - **MMD Files**: Every week should have at least one Mermaid (`.mmd`) file explaining the core архитекure or the specific script logic.
+- **Centralized Requirements**: All Python dependencies MUST be added to the `all_requirements.txt` file at the root of the repository. Individual `requirements.txt` files per week are deprecated.
 
-## 📚 2. Topic Explanation Rules (The "Jargon" Rule)
+## 2. Topic Explanation Rules (The "Jargon" Rule)
 When explaining a new technical concept or "jargon," follow this 3-step structure used in Week 4:
 1.  **Simple definition**: Use a "Layman's terms" first sentence.
 2.  **Technical context**: Explain *why* it is used in the specific script/pipeline.
@@ -31,7 +32,7 @@ When explaining a new technical concept or "jargon," follow this 3-step structur
 **Standard Jargon List to maintain:**
 - Chunking, Embeddings, Cosine Similarity, Top-K, Vector DBs, Semantic Caching, RAG Pipelines.
 
-## 📝 2.1 The Explanation Format (The Walkthrough Rule)
+## 2.1 The Explanation Format (The Walkthrough Rule)
 When explaining a complex Mermaid diagram or architecture flow, ALWAYS use the following structure:
 1. **Step-by-Step Breakdown**: Number each logical phase (e.g., 1. Pre-processing, 2. Retrieval).
 2. **Component Function**: Explain exactly what that specific node/block does in the AI context.
@@ -39,7 +40,7 @@ When explaining a complex Mermaid diagram or architecture flow, ALWAYS use the f
 4. **Conclusion/Why**: Briefly state the benefit of this specific architecture (e.g., "Ensures data quality" or "Optimizes for cost").
 
 
-## 🎨 3. Mermaid Diagram Design Standards
+## 3. Mermaid Diagram Design Standards
 
 ### Best Practices for Mermaid Syntax (CRITICAL)
 1.  **Use `flowchart TD`**: Prefer `flowchart` over `graph` for better subgraph and direction support.
@@ -77,7 +78,7 @@ All diagrams must optionally (strongly encouraged for complex agents) include a 
 4.  **DE Metaphors**: When applicable, explicitly mention the Data Engineering equivalent in the node label using the format: `(like [Tool] in DE)`.
     *   Example: `<b>ChromaDB</b><br/>Vector DB (like Snowflake in DE)`
 
-## 🔗 4. Script-to-Architecture Mapping Rule (The Traceability Rule)
+## 4. Script-to-Architecture Mapping Rule (The Traceability Rule)
 
 Every Python script MUST be explicitly linked to its corresponding architecture component in **both** the Mermaid diagram and the README.
 
@@ -107,6 +108,25 @@ Every Python script MUST be explicitly linked to its corresponding architecture 
 3.  **Orchestrator Script**: If one script combines all components, add a final section titled "The Orchestrator" mapping it.
 
 ### Why This Rule Exists
-- **Traceability**: Anyone reading the README can immediately jump to the relevant code.
-- **Onboarding**: New readers understand which file does what without digging through code.
 - **DE Equivalent**: Like a **Data Lineage Graph** (e.g., dbt docs, Atlan) that maps transformations back to their source models.
+
+## 5. "How to Run" Section Rule (The Reproducibility Rule)
+Every `README.md` MUST contain a final `## How to Run` section explaining exactly how to execute the scripts in the correct order.
+
+### 5.1 Content Requirements
+1.  **Standard Header**: Always use exactly `## How to Run` as the section header.
+2.  **Numbered Options**: Explicitly list execution paths (e.g., `Option 1: Automated Demo`, `Option 2: Interactive CLI`).
+3.  **Correct Commands**: Include the full CLI command starting with the interpreter (e.g., `python weekX/[Y.Z]_filename.py`).
+4.  **Operational Warnings**: Include a `### [IMPORTANT]` or `### Note` sub-section for scripts that should NOT be run directly (like stdio-based servers).
+
+### 5.2 Example Format
+```markdown
+## How to Run
+
+### Option 1: Run the Main Client
+This is the primary entry point...
+`python weekXX/[1.0]_client.py`
+
+### [IMPORTANT]
+Do NOT run `[2.0]_server.py` directly; it is managed by the client.
+```

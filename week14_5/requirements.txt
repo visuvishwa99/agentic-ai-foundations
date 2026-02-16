@@ -1,8 +1,0 @@
-mcp
-anthropic
-python-dotenv
-uvicorn
-fastapi
-langchain
-langchain-anthropic
-pydantic
