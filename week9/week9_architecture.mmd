@@ -1,0 +1,68 @@
+---
+id: week9-architecture
+---
+flowchart TD
+    %% User Interaction
+    User(["fa:fa-user User Query"]) --> InputGuard{"🛡️ Input Guard<br/>(Jailbreak/PII Check)"}
+    
+    %% Input Guard Logic (Step 1)
+    InputGuard -- Safe --> Router{"Model Router"}
+    InputGuard -- Unsafe/PII --> Masked["Mask PII / Block"]
+    Masked --> Router
+    InputGuard -- Attack --> Reject(["fa:fa-ban Access Denied"])
+    
+    %% Routing Layer (Step 2 - From Week 8)
+    Router -- Simple --> Mini["fa:fa-robot ${SMALL_LLM}"]
+    Router -- Reasoning --> LLM["fa:fa-brain ${MAIN_LLM}"]
+    
+    %% Execution Layer (Step 3)
+    Mini --> SQLGen["SQL Generator"]
+    LLM --> SQLGen
+    
+    %% Output Guard Logic (Step 4 - Key Add)
+    SQLGen --> OutputGuard{"🛡️ Output Guard<br/>(Structured Validator)"}
+    
+    OutputGuard -- Safe SQL --> DB[(Data Warehouse)]
+    OutputGuard -- Unsafe SQL --> RejectSQL(["fa:fa-ban Blocked Query"])
+    OutputGuard -- Hallucination --> Fallback(["Retry / Error"])
+    
+    DB --> Results["Query Results"]
+    
+    %% Final Check (Step 5)
+    Results --> PIIFilter{"🔍 PII Output Filter"}
+    PIIFilter -- Clean --> FinalResp(["Final Answer"])
+    
+    %% Technology Stack & Script Mapping
+    subgraph Tech_Stack [Technology Stack & Script Mapping]
+        Stack1["<b>Guardrails AI / NeMo</b><br/>Safety Layer (like WAF/Auditing)"]
+        Stack2["<b>Pydantic</b><br/>Structure Validation (like Schema Checks)"]
+        Script1["<b>[1.0]_input_guard.py</b><br/>Jailbreak & PII Check"]
+        Script2["<b>[2.0]_output_guard.py</b><br/>SQL Safety Validator"]
+        Script3["<b>[3.0]_secure_agent.py</b><br/>Secure Agent Logic"]
+    end
+    
+    %% Visual Connections
+    Stack1 -.-> InputGuard
+    Stack1 -.-> OutputGuard
+    Stack2 -.-> OutputGuard
+    
+    %% Script Mapping
+    Script1 -.-> InputGuard
+    Script2 -.-> OutputGuard
+    Script3 -.-> SQLGen
+    
+    %% Styles
+    class User,FinalResp user
+    class DB storage
+    class Router,Mini,LLM,SQLGen process
+    class InputGuard,OutputGuard,PIIFilter logic
+    class Reject,RejectSQL logic
+    
+    style Tech_Stack fill:#fff,stroke:#2d3436,stroke-width:1px,color:#2d3436
+    
+    %% Global Style Block
+    classDef logic fill:#e74c3c,stroke:#c0392b,stroke-width:2px,color:#fff
+    classDef storage fill:#0984e3,stroke:#74b9ff,stroke-width:2px,color:#fff
+    classDef process fill:#6c5ce7,stroke:#a29bfe,stroke-width:2px,color:#fff
+    classDef user fill:#00b894,stroke:#55efc4,stroke-width:2px,color:#fff
+    classDef group fill:#f1f2f6,stroke:#2f3542,stroke-width:1px,color:#2d3436

@@ -1,0 +1,9 @@
+langchain
+langchain-community
+langchain-ollama
+arize-phoenix
+openinference-instrumentation-langchain
+opentelemetry-api
+opentelemetry-sdk
+pandas
+pytest

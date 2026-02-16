@@ -1,0 +1,48 @@
+---
+id: week13-architecture
+---
+flowchart TD
+    %% User and Execution
+    User(["User Query"]) --> AgentLoop["Instrumented Agent<br/>(OpenInference)"]
+    
+    %% Agent Execution
+    AgentLoop -- "Traces" --> OpenTelemetry{"OpenTelemetry Collector<br/>(Phoenix/Arize)"}
+    
+    %% Phoenix UI
+    OpenTelemetry -- "Visualize" --> PhoenixUI["Phoenix Dashboard<br/>(localhost:6006)"]
+    
+    %% Eval Execution
+    Repo(["Evaluation Data<br/>(Golden Questions)"]) --> EvalRunner{"Regression Test<br/>(CI/CD Pipeline)"}
+    
+    EvalRunner -- "Run Queries" --> AgentLoop
+    EvalRunner -- "Eval Results" --> PhoenixUI
+    
+    %% Analytics
+    PhoenixUI -- "Analysis" --> Findings["1. Latency Spikes<br/>2. Error Rates<br/>3. Topic Clusters"]
+    
+    %% Technology Stack & Script Mapping
+    subgraph Tech_Stack [Technology Stack & Script Mapping]
+        Script1["<b>[1.0]_observable_agent.py</b><br/>Wraps Agent with Tracing"]
+        Script2["<b>[2.0]_regression_test.py</b><br/>Automated Evals"]
+        Script3["<b>[3.0]_dashboard.py</b><br/>Launches Phoenix Server"]
+    end
+    
+    %% Script Mapping
+    Script1 -.-> AgentLoop
+    Script2 -.-> EvalRunner
+    Script3 -.-> PhoenixUI
+    
+    %% Styles
+    class User user
+    class AgentLoop process
+    class PhoenixUI,Findings storage
+    class EvalRunner,OpenTelemetry logic
+    
+    style Tech_Stack fill:#fff,stroke:#2d3436,stroke-width:1px,color:#2d3436
+    
+    %% Global Style Block
+    classDef logic fill:#e74c3c,stroke:#c0392b,stroke-width:2px,color:#fff
+    classDef storage fill:#0984e3,stroke:#74b9ff,stroke-width:2px,color:#fff
+    classDef process fill:#6c5ce7,stroke:#a29bfe,stroke-width:2px,color:#fff
+    classDef user fill:#00b894,stroke:#55efc4,stroke-width:2px,color:#fff
+    classDef group fill:#f1f2f6,stroke:#2f3542,stroke-width:1px,color:#2d3436

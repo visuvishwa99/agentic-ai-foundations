@@ -1,0 +1,46 @@
+---
+id: week14-architecture
+---
+flowchart TD
+    %% User and Execution
+    Client(["Client App<br/>(React / CLI / Bot)"]) --> API_Gateway{"API Gateway<br/>(FastAPI / Uvicorn)"}
+    
+    %% API Logic
+    API_Gateway -- "POST /chat" --> Validation["Request Validation<br/>(Pydantic Models)"]
+    
+    Validation --> AgentLoop["Observable Agent<br/>(Week 13 Logic)"]
+    
+    %% Async Processing
+    AgentLoop -- "Thinking..." --> LLM["LLM (Codellama/Qwen)"]
+    AgentLoop -- "Dependencies" --> DB[("SQL Database")]
+    AgentLoop -- "Trace" --> Phoenix["Observability (Phoenix)"]
+    
+    %% Response
+    AgentLoop -- "Response + Trace ID" --> API_Gateway
+    API_Gateway -- "JSON {200 OK}" --> Client
+    
+    %% Technology Stack & Script Mapping
+    subgraph Tech_Stack [Technology Stack & Script Mapping]
+        Script1["<b>[1.0]_agent_api.py</b><br/>FastAPI Microservice"]
+        Script2["<b>[2.0]_api_client.py</b><br/>Test Simulation Client"]
+        Script3["<b>[3.0]_docker_example.md</b><br/>Deployment Config"]
+    end
+    
+    %% Script Mapping
+    Script1 -.-> API_Gateway
+    Script2 -.-> Client
+    
+    %% Styles
+    class Client user
+    class DB,Phoenix storage
+    class AgentLoop,Validation,LLM process
+    class API_Gateway logic
+    
+    style Tech_Stack fill:#fff,stroke:#2d3436,stroke-width:1px,color:#2d3436
+    
+    %% Global Style Block
+    classDef logic fill:#e74c3c,stroke:#c0392b,stroke-width:2px,color:#fff
+    classDef storage fill:#0984e3,stroke:#74b9ff,stroke-width:2px,color:#fff
+    classDef process fill:#6c5ce7,stroke:#a29bfe,stroke-width:2px,color:#fff
+    classDef user fill:#00b894,stroke:#55efc4,stroke-width:2px,color:#fff
+    classDef group fill:#f1f2f6,stroke:#2f3542,stroke-width:1px,color:#2d3436

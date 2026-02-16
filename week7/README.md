@@ -1,17 +1,20 @@
-# Week 7: Structured Outputs & Advanced RAG Techniques ⭐ ENHANCED
+# Week 7: Structured Outputs and Advanced RAG Techniques - ENHANCED
 
-## 🎯 Weekly Goals
-1. **Learn Hybrid Search**: Combine BM25 (keyword) + Semantic Search (vector) for better retrieval.
+## Weekly Goals
+1. **Learn Hybrid Search**: Combine BM25 (Best Match 25 , keyword-based ranking algorithm, fast) + Semantic Search (vector, Slower (requires embedding)) for better retrieval.
 2. **Master Reranking**: Use Cohere or Cross-Encoders to re-order top-k results for relevance.
 3. **Query Enhancement**: Implement HyDE (Hypothetical Document Embeddings) and query decomposition.
 4. **Structured Outputs**: Ensure all agent outputs are validated using Pydantic.
 
-## 📘 Resources
+
+
+
+## Resources
 - [Weaviate Hybrid Search](https://weaviate.io/developers/weaviate/search/hybrid)
 - [Cohere Reranking Guide](https://docs.cohere.com/docs/reranking)
 - [LangChain Reranker Integration](https://python.langchain.com/docs/integrations/retrievers/cohere-reranker/)
 
-## ⚙️ Project: Advanced RAG Agent for Snowflake
+## Project: Advanced RAG Agent for Snowflake
 We will build an agent that:
 1. Queries a mock Snowflake database (or real if credentials provided).
 2. Uses **Hybrid Search** to find relevant schemas/documentation.
@@ -25,7 +28,7 @@ We will build an agent that:
 - `[4.0]_structured_agent.py`: Final agent integrating all components with Pydantic validation.
 - `week7_architecture.mmd`: Visual diagram of the Advanced RAG pipeline.
 
-## 🏗️ Architecture Breakdown
+## Architecture Breakdown
 This pipeline is designed for high-accuracy retrieval by combining multiple optimization layers.
 
 ### 1. Query Enhancement (Pre-processing)
@@ -60,9 +63,23 @@ Combines all previous steps into a single autonomous pipeline.
 - **DE Equivalent**: Like an **Airflow DAG** that chains multiple tasks (Extract, Transform, Load) into a coherent workflow.
 
 
-## 🛠️ Tech Stack
+## Tech Stack
 - **Framework**: LangChain / LangGraph
 - **Vector DB**: ChromaDB / FAISS
 - **Search**: BM25Retriever (Keyword), VectorStoreRetriever (Semantic)
 - **Reranking**: HuggingFace CrossEncoder / Cohere
 - **Validation**: Pydantic
+
+## How to Run
+
+### Run the Advanced RAG Agent
+This script launches the final agent integrating Hybrid Search, Reranking, and Structured Outputs.
+```bash
+python week7/[4.0]_rag_agent.py
+```
+
+### Test Hybrid Search
+Test the keyword and vector search components individually.
+```bash
+python week7/[1.0]_hybrid_search.py
+```

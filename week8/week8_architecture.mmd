@@ -1,0 +1,65 @@
+---
+id: week8-architecture
+---
+flowchart TD
+    %% User Interaction
+    User(["fa:fa-user User Query"]) --> Cache{"Semantic Cache<br/>(Redis/Chroma)"}
+    
+    %% Caching Layer (Step 1)
+    Cache -- Match Found (>0.9) --> CachedResp(["fa:fa-bolt Cached Response"])
+    Cache -- No Match --> Router{"Model Router<br/>(Complexity Check)"}
+    
+    %% Routing Layer (Step 2)
+    Router -- Simple / Lookup --> Mini["fa:fa-robot ${SMALL_LLM}<br/>(Simple Task)"]
+    Router -- Complex / Reasoning --> GPT4["fa:fa-brain ${MAIN_LLM}<br/>(Complex Logic)"]
+    
+    %% Execution Layer (Step 3)
+    Mini --> SQLGen["SQL Generator"]
+    GPT4 --> SQLGen
+    
+    SQLGen --> DB[(Snowflake / DuckDB)]
+    DB --> Results["Query Results"]
+    Results --> Analysis["Insight Generation"]
+    Analysis --> FinalResp(["Final Answer"])
+    
+    %% Cost Monitoring (Parallel Step)
+    Mini -.-> Monitor["fa:fa-chart-line Cost Monitor<br/>(Token Usage & Budget)"]
+    GPT4 -.-> Monitor
+    Analysis -.-> Monitor
+    
+    %% Technology Stack & Script Mapping
+    subgraph Tech_Stack [Technology Stack & Script Mapping]
+        Stack1["<b>LangChain Cache</b><br/>Semantic Caching (like Materialized View)"]
+        Stack2["<b>LiteLLM / Router</b><br/>Model Routing (like Load Balancer)"]
+        Stack3["<b>Snowflake/DuckDB</b><br/>Data Warehouse"]
+        Script1["<b>[1.0]_model_router.py</b><br/>Complexity & Routing Logic"]
+        Script2["<b>[2.0]_semantic_cache.py</b><br/>Caching Implementation"]
+        Script3["<b>[3.0]_sql_agent.py</b><br/>SQL Generation & Execution"]
+        Script4["<b>[4.0]_cost_monitor.py</b><br/>Budget Tracking"]
+    end
+
+    %% Visual Connections
+    Stack1 -.-> Cache
+    Stack2 -.-> Router
+    Stack3 -.-> DB
+    
+    %% Script Mapping
+    Script1 -.-> Router
+    Script2 -.-> Cache
+    Script3 -.-> SQLGen
+    Script4 -.-> Monitor
+    
+    %% Styles
+    class User,FinalResp user
+    class Cache,DB storage
+    class Router,Mini,GPT4,SQLGen,Analysis process
+    class Monitor logic
+    
+    style Tech_Stack fill:#fff,stroke:#2d3436,stroke-width:1px,color:#2d3436
+
+    %% Global Style Block
+    classDef logic fill:#2d3436,stroke:#dfe6e9,stroke-width:2px,color:#fff
+    classDef storage fill:#0984e3,stroke:#74b9ff,stroke-width:2px,color:#fff
+    classDef process fill:#6c5ce7,stroke:#a29bfe,stroke-width:2px,color:#fff
+    classDef user fill:#00b894,stroke:#55efc4,stroke-width:2px,color:#fff
+    classDef group fill:#f1f2f6,stroke:#2f3542,stroke-width:1px,color:#2d3436

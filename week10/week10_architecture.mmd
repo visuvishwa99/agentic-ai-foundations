@@ -1,0 +1,51 @@
+---
+id: week10-architecture
+---
+flowchart TD
+    %% User Interaction
+    User(["fa:fa-user User Query"]) --> PII["Graph Agent<br/>(NetworkX)"]
+    
+    %% Input Documents
+    SQLFiles["fa:fa-file-code SQL Scripts / dbt Models"] --> Extractor{"1. Entity Extractor<br/>(LLM + LangChain)"}
+    Extractor -- Nodes/Edges --> GraphBuilder{"2. Graph Builder<br/>(NetworkX)"}
+    GraphBuilder --> GraphDB[("Knowledge Graph<br/>(In-Memory DAG)")]
+    
+    %% Graph Usage
+    PII -- "What depends on X?" --> GraphDB
+    GraphDB -- "Table Y depends on X" --> PII
+    
+    %% Visualization Step
+    GraphDB --> Viz["fa:fa-chart-network Graph Visualization<br/>(Matplotlib/PyVis)"]
+    
+    %% Technology Stack & Script Mapping
+    subgraph Tech_Stack [Technology Stack & Script Mapping]
+        Stack1["<b>NetworkX</b><br/>Graph Library (Simple Lineage)"]
+        Stack2["<b>Pydantic</b><br/>Structured Extraction (LLM -> Nodes/Edges)"]
+        Script1["<b>[1.0]_lineage_mapper.py</b><br/>Entity Extraction (LLM)"]
+        Script2["<b>[2.0]_graph_builder.py</b><br/>Graph Construction"]
+        Script3["<b>[3.0]_graph_agent.py</b><br/>Graph RAG Query Tool"]
+    end
+    
+    %% Visual Connections
+    Stack1 -.-> GraphBuilder
+    Stack2 -.-> Extractor
+    
+    %% Script Mapping
+    Script1 -.-> Extractor
+    Script2 -.-> GraphBuilder
+    Script3 -.-> PII
+    
+    %% Styles
+    class User,Viz user
+    class GraphDB storage
+    class Extractor,GraphBuilder,PII process
+    class PII logic
+    
+    style Tech_Stack fill:#fff,stroke:#2d3436,stroke-width:1px,color:#2d3436
+    
+    %% Global Style Block
+    classDef logic fill:#e74c3c,stroke:#c0392b,stroke-width:2px,color:#fff
+    classDef storage fill:#0984e3,stroke:#74b9ff,stroke-width:2px,color:#fff
+    classDef process fill:#6c5ce7,stroke:#a29bfe,stroke-width:2px,color:#fff
+    classDef user fill:#00b894,stroke:#55efc4,stroke-width:2px,color:#fff
+    classDef group fill:#f1f2f6,stroke:#2f3542,stroke-width:1px,color:#2d3436

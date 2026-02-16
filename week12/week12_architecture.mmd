@@ -1,0 +1,46 @@
+---
+id: week12-architecture
+---
+flowchart TD
+    %% Red Teaming Flow
+    Attacker(["fa:fa-user-secret Red Teamer (Attacker)"]) --> Attacks["Attack Prompts<br/>(Adversarial, Jailbreak, PII)"]
+    
+    Attacks --> AgentLoop{Self-Correcting Agent}
+    
+    %% Agent Logic
+    AgentLoop -- "Thinking..." --> InternalReview["Self-Critique Engine<br/>(LLM + Rules)"]
+    
+    InternalReview -- "Unsafe/Unsound" --> Refiner{"Wait, let me rethink..."}
+    Refiner -- "Better Prompt" --> InternalReview
+    
+    InternalReview -- "Safe & Correct" --> FinalOutput["Final Response"]
+    
+    %% Evaluation
+    FinalOutput --> Evaluator{"Evaluator (Judge)<br/>(Score 0-1)"}
+    Evaluator --> Report["Evaluation Report<br/>MD/JSON"]
+    
+    %% Technology Stack & Script Mapping
+    subgraph Tech_Stack [Technology Stack & Script Mapping]
+        Script1["<b>[1.0]_red_teamer.py</b><br/>Generates Attacks"]
+        Script2["<b>[2.0]_evaluator.py</b><br/>Scores Responses"]
+        Script3["<b>[3.0]_self_correcting_agent.py</b><br/>Implements Critique Loop"]
+    end
+    
+    %% Script Mapping
+    Script1 -.-> Attacker
+    Script2 -.-> Evaluator
+    Script3 -.-> AgentLoop
+    
+    %% Styles
+    class Attacker,Attacks logic
+    class FinalOutput,Report storage
+    class AgentLoop,InternalReview,Refiner,Evaluator process
+    
+    style Tech_Stack fill:#fff,stroke:#2d3436,stroke-width:1px,color:#2d3436
+    
+    %% Global Style Block
+    classDef logic fill:#e74c3c,stroke:#c0392b,stroke-width:2px,color:#fff
+    classDef storage fill:#0984e3,stroke:#74b9ff,stroke-width:2px,color:#fff
+    classDef process fill:#6c5ce7,stroke:#a29bfe,stroke-width:2px,color:#fff
+    classDef user fill:#00b894,stroke:#55efc4,stroke-width:2px,color:#fff
+    classDef group fill:#f1f2f6,stroke:#2f3542,stroke-width:1px,color:#2d3436

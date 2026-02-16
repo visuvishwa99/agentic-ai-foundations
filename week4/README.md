@@ -1,8 +1,8 @@
-# Week 4: Advanced Chunking & Document Parsing
+# Week 4: Advanced Chunking and Document Parsing
 
 This directory contains scripts demonstrating advanced techniques for document processing and retrieval-augmented generation (RAG).
 
-## 📄 Scripts Overview
+## Scripts Overview
 
 ### `advancedchunkingsystem.py`
 This script demonstrates an **Enhanced Chunking Strategy** that goes beyond simple text splitting. It uses structured parsing to handle different document elements (like tables and images) uniquely, ensuring that context is preserved where it matters most.
@@ -12,7 +12,7 @@ This script demonstrates an **Enhanced Chunking Strategy** that goes beyond simp
 - **Table Preservation:** Converts tables to Markdown to maintain their semantic structure for better RAG performance.
 - **Contextual Retrieval:** Uses sentence embeddings to find relevant chunks and applies "boosts" to specific types (like tables) when the query asks for data.
 
-## 🏗️ Architecture Breakdown
+## Architecture Breakdown
 
 ### 1. Advanced Parsing (Multi-Modal Ingestion)
 **Implemented in:** `[1.1]_advancedchunkingsystem.py`
@@ -73,3 +73,17 @@ The practice of artificially increasing the similarity score of certain chunks b
 
 ### 9. Markdown Table
 A text-based format for tables (e.g., `| Header |`). This format is much easier for AI models to "read" and understand compared to raw CSV or JSON data.
+
+## How to Run
+
+### Option 1: Run the Advanced Chunking System (Recommended)
+This script demonstrates element-aware chunking and contextual boosting.
+```bash
+python week4/[1.1]_advancedchunkingsystem.py
+```
+
+### Option 2: Run the Base Chunking Logic
+Test the core chunking and validation functions.
+```bash
+python week4/[0.1]_chunk_system.py
+```

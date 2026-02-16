@@ -1,0 +1,33 @@
+graph TD
+    %% Base Styles
+    classDef logic fill:#2d3436,stroke:#dfe6e9,stroke-width:2px,color:#fff
+    classDef storage fill:#0984e3,stroke:#74b9ff,stroke-width:2px,color:#fff
+    classDef process fill:#6c5ce7,stroke:#a29bfe,stroke-width:2px,color:#fff
+    classDef user fill:#00b894,stroke:#55efc4,stroke-width:2px,color:#fff
+    classDef group fill:#f1f2f6,stroke:#2f3542,stroke-width:1px,color:#2d3436
+
+    %% Nodes
+    User([User]) -->|Query| Client[MCP Client / Agent]:::logic
+    
+    subgraph "Tech_Stack [Technology Stack]"
+        direction TB
+        ServerScript["<b>[2.0]_mcp_server.py</b><br/>Exposes Tools & Resources"]:::process
+        ClientScript["<b>[1.0]_mcp_client.py</b><br/>Consumes Context"]:::logic
+    end
+
+    subgraph "MCP Ecosystem"
+        direction TB
+        Client -->|JSON-RPC Request| Transport["Transport Layer<br/>(stdio / SSE)"]:::group
+        Transport -->|JSON-RPC Response| Server[MCP Server]:::process
+        
+        Server -->|Read| Files[(Local Files)]:::storage
+        Server -->|Query| DB[(Database / Warehouse)]:::storage
+    end
+
+    %% Mappings
+    ServerScript -.-> Server
+    ClientScript -.-> Client
+
+    %% Explanations
+    Transport -- Like a Pipe/Socket --> User
+    Server -- Like a Driver --> DB

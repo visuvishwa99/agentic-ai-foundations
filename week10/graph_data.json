@@ -1,0 +1,66 @@
+{
+  "nodes": [
+    {
+      "id": "dim_products",
+      "type": "table"
+    },
+    {
+      "id": "raw_products",
+      "type": "table"
+    },
+    {
+      "id": "raw_suppliers",
+      "type": "table"
+    },
+    {
+      "id": "dim_users",
+      "type": "table"
+    },
+    {
+      "id": "raw_users",
+      "type": "table"
+    },
+    {
+      "id": "raw_countries",
+      "type": "table"
+    },
+    {
+      "id": "fct_orders",
+      "type": "table"
+    },
+    {
+      "id": "raw_orders",
+      "type": "table"
+    }
+  ],
+  "edges": [
+    {
+      "source": "raw_products",
+      "target": "dim_products"
+    },
+    {
+      "source": "raw_suppliers",
+      "target": "dim_products"
+    },
+    {
+      "source": "raw_users",
+      "target": "dim_users"
+    },
+    {
+      "source": "raw_countries",
+      "target": "dim_users"
+    },
+    {
+      "source": "raw_orders",
+      "target": "fct_orders"
+    },
+    {
+      "source": "dim_users",
+      "target": "fct_orders"
+    },
+    {
+      "source": "dim_products",
+      "target": "fct_orders"
+    }
+  ]
+}

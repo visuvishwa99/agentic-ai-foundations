@@ -34,7 +34,7 @@ We combine user intent with retrieved data to produce a grounded answer.
 - **DE Equivalent**: Like a **Data Enrichment (Lookup)** step in an ETL pipeline where a source record is joined with master data before final loading.
 
 
-## 🚀 Key Components (Sorted)
+## Key Components (Sorted)
 
 ### 1. Vector Foundations
 - **`[1.1]_Cosine_Similarity.py`**: Measuring the semantic distance between two blocks of text.
@@ -57,7 +57,21 @@ We combine user intent with retrieved data to produce a grounded answer.
 - **Models**: Qwen 2.5 Coder (via Ollama)
 - **Vector DB**: ChromaDB, FAISS
 
-## 📦 Installation
+## Installation
 ```bash
 pip install -r requirements.txt
+```
+
+## How to Run
+
+### Option 1: Run the RAG Pipeline (Recommended)
+This script demonstrates the full workflow: loading data, creating embeddings, searching, and generating an answer.
+```bash
+python week3/[4.1]_capstone_RAG.py
+```
+
+### Option 2: Test Semantic Caching
+Test how the system reuses previous results.
+```bash
+python week3/[3.1]_semantic_cache.py
 ```

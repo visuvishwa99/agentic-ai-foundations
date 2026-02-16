@@ -70,3 +70,11 @@ If you're moving from simple Chains to Agents, here are the key concepts used in
 ### 5. LangSmith Tracing
 1.  **Simple definition:** A debugger/X-ray for your AI agent.
 2.  **Technical context:** Because agents loop and call tools multiple times, it's hard to follow what happened. Tracing visualizes every decision, tool input, and output in a web dashboard.
+
+## How to Run
+
+### Run the Alerting Agent
+This script launches the LangGraph-based monitoring agent.
+```bash
+python week5/AlertingAgent.py
+```

@@ -1,0 +1,48 @@
+---
+id: week11-architecture
+---
+flowchart TD
+    %% User Interaction
+    User(["fa:fa-user User Request"]) --> AgentLoop{Secure SQL Agent}
+    
+    %% Agent Logic
+    AgentLoop -- Drafts SQL --> RiskAnalyzer{"Risk Analyzer<br/>(LLM + Regex)"}
+    
+    RiskAnalyzer -- Low/Medium Risk --> ApprovalGate{"🛑 Approval Gate"}
+    RiskAnalyzer -- High Risk (DROP) --> Blocked["❌ Blocked"]
+    
+    %% Human Component
+    ApprovalGate -- "Looks Good?" --> HumanReviewer(["fa:fa-user-check Human Reviewer<br/>(CLI/Slack)"])
+    
+    HumanReviewer -- "Approved" --> Execution["Execute SQL<br/>(Snowflake/DB)"]
+    HumanReviewer -- "Rejected" --> FeedbackLoop["Feedback Store<br/>(JSON/DB)"]
+    
+    %% Learning Loop
+    FeedbackLoop -.-> AgentLoop
+    
+    %% Technology Stack & Script Mapping
+    subgraph Tech_Stack [Technology Stack & Script Mapping]
+        Script1["<b>[1.0]_risk_analyzer.py</b><br/>Classifies Query Risk"]
+        Script2["<b>[2.0]_human_review.py</b><br/>Simulates Human Input"]
+        Script3["<b>[3.0]_interactive_agent.py</b><br/>Orchestrates Cycle"]
+    end
+    
+    %% Script Mapping
+    Script1 -.-> RiskAnalyzer
+    Script2 -.-> HumanReviewer
+    Script3 -.-> AgentLoop
+    
+    %% Styles
+    class User,HumanReviewer user
+    class Execution,FeedbackLoop storage
+    class AgentLoop,RiskAnalyzer,ApprovalGate process
+    class Blocked logic
+    
+    style Tech_Stack fill:#fff,stroke:#2d3436,stroke-width:1px,color:#2d3436
+    
+    %% Global Style Block
+    classDef logic fill:#e74c3c,stroke:#c0392b,stroke-width:2px,color:#fff
+    classDef storage fill:#0984e3,stroke:#74b9ff,stroke-width:2px,color:#fff
+    classDef process fill:#6c5ce7,stroke:#a29bfe,stroke-width:2px,color:#fff
+    classDef user fill:#00b894,stroke:#55efc4,stroke-width:2px,color:#fff
+    classDef group fill:#f1f2f6,stroke:#2f3542,stroke-width:1px,color:#2d3436

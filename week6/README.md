@@ -10,7 +10,7 @@ An intelligent agent system that remembers pipeline failures, detects patterns, 
 - **Actionable Suggestions**: Generates specific remediation steps based on error patterns
 - **Comprehensive Testing**: Includes golden dataset with 10 test cases and 90%+ accuracy
 
-## 🏗️ Architecture Breakdown
+## Architecture Breakdown
 
 ### 1. Vector Memory System (Long-Term Storage)
 **Implemented in:** `dataops_memory_agent.py`
@@ -67,9 +67,22 @@ DataOpsMemoryAgent
 pip install -r requirements.txt
 ```
 
-## Quick Start
+## How to Run
+
+### Interactive Demo (Recommended)
+This runs scenarios for schema drift, quality issues, and performance.
+```bash
+python week6/demo_agent.py
+```
+
+### Run the Test Suite
+Validate accuracy against the golden dataset.
+```bash
+python week6/test_agent.py
+```
 
 ### Basic Usage
+How to use the agent in your own code:
 
 ```python
 from dataops_memory_agent import DataOpsMemoryAgent, PipelineFailure
@@ -100,7 +113,7 @@ print(f"Pattern Detected: {analysis['pattern_detected']}")
 print(f"Suggestions: {analysis['remediation_suggestions']}")
 ```
 
-## Running Tests
+## Customization
 
 ### Full Test Suite
 

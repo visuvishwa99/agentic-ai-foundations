@@ -1,0 +1,11 @@
+langchain
+langchain-community
+langchain-ollama
+faiss-cpu
+pydantic
+python-dotenv
+tiktoken
+guardrails-ai
+presidio-analyzer
+presidio-anonymizer
+spacy

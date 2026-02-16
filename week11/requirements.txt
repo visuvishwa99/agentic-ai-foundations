@@ -1,0 +1,8 @@
+langchain
+langchain-community
+langchain-ollama
+networkx
+pyvis
+pydantic
+python-dotenv
+streamlit
