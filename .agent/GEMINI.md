@@ -44,26 +44,27 @@ When explaining a complex Mermaid diagram or architecture flow, ALWAYS use the f
 
 ### Best Practices for Mermaid Syntax (CRITICAL)
 1.  **Use `flowchart TD`**: Prefer `flowchart` over `graph` for better subgraph and direction support.
-2.  **Quote Node Labels**: ALWAYS quote node labels that contain whitespace or special characters (especially parentheses).
+3.  **Quote Node Labels**: ALWAYS quote node labels that contain whitespace or special characters (especially parentheses).
     *   ❌ `Node(Label (Text))` -> Syntax Error
     *   ✅ `Node["Label (Text)"]` -> Correct
+    *   **Rule**: If it has a space or symbol, wrap it in double quotes: `Node["My Label"]`.
 3.  **Separate Styling**: Define styles in a separate block at the end using `class NodeName ClassName`, rather than inline `:::ClassName` which can cause parser issues.
 4.  **Direction in Subgraphs**: Explicitly use `direction TB` (Top-Bottom) inside subgraphs if vertical layout is needed.
 
 ### Color Palette
-- **Logic/Prompt/Decision**: `#2d3436` (Charcoal) -> `:::logic`
-- **Data Storage (DBs/Cache)**: `#0984e3` (Blue) -> `:::storage`
-- **Processing (Models/AI)**: `#6c5ce7` (Purple) -> `:::process`
-- **User/Entrance/Output**: `#00b894` (Teal) -> `:::user`
-- **Groupings (Subgraphs)**: `#f1f2f6` (Light Gray) -> `:::group`
+- **Logic/Prompt/Decision**: `#5a3e00` (Amber/Brown) -> `:::logic`
+- **Data Storage (DBs/Cache)**: `#1e3a5f` (Dark Blue) -> `:::storage`
+- **Processing (Models/AI)**: `#1e3a5f` (Dark Blue) -> `:::process`
+- **User/Entrance/Output**: `#3a1a1a` (Dark Red) -> `:::user`
+- **Groupings (Subgraphs)**: `#2d3436` (Charcoal) -> `:::group`
 
 ### Global Style Block (Add to bottom of all .mmd files)
 ```mermaid
-    classDef logic fill:#2d3436,stroke:#dfe6e9,stroke-width:2px,color:#fff
-    classDef storage fill:#0984e3,stroke:#74b9ff,stroke-width:2px,color:#fff
-    classDef process fill:#6c5ce7,stroke:#a29bfe,stroke-width:2px,color:#fff
-    classDef user fill:#00b894,stroke:#55efc4,stroke-width:2px,color:#fff
-    classDef group fill:#f1f2f6,stroke:#2f3542,stroke-width:1px,color:#2d3436
+    classDef logic fill:#5a3e00,stroke:#ffb300,stroke-width:2px,color:#fff
+    classDef storage fill:#1e3a5f,stroke:#4a9eda,stroke-width:2px,color:#fff
+    classDef process fill:#1e3a5f,stroke:#4a9eda,stroke-width:2px,color:#fff
+    classDef user fill:#3a1a1a,stroke:#cc4444,stroke-width:2px,color:#fff
+    classDef group fill:#2d3436,stroke:#dfe6e9,stroke-width:1px,color:#fff
 ```
 
 ### Contrast Rules

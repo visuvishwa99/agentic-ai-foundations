@@ -1,0 +1,85 @@
+flowchart TD
+    %% Base Styles
+
+    %% Top Level: Existing Pipeline
+    subgraph Pipeline_Infra [Existing Phase 1 Pipeline]
+        direction TB
+        AWS[AWS Cloud Services]:::process
+        Postgres[("PostgreSQL + pgvector")]:::storage
+        PySpark["PySpark ETL"]:::process
+    end
+
+    %% Bottom Level: Multi-Agent System
+    subgraph Agent_System [Phase 2: Multi-Agent Monitoring System]
+        direction TB
+
+        %% Supervisor - Code Logic
+        Supervisor["<b>Supervisor Router</b><br/>(Deterministic Code)"]:::logic
+        
+        subgraph Specialists [Specialist Agents]
+            direction LR
+            IngestAgent["<b>Ingestion Agent</b><br/>(Boto3 Tools)"]:::process
+            TransformAgent["<b>Transform Agent</b><br/>(Spark Logs)"]:::process
+            QualityAgent["<b>Quality Agent</b><br/>(SQL Check)"]:::process
+        end
+
+        %% Analyst & Alerting
+        Analyst["<b>Analyst Agent</b><br/>(LLM Reasoning)"]:::logic
+        AlertFunc["<b>Alerting Module</b><br/>(Dumb Function)"]:::process
+        
+        %% Shared Resources
+        subgraph Resources [Shared Resources]
+            direction LR
+            State[("Shared State<br/>TypedDict")]:::storage
+            Graph[("Knowledge Graph<br/>NetworkX")]:::storage
+            Mem[("Pattern Memory<br/>(pgvector in Postgres)")]:::storage
+        end
+
+        %% Control Flow
+        Supervisor -->|Deterministic Route| IngestAgent
+        Supervisor -->|Deterministic Route| TransformAgent
+        Supervisor -->|Deterministic Route| QualityAgent
+        
+        IngestAgent -->|Report| State
+        TransformAgent -->|Report| State
+        QualityAgent -->|Report| State
+        
+        State -->|Full Context| Analyst
+        
+        %% Sequential Reasoning Flow
+        Analyst -->|1. Structural Query| Graph
+        Analyst -->|2. Temporal Query| Mem
+        Analyst -->|3. Decision| AlertFunc
+        
+        AlertFunc -->|Slack/Discord| User((User)):::user
+    end
+
+    %% Cross-System Monitoring Links
+    IngestAgent -.->|Monitor| AWS
+    TransformAgent -.->|Monitor| PySpark
+    QualityAgent -.->|Monitor| Postgres
+    Mem -.->|Resides In| Postgres
+
+    %% Tech Stack & Script Mapping
+    subgraph Tech_Stack [Technology Stack - Phase 2]
+        SupScript["<b>[3.0]_supervisor_router.py</b><br/>Python Logic"]:::logic
+        IngestScript["<b>agent/ingestion_agent.py</b><br/>AWS Tools"]:::process
+        TransScript["<b>agent/transform_agent.py</b><br/>Spark Tools"]:::process
+        QualScript["<b>agent/quality_agent.py</b><br/>SQL Tools"]:::process
+        AnalystScript["<b>agent/analyst_agent.py</b><br/>LLM Reasoning"]:::logic
+        AlertScript["<b>agent/alerting.py</b><br/>Webhook Function"]:::process
+    end
+
+    SupScript -.-> Supervisor
+    IngestScript -.-> IngestAgent
+    TransScript -.-> TransformAgent
+    QualScript -.-> QualityAgent
+    AnalystScript -.-> Analyst
+    AlertScript -.-> AlertFunc
+
+    %% Global Style Block
+    classDef logic fill:#5a3e00,stroke:#ffb300,stroke-width:2px,color:#fff
+    classDef storage fill:#1e3a5f,stroke:#4a9eda,stroke-width:2px,color:#fff
+    classDef process fill:#1e3a5f,stroke:#4a9eda,stroke-width:2px,color:#fff
+    classDef user fill:#3a1a1a,stroke:#cc4444,stroke-width:2px,color:#fff
+    classDef group fill:#2d3436,stroke:#dfe6e9,stroke-width:1px,color:#fff

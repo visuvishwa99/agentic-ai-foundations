@@ -1,0 +1,108 @@
+flowchart TD
+    %% Base Styles
+
+    %% Top Level: Data Pipeline Infrastructure
+    subgraph Pipeline_Infra [Data Pipeline Infrastructure]
+        direction TB
+        
+        subgraph AWS [AWS Cloud Services]
+            direction TB
+            SNS[SNS FIFO<br/>Topic]:::process
+            SQS[SQS FIFO<br/>+ Filter]:::process
+            Pipes[EventBridge<br/>Pipes]:::process
+            Firehose[Kinesis<br/>Firehose]:::process
+            S3[S3 Bucket<br/>Partitioned]:::storage
+            
+            SNS --> SQS
+            SQS --> Pipes
+            Pipes --> Firehose
+            Firehose --> S3
+        end
+
+        subgraph Local [Local Docker Env]
+            direction TB
+            Simulator["Event Simulator<br/>(Python)"]:::user
+            PySpark["PySpark ETL<br/>(Docker)"]:::process
+            Postgres[("PostgreSQL<br/>Replica + pgvector")]:::storage
+            
+            Simulator -->|Events| SNS
+            PySpark -->|Read| S3
+            PySpark -->|Load| Postgres
+        end
+    end
+
+    %% Bottom Level: Multi-Agent System
+    subgraph Agent_System [Multi-Agent Monitoring System]
+        direction TB
+
+        %% Supervisor is now a Hybrid (Code + LLM)
+        Supervisor["<b>Supervisor Router</b><br/>(Code + LLM Fallback)"]:::logic
+        
+        subgraph Specialists [Specialist Agents]
+            direction LR
+            IngestAgent["<b>Ingestion Agent</b><br/>(Monitors SNS/SQS/S3)"]:::process
+            TransformAgent["<b>Transform Agent</b><br/>(Monitors Spark)"]:::process
+            QualityAgent["<b>Quality Agent</b><br/>(Monitors Postgres)"]:::process
+        end
+
+        %% Split Reporter into Analyst + Alerting Function
+        Analyst["<b>Analyst Agent</b><br/>(Reasoning & Diagnosis)"]:::logic
+        AlertFunc["<b>Alerting Module</b><br/>(Dumb Function)"]:::process
+        
+        %% Shared Resources - Memory moved to Postgres
+        subgraph Resources [Shared Resources]
+            direction LR
+            State[("Shared State<br/>TypedDict")]:::storage
+            Graph[("Knowledge Graph<br/>NetworkX")]:::storage
+            Mem[("Pattern Memory<br/>(pgvector in Postgres)")]:::storage
+        end
+
+        %% Control Flow
+        Supervisor -->|Deterministic Route| IngestAgent
+        Supervisor -->|Deterministic Route| TransformAgent
+        Supervisor -->|Deterministic Route| QualityAgent
+        
+        IngestAgent -->|Report| State
+        TransformAgent -->|Report| State
+        QualityAgent -->|Report| State
+        
+        State -->|Full Context| Analyst
+        
+        %% Sequential Reasoning Flow
+        Analyst -->|1. Structural Query| Graph
+        Analyst -->|2. Temporal Query| Mem
+        Analyst -->|3. Decision| AlertFunc
+        
+        AlertFunc -->|Slack/Discord| User((User)):::user
+    end
+
+    %% Cross-System Monitoring Links
+    IngestAgent -.->|Get Metrics| SNS
+    IngestAgent -.->|Check| S3
+    TransformAgent -.->|Check Status| PySpark
+    QualityAgent -.->|Query| Postgres
+    Mem -.->|Resides In| Postgres
+
+    %% Tech Stack & Script Mapping
+    subgraph Tech_Stack [Technology Stack]
+        SupScript["<b>[3.0]_supervisor_router.py</b><br/>Python Logic"]:::logic
+        IngestScript["<b>agent/ingestion_agent.py</b><br/>AWS Tools"]:::process
+        TransScript["<b>agent/transform_agent.py</b><br/>Spark Tools"]:::process
+        QualScript["<b>agent/quality_agent.py</b><br/>SQL Tools"]:::process
+        AnalystScript["<b>agent/analyst_agent.py</b><br/>LLM Reasoning"]:::logic
+        AlertScript["<b>agent/alerting.py</b><br/>Webhook Function"]:::process
+    end
+
+    SupScript -.-> Supervisor
+    IngestScript -.-> IngestAgent
+    TransScript -.-> TransformAgent
+    QualScript -.-> QualityAgent
+    AnalystScript -.-> Analyst
+    AlertScript -.-> AlertFunc
+
+    %% Global Style Block
+    classDef logic fill:#5a3e00,stroke:#ffb300,stroke-width:2px,color:#fff
+    classDef storage fill:#1e3a5f,stroke:#4a9eda,stroke-width:2px,color:#fff
+    classDef process fill:#1e3a5f,stroke:#4a9eda,stroke-width:2px,color:#fff
+    classDef user fill:#3a1a1a,stroke:#cc4444,stroke-width:2px,color:#fff
+    classDef group fill:#2d3436,stroke:#dfe6e9,stroke-width:1px,color:#fff
