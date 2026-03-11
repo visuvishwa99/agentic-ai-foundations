@@ -7,3 +7,5 @@ server.log
 .venv
 .agent
 agentic-ai-foundations/
+data/
+lib/
