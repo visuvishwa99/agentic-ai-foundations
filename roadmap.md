@@ -3,32 +3,31 @@
 
 -----
 
-## 🗓️ Phase 1: LLM & AI Foundations (Weeks 1–4)
+## Phase 1: LLM & AI Foundations (Weeks 1-4)
 
-### **Week 1 — Core Concepts + Cost Awareness**
+### **Week 1 -- Transformer Architecture & LLM Fundamentals**
 
 **Learn:**
 
-- How LLMs work: tokenization, embeddings, transformers
-- **Token economics and pricing models** (OpenAI, Anthropic, local models)
+- How LLMs work: tokenization, embeddings, transformer data flow
+- Key LLM jargons: vectors, embeddings, softmax, logits, KV cache, backpropagation, cross-entropy loss, perplexity
+- Attention mechanism (Q, K, V), multi-head attention, residual connections, LayerNorm
 
-**📘 Resources:**
+**Resources:**
 
-- Karpathy’s “Let’s build GPT from scratch”
+- Karpathy's "Let's build GPT from scratch"
 - Illustrated Transformer by Jay Alammar
-- OpenAI/Anthropic pricing documentation
 
-**⚙️ Practice:**
+**Content:**
 
-- Use OpenAI API (gpt-4o-mini) for simple Q&A
-- Experiment with temperature, max tokens, system prompts
-- **Track token usage and calculate costs for 1000 queries**
-
-**📊 Deliverable:** Cost calculator spreadsheet comparing GPT-4o vs Claude vs local models
+- `Transformer Architecture.md`: Full architecture analysis with Mermaid diagram of data flow (Tokenization -> Embedding -> LayerNorm -> MultiHead Attention -> Residual -> FFN -> Output Head)
+- `LLM Jargons.md`: 14 key concepts explained with examples (Vectors, Embeddings, ReLU, Softmax, Logits, KV Cache, MLP, Backpropagation, Dot Product, Cross-Entropy Loss, Perplexity, and more)
 
 -----
 
-### **Week 2 — Prompt Engineering + Structured Outputs**
+### **Week 2 -- Prompt Engineering + Structured Outputs**
+
+**Status:** Planned (no content yet)
 
 **Learn:**
 
@@ -36,7 +35,7 @@
 - **JSON mode and structured outputs**
 - **Pydantic for output validation**
 
-**⚙️ Project:**
+**Project:**
 
 - Build an LLM-powered Databricks log analyzer
 - Must return structured JSON output with Pydantic validation
@@ -44,301 +43,341 @@
 
 -----
 
-### **Week 3 — Embeddings & Retrieval**
+### **Week 3 -- Embeddings & Retrieval**
 
 **Learn:**
 
 - Embeddings, cosine similarity, vector search
-- Tools: FAISS, ChromaDB, pgvector
+- Tools: FAISS, ChromaDB
 - Semantic caching concepts
+- RAG pipeline fundamentals
 
-**⚙️ Mini Project:**
+**Content:**
 
-- Load .sql/.py scripts from your repo
-- Use embeddings + retrieval to answer: “Which script loads Crunchtime data?”
-- Implement Redis-based semantic caching
+- `[1.1]_Cosine_Similarity.py`: Measuring semantic distance between text blocks
+- `[1.2]_Embeddings.py`: Transforming text into high-dimensional vectors
+- `[1.3]_vector.py`: Core vector representation logic
+- `[2.1]_FAISS.py`: High-performance similarity search using Facebook AI Similarity Search
+- `[2.2]_chromeDB.py`: Local vector storage using ChromaDB
+- `[3.1]_semantic_cache.py`: Intercepts queries to reduce costs via semantic caching
+- `[4.1]_capstone_RAG.py`: Complete "Talk to your Data" RAG pipeline using Ollama
+
+**Tech Stack:** Python 3.10+, LangChain, sentence-transformers, Qwen 2.5 Coder (Ollama), ChromaDB, FAISS
 
 -----
 
-### **Week 4 — RAG Basics + Document Parsing** ⭐ **ENHANCED**
+### **Week 4 -- Advanced Chunking & Document Parsing**
 
 **Learn:**
 
-- RAG pipeline: query → retrieve → augment → respond
-- Chunking strategies and retrieval quality
-- **NEW: Advanced document parsing**
-  - **Unstructured.io** for multi-format processing
-  - **LlamaParse** for complex PDFs
-  - **Handling tables, images, and nested structures**
+- Chunking strategies: element-aware, table preservation, overlap
+- Advanced document parsing with Unstructured.io and LlamaParse
+- Chunk quality validation and scoring
+- Contextual boosting for retrieval optimization
 
-**📘 Resources:**
+**Content:**
 
-- [Unstructured.io](http://Unstructured.io) documentation
-- LlamaParse tutorials
-- LlamaIndex document parsing guides
+- `[0.1]_chunk_system.py`: Base chunking logic with validation and quality scoring
+- `[0.0]_chunk_system.mmd`: Architecture diagram for chunking system
+- `[1.1]_advancedchunkingsystem.py`: Element-aware chunking with table preservation and relevance boosting
+- `[1.0]_advance_chunk.mmd`: Architecture diagram for advanced chunking
 
-**⚙️ Project:**
-
-- Build a RAG-based assistant for dbt model documentation
-- **Process PDFs with tables and images** (e.g., data architecture diagrams)
-- Add **observability**: Log all retrieval steps with LangSmith/Phoenix
-
-**📊 Deliverable:** RAG pipeline that handles 3+ document formats (PDF, DOCX, Markdown)
+**Key Concepts:** Chunk size/overlap, Unstructured.io partitioning, sentence transformers, cosine similarity, top-K retrieval, relevance boosting, Markdown table formatting
 
 -----
 
-## 🧩 Phase 2: Agentic Thinking & Tool Use (Weeks 5–8)
+## Phase 2: Agentic Thinking & Tool Use (Weeks 5-8)
 
-### **Week 5 — Agents & Tools + Tracing**
+### **Week 5 -- Agentic Log Monitoring & Alerting**
 
 **Learn:**
 
-- What makes an “agent”: reasoning loop, tool use, memory
-- Frameworks: LangChain, LangGraph, LlamaIndex (pick LangGraph)
-- **Set up tracing from day one** (LangSmith/Phoenix)
+- What makes an "agent": reasoning loop, tool use, state
+- LangGraph for cyclic graph workflows (Agent -> Tools -> Retry -> Agent)
+- Tool binding (function calling): LLM decides which tool to call and with what arguments
+- Agent state management with TypedDict
+- Observability with LangSmith tracing
 
-**⚙️ Project:**
+**Project:**
 
-- Create agent: reads logs → checks job status → posts to Slack
-- **Log every step**: tool called, input, output, reasoning
+- Alerting Agent: reads logs -> checks job status -> posts to **Discord** via webhooks
+- Cyclic graph architecture with retry logic and conditional edges
+- Full trace visibility of agent reasoning
+
+**Content:**
+
+- `AlertingAgent.py`: Stateful monitoring agent using LangGraph with Discord alerting
+- `AlertingAgent.mmd`: Architecture diagram
 
 -----
 
-### **Week 6 — Memory & State + Testing Fundamentals**
+### **Week 6 -- Memory & State + Testing Fundamentals**
 
 **Learn:**
 
 - Short-term (contextual) and long-term (vector) memory
-- **NEW: Agent testing frameworks**
-  - RAGAS, TruLens, or Langfuse evaluation
-  - Create “golden datasets” of expected behaviors
-  - Unit tests for agent tool calls
+- TF-IDF vectorization for semantic search of past failures
+- Error classification and pattern recognition
+- Agent testing with golden datasets
 
-**⚙️ Project:**
+**Project:**
 
-- DataOps Memory Agent: remembers last 5 failed runs
-- **Test suite**: 10 test cases with expected outputs
-- **Measure accuracy**: Did the agent identify the right cause?
+- DataOps Memory Agent: remembers pipeline failures, detects patterns, generates remediation suggestions
+- Vector-based semantic memory with TF-IDF embeddings
+- Error classification into 6+ types (schema, timeout, data quality, permission, connection, resource)
+- Test suite with 10 golden test cases (96.7% overall accuracy)
+
+**Content:**
+
+- `dataops_memory_agent.py`: Core agent with vector memory, classification, pattern detection, and suggestion engine
+- `demo_agent.py`: Interactive demo with 4 scenarios (schema drift, data quality crisis, performance degradation, weekly report)
+- `test_agent.py`: Golden dataset test suite (100% classification, 90% pattern detection)
+- `generate_metrics.py`: Metrics generation for analysis
+- `dashboard.html`: Visual dashboard
+- `DataOpsMemoryAgent.mmd`: Architecture diagram
 
 -----
 
-### **Week 7 — Structured Outputs & Advanced RAG Techniques** ⭐ **ENHANCED**
+### **Week 7 -- Structured Outputs & Advanced RAG Techniques**
 
 **Learn:**
 
-- **Hybrid search**: BM25 + semantic search
-- **Reranking**: Cohere reranker, cross-encoders
-- **Query enhancement**: HyDE, query decomposition
-- Pydantic for structured agent outputs
+- **Hybrid search**: BM25 (keyword-based, fast) + Semantic Search (vector-based)
+- **Reranking**: Cross-encoders and Cohere for re-ordering top-K results
+- **Query enhancement**: HyDE (Hypothetical Document Embeddings), query decomposition
+- Pydantic for structured agent output validation
 
-**📘 Resources:**
+**Resources:**
 
 - Weaviate hybrid search docs
 - Cohere reranking guide
 
-**⚙️ Project:**
+**Project:**
 
-- Build agent that queries Snowflake and returns structured DataFrames
-- Implement **hybrid search** (keyword + vector)
-- Add **reranking** for top-k results
-- All outputs must pass Pydantic schema validation
+- Advanced RAG Agent for Snowflake with hybrid search, reranking, and structured DataFrames
 
-Vector DB : 
+**Content:**
+
+- `[1.0]_hybrid_search.py`: BM25 + Chroma/FAISS hybrid search implementation
+- `[2.0]_reranking.py`: Cross-encoder/Cohere re-ranking of retrieval results
+- `[3.0]_structured_output.py`: Pydantic-validated structured outputs
+- `[4.0]_rag_agent.py`: Final agent integrating all components
+- `week7_architecture.mmd`: Advanced RAG pipeline diagram
+
 -----
 
-### **Week 8 — Cost Management & Optimization**
+### **Week 8 -- Cost Management & Optimization**
 
 **Learn:**
 
-- Calculate cost per agent run (tokens × price)
-- Implement semantic caching (Redis, LangChain cache)
-- Model selection strategy (when to use GPT-4o-mini vs GPT-4o)
-- Token budgets and monitoring
+- Calculate cost per agent run (tokens x price)
+- Semantic caching (Redis, LangChain cache)
+- Model routing: dynamically select cheap vs premium models based on query complexity
+- Token budgets and monitoring alerts
 
-**⚙️ Project:**
+**Project:**
 
-- “Data Assistant Agent”: natural language → SQL → Snowflake → insights
-- **Optimize**: Reduce cost by 50% through caching and model selection
-- Set up **cost alerts** (e.g., daily budget exceeded)
+- "Data Assistant Agent": natural language -> SQL -> Snowflake -> insights
+- Model router (Budget Gatekeeper), semantic cache, SQL agent, cost monitor
 
-**📊 Deliverable:** Cost optimization report with before/after metrics
+**Content:**
+
+- `[1.0]_model_router.py`: Complexity-based model routing (cheap model for simple queries, premium for complex)
+- `[2.0]_semantic_cache.py`: Vector-based semantic caching to reduce redundant API calls
+- `[3.0]_sql_agent.py`: Core SQL agent translating natural language to SQL
+- `[4.0]_cost_monitor.py`: Token usage tracking, cost calculation, and budget alerts
+- `week8_architecture.mmd`: Cost-optimized architecture diagram
+
+**Deliverable:** Cost optimization report (target: >50% reduction via caching + routing)
 
 -----
 
-## ⚙️ Phase 3: Data-Aware Agents with Safety (Weeks 9–12)
+## Phase 3: Data-Aware Agents with Safety (Weeks 9-12)
 
-### **Week 9 — Guardrails & Safety**
+### **Week 9 -- Guardrails & Safety**
 
 **Learn:**
 
 - Prompt injection attacks and defenses
-- **Guardrails AI** or **NeMo Guardrails**
-- Rate limiting, approval flows
+- NeMo Guardrails, Guardrails AI, OWASP Top 10 for LLMs
 - PII detection and data masking
+- Input guard (pre-LLM) and output guard (post-LLM) patterns
 
-**⚙️ Project:**
+**Project:**
 
-- Add guardrails to your SQL agent
-- Must refuse: DROP TABLE, DELETE without WHERE, credential exposure
-- **Red team test**: Try adversarial prompts
+- Secure SQL Agent with layered guardrails
+- Input guard: blocks jailbreaks, masks PII
+- Output guard: rejects destructive SQL (DROP, TRUNCATE), validates syntax
+
+**Content:**
+
+- `[1.0]_input_guard.py`: Input inspection for jailbreak attempts, malicious intent, PII
+- `[2.0]_output_guard.py`: SQL/code inspection for destructive commands and authorized schemas
+- `[3.0]_secure_agent.py`: Integrated secure agent workflow
+- `week9_architecture.mmd`: Secure agent architecture diagram
 
 -----
 
-### **Week 10 — Data Integration & Graph RAG** ⭐ **ENHANCED**
+### **Week 10 -- Data Integration & Graph RAG**
 
 **Learn:**
 
-- Connect Databricks/Snowflake as agent context
-- **NEW: Graph RAG**
-  - Build knowledge graphs from documents
-  - Entity linking and resolution
-  - Graph-based retrieval with Neo4j or NetworkX
-- **Data lineage**: OpenLineage, dbt lineage
+- Graph RAG: structural understanding beyond vector similarity
+- Knowledge graphs from documents: nodes (tables, columns), edges (SELECTS_FROM, JOINS_WITH, LOADS_INTO)
+- Data lineage mapping and dependency tracking
+- NetworkX for lightweight graph modeling
 
-**📘 Resources:**
+**Resources:**
 
 - Microsoft GraphRAG paper
 - Neo4j + LangChain integration
-- dbt lineage documentation
 
-**⚙️ Project:**
+**Project:**
 
-- **Graph RAG agent**: “Which upstream table affects this dashboard?”
-- Build knowledge graph from dbt metadata
-- Integrate with dbt lineage graph
+- Graph RAG Agent: "Which upstream table affects this dashboard?"
+- LLM-powered entity extraction from SQL/dbt files
+- Visual lineage graph generation
 
-**📊 Deliverable:** Graph visualization showing data dependencies
+**Content:**
 
------
-
-### **Week 11 — Human-in-the-Loop Patterns**
-
-**Learn:**
-
-- Approval workflows (agent proposes → human confirms → executes)
-- Feedback loops (thumbs up/down)
-- **Streamlit** or **Slack buttons** for approvals
-
-**⚙️ Project:**
-
-- Extend SQL agent to require approval before writes
-- Add feedback: “Was this query helpful?”
-- Store feedback for model improvements
+- `[1.0]_lineage_mapper.py`: LLM-based entity extraction from SQL/dbt (nodes and edges)
+- `[2.0]_graph_builder.py`: Directed graph (DAG) construction with NetworkX
+- `[3.0]_graph_agent.py`: Agent with graph traversal tool for upstream/downstream dependency queries
+- `lineage_graph.html`: Visual graph output
+- `graph_data.json`: Graph data store
+- `sql/`: Sample SQL files for lineage extraction
+- `week10_architecture.mmd`: Lineage agent architecture diagram
 
 -----
 
-### **Week 12 — Self-Evaluation & Red Team Week**
+### **Week 11 -- Human-in-the-Loop Patterns**
 
 **Learn:**
 
-- Self-checking prompts
-- Common agent failures:
-  - Hallucination, tool errors, context overflow, infinite loops
+- Approval workflows (agent proposes -> human confirms -> executes)
+- Risk-based classification: SELECT (auto-run), UPDATE/INSERT (require approval), DROP/DELETE (block)
+- Feedback loops for model improvements
 
-**⚙️ Project:**
+**Project:**
 
-- **Red team your agents**: Try to break them
-- Document all failure modes
-- Add error handling for each type
-- Deploy data-assistant agent as API (AWS API Gateway)
+- Interactive SQL Agent with risk-based approval gates
+- Extends Week 8 SQL Agent with Risk Analyzer and Human Review
+
+**Content:**
+
+- `[1.0]_risk_analyzer.py`: SQL risk classification (Low/Medium/High)
+- `[2.0]_human_review.py`: Simulated human approval interface (CLI/Streamlit)
+- `[3.0]_interactive_agent.py`: Orchestrator combining SQL Agent + Risk Analyzer + Reviewer
+- `week11_architecture.mmd`: Interactive agent architecture diagram
 
 -----
 
-## 🧠 Phase 4: Production Systems & Advanced Topics (Weeks 13–16)
-
-### **Week 13 — LLMOps & Observability**
+### **Week 12 -- Self-Evaluation & Red Team Week**
 
 **Learn:**
 
-- Versioning, prompt templates, evaluation pipelines
-- **Deep dive**: Langfuse, Phoenix, Helicone
-- Dashboards: latency, cost, success rate, error patterns
+- Red teaming: adversarial testing of AI agents
+- Self-correction loops (generate -> self-critique -> regenerate)
+- Common agent failures: hallucination, tool errors, context overflow, infinite loops
+
+**Project:**
+
+- Red team attack suite and automated evaluation
+- Self-correcting agent with safety check loop
+
+**Content:**
+
+- `[1.0]_red_teamer.py`: Automatic adversarial prompt generation
+- `[2.0]_evaluator.py`: Attack scoring (refusal rate, safety score)
+- `[3.0]_self_correcting_agent.py`: Response -> critique -> regenerate pipeline
+- `week12_architecture.mmd`: Resilient agent architecture diagram
+
+-----
+
+## Phase 4: Production Systems & Advanced Topics (Weeks 13-14.5)
+
+### **Week 13 -- LLMOps & Observability**
+
+**Learn:**
+
+- Observability: trace 100% of agent steps (input, tool usage, output, latency)
+- Evaluation pipelines: regression testing with golden questions
+- Dashboards: Token usage, error rates, latency
 - A/B testing for prompts
 
-**⚙️ Practice:**
+**Resources:**
 
-- Set up full observability for one agent
-- Create alerts: high error rates, cost spikes, slow responses
+- Phoenix (Arize AI) - Open source observability
+- LangSmith - Hosted tracing
+- DeepEval - Unit testing for LLMs
+
+**Content:**
+
+- `[1.0]_observable_agent.py`: SQL agent wrapped with OpenInference tracers, exports to Phoenix
+- `[2.0]_regression_test.py`: Golden question test suite (relevance, correctness, latency)
+- `[3.0]_dashboard.py`: Local Phoenix server for trace visualization and cluster analysis
+- `week13_architecture.mmd`: Observable agent architecture diagram
 
 -----
 
-### **Week 14 — Multi-Agent Systems & Orchestration**
+### **Week 14 -- Serving & API Deployment**
 
 **Learn:**
 
-- Event-driven architecture (message queues, Redis state)
-- **Multi-agent patterns**: CrewAI, AutoGen
-- Persistent memory + reasoning state
+- API layer with FastAPI (Pydantic models, async endpoints, Swagger UI)
+- Concurrency: handling multiple requests without blocking
+- Basic API key authentication
+- Dockerization for production deployment
 
-**⚙️ Exercise:**
+**Project:**
 
-- **Pipeline Reviewer Team**:
-  - Agent A: reviews SQL logic
-  - Agent B: checks schema/lineage
-  - Agent C: documents results
-- Draw system diagram
+- Agent Microservice: wrapping the Observable Agent (Week 13) in an HTTP API
+
+**Content:**
+
+- `[1.0]_agent_api.py`: FastAPI server with `POST /chat` endpoint, Swagger docs, background logging
+- `[2.0]_api_client.py`: Client simulator for concurrency testing
+- `[3.0]_docker_example.md`: Dockerfile instructions for container deployment
+- `week14_architecture.mmd`: Agent microservice architecture diagram
 
 -----
 
-### **Week 14.5 — Model Context Protocol (MCP)** ⭐ **NEW MODULE**
+### **Week 14.5 -- Model Context Protocol (MCP)**
 
 **What is MCP?**
 
-- Anthropic’s protocol for connecting AI systems to external context
+- Anthropic's protocol for connecting AI systems to external context
 - Enables agents to access files, repos, databases, APIs dynamically
-- Critical for code assistants and contextual AI
+- Think of it as "USB-C for AI apps" (standardized tool/context exchange)
 
 **Learn:**
 
-- MCP fundamentals and architecture
-- MCP server components
+- MCP fundamentals and architecture (Client, Host, Server)
+- Transport mechanisms: `stdio` (pipe) and `SSE` (HTTP)
 - Integration with Claude Desktop, Cursor IDE
 
-**📘 Resources:**
+**Resources:**
 
 - Anthropic MCP documentation: <https://modelcontextprotocol.io>
-- MCP GitHub repo: <https://github.com/anthropics/mcp>
+- MCP Python SDK: <https://github.com/modelcontextprotocol/python-sdk>
 - [Smithery.ai](http://Smithery.ai) MCP catalog
 
-**⚙️ Hands-on:**
+**Content:**
 
-1. **Demo existing MCP integrations**:
+- `[1.0]_mcp_client.py`: Automated agent client that launches server and performs tasks (list resources, read catalog, query data)
+- `[2.0]_mcp_server.py`: Custom MCP server exposing tools (`list_files`, `read_file`, `query_db`) via `stdio`
+- `[3.0]_inspector.py`: MCP Inspector for debugging server availability (requires Node.js)
+- `week14_5_architecture.mmd`: MCP architecture diagram
 
-- Set up Claude Desktop with MCP
-- Configure Cursor IDE with MCP servers
-- Explore [Smithery.ai](http://Smithery.ai) MCP repository catalog
-
-1. **Build your own MCP server**:
-
-- Create MCP server for Databricks metadata
-- Connect to your Snowflake warehouse
-- Enable agent to query data catalog dynamically
-
-1. **Advanced: MCP + LangChain integration**:
-
-- Build MCP client using LangChain
-- Create tools that use MCP for context
-- Enable cross-repository code analysis
-
-**⚙️ Project: Code-Aware Data Agent**
-
-- Build agent that uses MCP to:
-  - Read your data pipeline code (Python, SQL)
-  - Access dbt project metadata
-  - Query Databricks job history
-  - Provide context-aware recommendations
-
-**📊 Deliverable:** MCP-powered agent that can analyze your entire data stack
-
-**Time Allocation:**
-
-- 2-3 days for MCP fundamentals
-- 2-3 days for building custom MCP server
-- 1-2 days for integration with your agents
+**Note:** `[2.0]_mcp_server.py` uses `stdio` communication and should NOT be run directly. It is launched by the client or inspector.
 
 -----
 
-### **Week 15 — Streaming Data & Production Integration**
+## Phase 5: Capstone (Weeks 15-16) -- Planned
+
+### **Week 15 -- Streaming Data & Production Integration**
+
+**Status:** Planned (no content yet)
 
 **Learn:**
 
@@ -346,14 +385,16 @@ Vector DB :
 - Real-time data processing
 - **Optional**: Fine-tuning basics (when to use vs RAG)
 
-**⚙️ Project:**
+**Project:**
 
-- Streaming Log Analyzer: listens to error topics → summarizes → alerts
+- Streaming Log Analyzer: listens to error topics -> summarizes -> alerts
 - Compare RAG vs fine-tuning for your use case
 
 -----
 
-### **Week 16 — Capstone Project 🎓**
+### **Week 16 -- Capstone Project**
+
+**Status:** Planned (no content yet)
 
 **Build: Production Agentic DataOps Platform**
 
@@ -367,56 +408,50 @@ Vector DB :
 
 **Production Requirements:**
 
-- ✅ Full observability (traces, logs, metrics)
-- ✅ Guardrails (refuses destructive actions)
-- ✅ Human-in-the-loop for critical decisions
-- ✅ Cost tracking and optimization
-- ✅ Comprehensive testing suite (RAGAS)
-- ✅ Structured outputs with Pydantic validation
-- ✅ Error handling and recovery
-- ✅ **MCP integration** for contextual awareness
-- ✅ **Graph RAG** for lineage queries
-- ✅ Deployed on AWS/Databricks with CI/CD
+- Full observability (traces, logs, metrics)
+- Guardrails (refuses destructive actions)
+- Human-in-the-loop for critical decisions
+- Cost tracking and optimization
+- Comprehensive testing suite (RAGAS)
+- Structured outputs with Pydantic validation
+- Error handling and recovery
+- **MCP integration** for contextual awareness
+- **Graph RAG** for lineage queries
+- Deployed on AWS/Databricks with CI/CD
 
-**📊 Deliverables:**
+**Deliverables:**
 
 1. GitHub repo with documentation
 1. Architecture diagram (include MCP and Graph RAG)
 1. Demo video (10 minutes)
 1. Cost analysis and performance metrics
-1. Blog post: “Building a Production Agentic DataOps Platform”
-
-**Bonus:**
-
-- Present at a local AI/data engineering meetup
-- Publish as open-source project
-- Write LinkedIn post series documenting your journey
+1. Blog post: "Building a Production Agentic DataOps Platform"
 
 -----
 
-## 🧰 Updated Tech Stack
+## Tech Stack
 
 |**Area**            |**Tools**                                   |
-|--------------------|--------------------------------------------|
-|**LLMs**            |OpenAI GPT-4o, Claude 3.5, Llama 3.1 (local)|
-|**Frameworks**      |LangGraph, LangChain, LlamaIndex            |
-|**Memory**          |ChromaDB, pgvector, Redis                   |
-|**Data**            |Databricks, Snowflake, Kafka                |
-|**Document Parsing**|⭐ Unstructured.io, LlamaParse, Docling      |
-|**Graph**           |⭐ Neo4j, NetworkX (Graph RAG)               |
-|**MCP**             |⭐ Anthropic MCP SDK, custom servers         |
-|**Validation**      |Pydantic, JSON Schema                       |
-|**Safety**          |Guardrails AI, NeMo Guardrails              |
-|**Testing**         |RAGAS, TruLens, pytest                      |
-|**Observability**   |LangSmith, Phoenix, Langfuse                |
-|**Deployment**      |AWS Lambda/ECS/Bedrock, Docker, Kubernetes  |
-|**Orchestration**   |Airflow, Prefect                            |
-|**Monitoring**      |Arize AI, Weights & Biases                  |
-|**Versioning**      |GitHub, MLflow                              |
+|--------------------|-------------------------------------------|
+|**LLMs**            |OpenAI GPT-4o, Claude 3.5, Llama 3.1 (local), Qwen 2.5 Coder (Ollama)|
+|**Frameworks**      |LangGraph, LangChain, LlamaIndex           |
+|**Memory**          |ChromaDB, FAISS, pgvector, Redis            |
+|**Data**            |Databricks, Snowflake, Kafka               |
+|**Document Parsing**|Unstructured.io, LlamaParse, Docling       |
+|**Graph**           |Neo4j, NetworkX (Graph RAG)                |
+|**MCP**             |Anthropic MCP SDK, custom servers          |
+|**Validation**      |Pydantic, JSON Schema                      |
+|**Safety**          |Guardrails AI, NeMo Guardrails             |
+|**Testing**         |RAGAS, TruLens, DeepEval, pytest           |
+|**Observability**   |LangSmith, Phoenix (Arize), Langfuse       |
+|**Deployment**      |FastAPI, Docker, AWS Lambda/ECS/Bedrock    |
+|**Orchestration**   |Airflow, Prefect                           |
+|**Monitoring**      |Arize AI, Weights & Biases                 |
+|**Versioning**      |GitHub, MLflow                             |
 
 -----
 
-## 📚 Additional Learning Resources
+## Additional Learning Resources
 
 ### **For Document Parsing (Week 4):**
 
@@ -441,85 +476,24 @@ Vector DB :
 
 -----
 
-## 🎯 Key Enhancements Over Original Plan
+## Progress Summary
 
-### **✅ What We Added:**
-
-1. **Week 4**: Advanced document parsing ([Unstructured.io](http://Unstructured.io), LlamaParse)
-1. **Week 7**: Hybrid search + reranking techniques
-1. **Week 10**: Graph RAG with knowledge graphs
-1. **Week 14.5**: Complete MCP module (3-4 days)
-1. **Throughout**: More mini-projects for incremental learning
-1. **Week 16**: Enhanced capstone with Graph RAG + MCP
-
-### **✅ What We Kept from Original:**
-
-- Week 1: Cost management emphasis
-- Week 6: Testing from day one
-- Week 9: Safety and guardrails
-- Week 8: Structured outputs with Pydantic
-- Weeks 10, 15: Data engineering integration (Databricks, Snowflake, Kafka)
-
------
-
-## 📈 Weekly Time Commitment
-
-- **Learning**: 8-10 hours/week (videos, docs, tutorials)
-- **Practice Projects**: 5-7 hours/week
-- **Community**: 1-2 hours/week (Discord, LinkedIn, meetups)
-
-**Total**: ~15-20 hours/week
-
------
-
-## ✅ Success Metrics (By Week 16)
-
-You should be able to:
-
-1. ✅ Design multi-step agentic systems with Graph RAG + MCP
-1. ✅ Implement agents with guardrails, testing, observability
-1. ✅ Parse complex documents (PDFs with tables/images)
-1. ✅ Build hybrid search systems with reranking
-1. ✅ Deploy production agents on AWS/Databricks
-1. ✅ Debug agent failures using traces
-1. ✅ Optimize for cost and performance
-1. ✅ Integrate with your data stack (Databricks, Snowflake, Kafka)
-1. ✅ Build MCP servers for contextual AI
-1. ✅ Create Graph RAG systems for data lineage
-
------
-
-## 🚀 Next Steps
-
-**Week 1 starts now!** Here’s what to do today:
-
-1. **Set up your environment**:
-   
-   ```bash
-   # Create project directory
-   mkdir agentic-ai-engineer
-   cd agentic-ai-engineer
-   
-   # Set up Python environment
-   python -m venv venv
-   source venv/bin/activate  # or `venv\Scripts\activate` on Windows
-   
-   # Install base libraries
-   pip install openai anthropic langchain langsmith
-   ```
-1. **Get API keys**:
-
-- OpenAI: <https://platform.openai.com/api-keys>
-- Anthropic: <https://console.anthropic.com/>
-- LangSmith: <https://smith.langchain.com/>
-
-1. **Watch Karpathy’s GPT video** (2 hours):
-
-- <https://www.youtube.com/watch?v=kCc8FmEb1nY>
-
-1. **Start cost tracking spreadsheet**:
-
-- Create columns: Date, Model, Input Tokens, Output Tokens, Cost
-- Calculate: 1000 queries × GPT-4o vs Claude vs Llama
-
-**Want me to create a detailed Day 1-7 breakdown for Week 1 with specific tasks, links, and code examples?**
+| Week | Topic | Status |
+|------|-------|--------|
+| 1  | Transformer Architecture & LLM Fundamentals | Done |
+| 2  | Prompt Engineering + Structured Outputs | Planned |
+| 3  | Embeddings & Retrieval | Done |
+| 4  | Advanced Chunking & Document Parsing | Done |
+| 5  | Agentic Log Monitoring & Alerting | Done |
+| 6  | Memory & State + Testing Fundamentals | Done |
+| 7  | Structured Outputs & Advanced RAG | Done |
+| 8  | Cost Management & Optimization | Done |
+| 9  | Guardrails & Safety | Done |
+| 10 | Data Integration & Graph RAG | Done |
+| 11 | Human-in-the-Loop Patterns | Done |
+| 12 | Self-Evaluation & Red Team Week | Done |
+| 13 | LLMOps & Observability | Done |
+| 14 | Serving & API Deployment | Done |
+| 14.5 | Model Context Protocol (MCP) | Done |
+| 15 | Streaming Data & Production Integration | Planned |
+| 16 | Capstone Project | Planned |

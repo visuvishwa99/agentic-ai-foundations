@@ -1,5 +1,7 @@
 # AI Engineering - Week 3: Embeddings & Retrieval
 
+![alt text](image.png)
+
 This project explores the foundations of modern AI applications, focusing on how text is represented as vectors (embeddings) and how those vectors are used for semantic search, caching, and Retrieval-Augmented Generation (RAG).
 
 ## 🗺️ System Architecture
