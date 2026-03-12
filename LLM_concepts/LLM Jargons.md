@@ -1,33 +1,38 @@
+### Large Language Model (LLM) Definition
 
- Large Language Model (LLM) Definition
-A Large Language Model (LLM) is a sophisticated neural network-based system, built primarily on the Transformer architecture, which uses statistical patterns learned from massive text datasets to predict the most probable next token (word, subword, or character) in a sequence. It operates like an incredibly advanced autocomplete engine, leveraging its parallel processing structure to understand and generate human-quality text by modeling the probabilistic relationships between words and contexts.
+An LLM is a neural network built on the Transformer architecture, trained on massive text data to predict the next token in a sequence. A token is simply a small unit of text—a word, subword, or punctuation mark.
 
+Think of it as an advanced autocomplete system. The Transformer allows it to process context in parallel, learning probabilistic relationships between tokens. When generating text, it predicts one token, appends it, then predicts the next—chaining predictions to produce coherent output.
+
+The key point: it doesn't truly "understand" language. It relies on learned statistical patterns to generate contextually appropriate responses. The coherence comes from patterns in training data, not explicit reasoning about grammar or meaning.
 
 ---
 
 Common Dimensions by Model
-Model	Embedding Dimension	Parameters
-BERT-base	768	110M
-GPT-2	1024	1.5B
-GPT-3	12,288	175B
-GPT-4 (estimated)	~16,000	~1.76T
 
+| Model | Embedding Dimension | Parameters |
+| :--- | :--- | :--- |
+| BERT-base | 768 | 110M |
+| GPT-2 | 1024 | 1.5B |
+| GPT-3 | 12,288 | 175B |
+| GPT-4 (estimated) | ~16,000 | ~1.76T |
 
------
-
-
+---
 
 # LLM Key Jargons Explained
 
 ## 1. Vectors
 
-Numerical representation of data.
+Numerical representation of data in a multi-dimensional space
+
+## 1.1 Embedding Vectors
+Numerical representation of words/tokens in a multi-dimensional space (typically 300-768 dimensions)
 
 **Example:**
 
 ```
-Word "cat" → [0.2, -0.5, 0.8, 1.2, ..., -0.3]  (768 dimensions)
-Image pixel → [255, 128, 64]  (RGB values)
+Word "cat" → [0.2, -0.5, 0.8, 1.2, ..., -0.3]  (768 dimensions)  ← Embedding vector
+Image pixel → [255, 128, 64]  (RGB values)                        ← General vector
 ```
 
 **Why:** Computers need numbers; vectors encode meaning in multi-dimensional space.
@@ -36,15 +41,19 @@ Image pixel → [255, 128, 64]  (RGB values)
 - Similar concepts have similar vectors
 - "king" - "man" + "woman" ≈ "queen"
 
+Think of a General Vector like a driver's license: it lists specific, measurable traits (Height, Weight, Eye Color).
+
+Think of an Embedding Vector like a personality profile: it doesn't list height or weight, but it uses a complex set of scores to determine how similar your "vibe" is to someone else's.
+
 ---
 
-## 2. Embeddings (Word Embeddings)
+## Embeddings (Word Embeddings)
 
-An Embedding is a process or a look-up table. It maps discrete items (words/tokens) to continuous vector space.
+An Embedding is a learned mapping (or look-up table) that converts discrete items (words/tokens) into continuous vector representations.
 
 **Example:**
 
-​```python
+```python
 vocab_size = 50,000
 embedding_dim = 768
 
@@ -52,10 +61,9 @@ embedding_dim = 768
 embedding_table = nn.Embedding(50000, 768)
 
 "hello" (token_id: 15277) → [0.23, -0.45, ..., 0.89]
-​```
+```
 
 ![alt text](embedding.png)
-
 
 **Key concepts:**
 - **Token embedding:** What the word means
@@ -70,10 +78,10 @@ One-hot encoding represents each word as a giant list of zeros with a single 1
 at the word's position. If your vocabulary has 50,000 words, every word becomes
 a list of 50,000 numbers — 49,999 of which are useless zeros.
 
-​```
+```
 "cat" → [0, 0, 0, 1, 0, 0, ..., 0]   (position 4 is 1, rest are 0)
 "dog" → [0, 0, 0, 0, 1, 0, ..., 0]   (position 5 is 1, rest are 0)
-​```
+```
 
 The problem: "cat" and "dog" look completely unrelated to the model even though
 both are animals. There is no way to tell that cat and dog are more similar to
@@ -83,27 +91,59 @@ Embeddings fix both problems:
 - One-hot: `[0,0,0,1,0,0,...,0]` — 50k dimensions, sparse, no meaning
 - Embedding: `[0.2,-0.5,...,0.3]` — 768 dimensions, dense, learned
 
-​```
+```
 "cat" → [0.2, -0.5, 0.8, ...]    (similar to dog!)
 "dog" → [0.3, -0.4, 0.7, ...]    (similar to cat!)
 "car" → [-0.9, 0.6, -0.2, ...]   (very different from both)
-​```
+```
 
 Similar words end up with similar numbers — the model can now tell that cat
 and dog are related concepts.
 
+| Feature | Embedding | Embedding Vector | Vector |
+|---------|-----------|------------------|--------|
+| Nature | The Function or Table | The Output (one row) | General mathematical object |
+| Analogy | The English-to-Math Dictionary | One specific definition | Any list of numbers |
+| Example | nn.Embedding (The whole grid) | [0.1, -0.5, 0.8] (One word) | [255, 128, 64] (RGB pixel), [0.1, -0.5, 0.8] (word), [1.2, 3.4] (coordinates) |
+| Role | Maps ALL tokens to vectors | Represents ONE specific token's meaning | Represents any data numerically |
+| Scope | NLP/ML specific | NLP/ML specific (output of embedding) | Universal (math, ML, physics, graphics) |
 
+**Key distinctions:**
+- **Vector** = broad concept (any ordered list of numbers in n-dimensions)
+- **Embedding** = the lookup mechanism/table (many vectors stored together)
+- **Embedding Vector** = one specific output from the embedding table
 
-| Feature | Embedding | Vector |
-|---------|-----------|--------|
-| Nature | The Function or Table | The Data or Output |
-| Analogy | The English-to-Math Dictionary | The specific page/definition |
-| Example | nn.Embedding (The whole grid) | "[0.1, -0.5, 0.8] (One row)" |
-| Role | Stores the relationships between all words | Represents one specific word's meaning |
+This shows that "embedding vector" is a **type of vector**, but "vector" is the more general mathematical concept that can represent anything from pixel colors to word meanings to physical coordinates.
 
 ---
 
-## 3. ReLU (Rectified Linear Unit)
+## What Are Weights?
+
+Weights = The numbers the neural network learns during training
+Think of weights as knobs you can turn to make the network better at its job.
+
+```
+Inputs:
+- Hours of sleep: 7
+- Energy level: 8
+- Weather (1-10): 9
+
+Weights (importance of each factor):
+- Sleep weight: 0.5
+- Energy weight: 0.8
+- Weather weight: 0.3
+
+Calculation:
+Decision = (7 × 0.5) + (8 × 0.8) + (9 × 0.3)
+         = 3.5 + 6.4 + 2.7
+         = 12.6
+
+If > 10 → "YES, exercise!"
+```
+
+---
+
+## ReLU (Rectified Linear Unit)
 
 Activation function: converts negative values to zero.
 
@@ -121,14 +161,11 @@ Output: [ 0,  0, 0, 1, 2]
 - Fast to compute
 - Prevents vanishing gradients
 
-**Visual:**
+**Transformers use:**
 
-```
-│ /
-│/
-────┼──────
-│
-```
+GELU (Gaussian Error Linear Unit) - most common in modern transformers (BERT, GPT)
+ReLU - in some older/simpler transformer variants
+Swish/SiLU - in some newer models
 
 **Alternatives:**
 - GELU (used in GPT): smoother version
@@ -137,7 +174,7 @@ Output: [ 0,  0, 0, 1, 2]
 
 ---
 
-## 4. Embedding Space
+## Embedding Space
 
 High-dimensional space where similar items are close together.
 
@@ -170,59 +207,175 @@ Animals clustered, vehicles clustered
 
 ---
 
-## 5. Softmax
+## Stacked Linear & Non-Linear Layers
 
-Converts arbitrary numbers to probabilities (sum to 1).
+**"Stacked" = Placed one after another (in sequence)**
 
-**Formula:**
+Think of it like building blocks stacked vertically:
 
 ```
-softmax([x₁, x₂, x₃]) = [e^x₁, e^x₂, e^x₃] / sum
-
-Example:
-Input:  [2.0, 1.0, 0.1]
-Output: [0.659, 0.242, 0.099]  ← Sum = 1.0
+Output
+  ↑
+Linear Layer 3
+  ↑
+Linear Layer 2
+  ↑
+Linear Layer 1
+  ↑
+Input
 ```
 
-**Properties:**
-- Larger inputs get larger probabilities
-- All outputs positive
-- Always sum to 1
+Each layer's output becomes the next layer's input.
 
-**Use in LLMs:**
-- Attention weights
-- Next token prediction
-- Classification tasks
+**"Linear Layer" = Matrix multiplication + addition**
 
-**Temperature (optional parameter):**
+**Formula:** `y = Wx + b`
 
-```python
-softmax(logits / temperature)
+Where:
+- **W** = weight matrix (learned parameters)
+- **x** = input vector
+- **b** = bias vector (learned parameters)
+- **y** = output vector
 
-# Low temperature (0.0 - 0.3): Deterministic, focused
-temperature = 0.1
-"The capital of France is Paris."  # Always same answer
+**Example:**
 
-# Medium temperature (0.7 - 1.0): Balanced creativity
-temperature = 0.8
-"The capital of France is Paris, known for..."  # Varies slightly
-
-# High temperature (1.5 - 2.0): Creative, random
-temperature = 1.8
-"The capital of France? Well, Paris obviously, but..."  # Very different each time
-
-Temperature = 1.0: [0.7, 0.2, 0.1]   # Normal
-Temperature = 0.5: [0.9, 0.08, 0.02] # Sharper (more confident)
-Temperature = 2.0: [0.5, 0.3, 0.2]   # Softer (more random)
-
-0.0 - 0.3: Code generation, factual Q&A, math
-0.7 - 1.0: General conversation, writing
-1.5+:      Creative writing, brainstorming
 ```
+Input: [2, 3]
+
+Weight matrix W:        Bias b:
+[0.5  -0.2]            [0.1]
+[0.3   0.8]            [-0.2]
+[1.0  -0.5]            [0.3]
+
+Calculation:
+y = Wx + b
+
+y₁ = (0.5×2) + (-0.2×3) + 0.1 = 1.0 + (-0.6) + 0.1 = 0.5
+y₂ = (0.3×2) + (0.8×3) + (-0.2) = 0.6 + 2.4 + (-0.2) = 2.8
+y₃ = (1.0×2) + (-0.5×3) + 0.3 = 2.0 + (-1.5) + 0.3 = 0.8
+
+Output: [0.5, 2.8, 0.8]
+```
+
+**Why "linear"?** It's just multiplication and addition - creates a straight line relationship.
+
+## Non-Linear Activation Functions
+
+**"Non-linear" = NOT a straight line**
+
+**"Activation Function" = A function applied element-wise after linear transformation**
+
+**Common activation functions:**
+
+ReLU (Rectified Linear Unit):
+```
+ReLU(x) = max(0, x)
+
+Input:  [-2, 0.5, 3, -1]
+Output: [0, 0.5, 3, 0]    ← Negatives become 0
+```
+
+GELU (Gaussian Error Linear Unit):
+```
+GELU(x) ≈ smooth version of ReLU
+
+Input:  [-2, 0, 2]
+Output: [-0.045, 0, 1.95]  ← Smoother curve
+```
+
+Sigmoid:
+```
+sigmoid(x) = 1 / (1 + e^(-x))
+
+Input:  [-2, 0, 2]
+Output: [0.12, 0.5, 0.88]  ← Always between 0 and 1
+```
+
+## Why We Need BOTH:
+
+Problem with ONLY linear layers:
+
+```
+Layer 1: y = W₁x + b₁
+Layer 2: z = W₂y + b₂
+
+Substitute:
+z = W₂(W₁x + b₁) + b₂
+z = W₂W₁x + W₂b₁ + b₂
+z = W_combined × x + b_combined
+
+Result: Still just ONE linear transformation!
+Multiple linear layers = useless without activation
+```
+
+**Stacking linear layers without activation is like:**
+```
+5 → multiply by 2 → multiply by 3 → result
+= 5 × 2 × 3 = 5 × 6 (same as one operation)
+```
+
+With activation functions:
+
+```
+Layer 1: h = W₁x + b₁
+Activation: a = ReLU(h)
+Layer 2: y = W₂a + b₂
+
+Now you CANNOT simplify this!
+ReLU creates non-linearity that breaks the chain.
+```
+
+## Visual Example:
+
+**What linear layers can learn:**
+```
+Only straight lines/planes
+x → y relationship is linear
+```
+
+**What linear + activation can learn:**
+```
+Curves, circles, complex boundaries
+Can separate complex patterns
+Example: Recognize a cat vs dog (not a linear problem!)
+```
+
+## Complete MLP Example:
+
+```
+Input: [1, -2]
+
+→ Linear Layer 1: W₁x + b₁
+   W₁ = [[0.5, 0.3],      b₁ = [0.1,
+         [0.2, -0.4]]            -0.2]
+   
+   Result: [0.5×1 + 0.3×(-2) + 0.1,  = [-0.5,
+            0.2×1 + (-0.4)×(-2) + (-0.2)]  0.8]
+
+→ ReLU Activation:
+   [-0.5, 0.8] → [0, 0.8]  ← Non-linearity applied!
+
+→ Linear Layer 2: W₂a + b₂
+   W₂ = [[1.0, -0.5]]    b₂ = [0.2]
+   
+   Result: 1.0×0 + (-0.5)×0.8 + 0.2 = -0.2
+
+Final Output: [-0.2]
+```
+
+## Summary:
+
+**Stacked linear layers** = Multiple Wx + b operations in sequence
+
+**Non-linear activation** = Functions like ReLU that add curves/complexity
+
+**Together** = Can learn complex patterns (not just straight lines)
+
+Without activation between layers, you just have expensive linear algebra that accomplishes nothing more than a single layer would!
 
 ---
 
-## 6. Logits
+## Logits
 
 Raw, unnormalized scores before softmax.
 
@@ -250,7 +403,73 @@ next_token = sample(probs)    # Pick one
 
 ---
 
-## 7. KV Cache
+## Softmax
+
+Converts arbitrary numbers to probabilities (sum to 1).
+It guarantees all outputs are positive and sum to 1, regardless of whether inputs are negative, zero, or positive!
+
+**Formula:**
+
+```
+softmax(x_i) = e^(x_i) / Σ(e^(x_j))
+
+Example:
+Input:  [2.0, 1.0, 0.1]
+Output: [0.659, 0.242, 0.099]  ← Sum = 1.0
+```
+
+**Properties:**
+- Larger inputs get larger probabilities
+- All outputs positive
+- Always sum to 1
+
+**Use in LLMs:**
+- Attention weights
+- Next token prediction
+- Classification tasks
+
+---
+
+## Softmax with Temperature (optional parameter)
+
+```
+softmax(x_i, T) = e^(x_i / T) / Σ(e^(x_j / T))
+```
+
+Low temperature (0.0 - 0.3): Deterministic, focused
+```
+temperature = 0.1
+"The capital of France is Paris."  # Always same answer
+```
+
+Medium temperature (0.7 - 1.0): Balanced creativity
+```
+temperature = 0.8
+"The capital of France is Paris, known for..."  # Varies slightly
+```
+
+High temperature (1.5 - 2.0): Creative, random
+```
+temperature = 1.8
+"The capital of France? Well, Paris obviously, but..."  # Very different each time
+```
+
+```
+Temperature = 1.0: [0.7, 0.2, 0.1]   # Normal/ Default
+Temperature = 0.5: [0.9, 0.08, 0.02] # Sharper (more confident)
+Temperature = 2.0: [0.5, 0.3, 0.2]   # Softer (more random)
+```
+
+```
+0.0 - 0.3: (The Robot) Code generation, factual Q&A, math
+0.7 - 1.0: (The Human) General conversation, writing
+1.5+:      (The Artist) Creative writing, brainstorming
+2.0+:      (The Chaos) Unpredictable, The Chaos
+```
+
+---
+
+## KV Cache
 
 Optimization: cache Key and Value computations during generation.
 
@@ -291,42 +510,84 @@ v = concat(past_kv.values, v_new)
 
 ---
 
-## 8. MLP (Multi-Layer Perceptron)
+## MLP (Multi-Layer Perceptron)
 
-Fancy name for stacked linear layers with activations.
+A feedforward neural network with stacked linear layers and non-linear activation functions between them.
 
-**Structure:**
+"Perceptron" = A single decision-making unit (neuron)
 
-```
-Input → Linear → ReLU → Linear → Output
-```
-
-**In transformer (Feed-Forward):**
+**Basic Structure:**
 
 ```
-x → Linear(512→2048) → ReLU → Linear(2048→512) → x
+Input → Linear → Activation → Linear → Output
+```
+
+**In Transformers (Feed-Forward Network):**
+
+```
+x → Linear(512→2048) → GELU → Linear(2048→512) → x
       Expand 4x         Activate    Compress back
 ```
 
-**Why "multi-layer":**
-- Single layer = linear (can only learn lines)
+**Why "Multi-Layer":**
+- Single layer = linear (can only learn straight lines)
 - Multiple layers + activation = non-linear (learns curves, complex patterns)
 
-**Example:**
+**Example 1: Recognize if an image is a cat or dog**
 
 ```
-Input: [0.5, -0.2, 0.8]
-       ↓ Linear(3→6)
-[0.2, -0.5, 0.1, 0.9, -0.3, 0.4]
-       ↓ ReLU
-[0.2,  0,   0.1, 0.9,  0,   0.4]  ← Negatives zeroed
-       ↓ Linear(6→3)
-[0.7, -0.1, 0.5]
+INPUT (pixels):
+[0.2, 0.8, 0.3, 0.1, ...]  ← Raw pixel values
+
+↓ LAYER 1: Detects basic features
+[0.9, 0.1, 0.7, 0.2, 0.8]  ← "edges detected, curves detected..."
+
+↓ LAYER 2: Combines features
+[0.6, 0.3, 0.9]  ← "pointy ears?, whiskers?, tail?"
+
+↓ OUTPUT: Makes final decision
+[0.1, 0.9]  ← [dog: 10%, cat: 90%]
+
+Answer: It's a CAT!
 ```
+
+**Example 2: Task: Is this number even or odd?**
+
+```
+Input: 7
+
+Layer 1 (4 neurons):
+- Neuron 1: Checks "divisible by 2?"
+- Neuron 2: Checks "ends in 0,2,4,6,8?"
+- Neuron 3: Checks "remainder when divided by 2"
+- Neuron 4: Other patterns
+
+Results: [0.1, 0.2, 0.9, 0.3]
+
+Layer 2 (2 neurons):
+- Combines the evidence
+- Neuron 1: "Evidence for EVEN"
+- Neuron 2: "Evidence for ODD"
+
+Results: [0.2, 0.8]
+
+Output: [Even: 20%, Odd: 80%]
+Answer: ODD ✓
+```
+
+**Key Components:**
+- **Linear layers:** Matrix multiplication + bias (Wx + b)
+- **Activation functions:** Non-linearity (ReLU, GELU, Swish)
+- **Expansion-compression:** Typically expands by 4x, then compresses back
+
+**In Practice:**
+- Appears after every attention layer in transformers
+- Processes each position independently
+- Adds representational capacity to the model
 
 ---
 
-## 9. Backpropagation
+## Backpropagation
 
 Algorithm to compute gradients (how to adjust weights).
 
@@ -340,22 +601,29 @@ Compute: ∂Loss/∂weights for each layer
 
 **Example:**
 
-```python
-# Forward
-x = 2.0
-w = 3.0
-y = w * x = 6.0
-target = 10.0
-loss = (y - target)^2 = 16.0
+```
+ex1
 
-# Backward (backprop)
-∂loss/∂y = 2(y - target) = -8
-∂y/∂w   = x = 2.0
-∂loss/∂w = ∂loss/∂y × ∂y/∂w = -8 × 2.0 = -16
+Flour: 2.5 cups    ← This is a "weight"
+Sugar: 1.8 cups    ← This is a "weight"
+Eggs: 3.0          ← This is a "weight"
 
-# Update
-w = w - lr × ∂loss/∂w
-w = 3.0 - 0.01 × (-16) = 3.16  ← Improved!
+If cake is too dry → increase flour weight to 2.7
+If cake is too sweet → decrease sugar weight to 1.5
+
+ex2
+
+Iteration 1: Network predicts 3, actual is 10 (error = -7)
+→ Backpropagation calculates: "increase w₁ by 0.05"
+→ w₁ = 0.23 + 0.05 = 0.28
+
+Iteration 2: Network predicts 5, actual is 10 (error = -5)
+→ Backpropagation: "increase w₁ by 0.03"
+→ w₁ = 0.28 + 0.03 = 0.31
+
+... (thousands of iterations)
+
+Final: w₁ = 1.54 (learned the right value!)
 ```
 
 **Why important:**
@@ -364,7 +632,7 @@ w = 3.0 - 0.01 × (-16) = 3.16  ← Improved!
 
 ---
 
-## 10. Dot Product
+## Dot Product
 
 Multiply corresponding elements and sum.
 
@@ -397,9 +665,12 @@ score = 0.8×0.9 + (-0.2)×0.1 + 0.5×0.6 = 1.0  ← High similarity!
 
 ---
 
-## 11. Cross-Entropy Loss
+## Cross-Entropy Loss
 
 Measures difference between predicted and actual probability distributions.
+
+Analogy: Cross-Entropy Loss = A way to measure how wrong your predictions are
+Think of it as a punishment score - the more confident you are in a wrong answer, the bigger the punishment!
 
 **Formula:**
 
@@ -420,6 +691,20 @@ Loss = -(0×log(0.1) + 1×log(0.7) + 0×log(0.1) + 0×log(0.1))
 
 Better prediction: [0.05, 0.9, 0.03, 0.02]
 Loss = -log(0.9) = 0.11  ← Lower is better
+
+"Paris":  0.10  ← Correct word, but low confidence
+"the":    0.40  ← Wrong word, high confidence
+...
+
+Loss = -log(0.10) = 2.30
+
+Bad! The model isn't confident in the right answer.
+
+IN GPT:
+logits  = model(input)               # (B×T, vocab_size)
+targets = [1523, 4421, 832, ...]     # Actual next tokens
+
+loss = F.cross_entropy(logits, targets)
 ```
 
 **Properties:**
@@ -427,19 +712,9 @@ Loss = -log(0.9) = 0.11  ← Lower is better
 - Wrong but confident: high loss
 - Used for classification and language modeling
 
-**In GPT:**
-
-```python
-logits  = model(input)               # (B×T, vocab_size)
-targets = [1523, 4421, 832, ...]     # Actual next tokens
-
-loss = F.cross_entropy(logits, targets)
-# Penalizes wrong predictions
-```
-
 ---
 
-## 12. Perplexity
+## Perplexity
 
 Measure of model uncertainty (lower = better).
 
@@ -466,7 +741,7 @@ Model B: perplexity = 10  (better,    10-way confusion)
 
 ---
 
-## 13. Input (in context of training)
+## Input (in context of training)
 
 Data fed to model.
 
@@ -487,11 +762,26 @@ Embedded:  (B, T, C) tensor
 32 sentences
 Each 512 tokens long
 Each token is a 768-dimensional vector
+
+**ex2**
+
+Real content: "Scientists discover... [1,050 words]"
+
+Can't fit! Must truncate:
+[█][█][█][█][█][█][█]...[█][STOP! Rest discarded]
+ ←───────── 512 tokens ─────────→
+
+OR split into chunks:
+Chunk 1: [█][█][█]...[█]  (512 tokens)
+Chunk 2: [█][█][█]...[█]  (512 tokens)  
+Chunk 3: [█][█][  ]...[  ] (26 + 486 padding)
+
+Each chunk shape: (512, 768)
 ```
 
 ---
 
-## 14. Visual Explanations
+## Visual Explanations
 
 ### Attention Mechanism
 
@@ -558,7 +848,7 @@ Cross-Attention:
 
 ---
 
-## 15. Tokenization
+## Tokenization
 
 The process of splitting raw text into subwords (not whole words). Each subword
 is mapped to a numeric ID from a fixed vocabulary. The model never sees raw
@@ -580,7 +870,7 @@ text -- only integers.
 
 ---
 
-## 16. LayerNorm (Layer Normalization)
+## LayerNorm (Layer Normalization)
 
 Normalizes the values in a vector before passing them into attention or
 feed-forward. Keeps numbers stable so training does not blow up across 96
@@ -607,7 +897,7 @@ consistent across the entire depth of the model.
 
 ---
 
-## 17. Residual Connections (Skip Connections)
+## Residual Connections (Skip Connections)
 
 After every sub-layer (attention or feed-forward), the original input is added
 back to the output.
@@ -639,7 +929,7 @@ With residuals:
 
 ---
 
-## 18. Unembedding
+## Unembedding
 
 The reverse of embedding. After all transformer layers, the final vector of the
 last token is multiplied by an unembedding matrix to produce one score per word
@@ -667,7 +957,7 @@ attention.
 
 ---
 
-## 19. Forward Pass (Autoregressive Generation)
+## Forward Pass (Autoregressive Generation)
 
 How an LLM generates text: one token at a time, feeding each new token back
 into the full model.
@@ -697,7 +987,7 @@ input. It regresses on itself, one step at a time.
 
 ---
 
-## 20. Context Window (Block Size)
+## Context Window (Block Size)
 
 The maximum number of tokens a model can process in a single forward pass. Any
 tokens beyond this limit are simply not visible to the model.
