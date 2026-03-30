@@ -24,9 +24,9 @@ We will build an agent that:
 ## 📂 Structure
 - `[1.0]_hybrid_search.py`: Implementation of Hybrid Search (BM25 + Chroma/FAISS).
 - `[2.0]_reranking.py`: Re-ranking retrieval results using Cross-Encoders/Cohere.
-- `[3.0]_query_enhancement.py`: HyDE and Query Decomposition implementation.
-- `[4.0]_structured_agent.py`: Final agent integrating all components with Pydantic validation.
-- `week7_architecture.mmd`: Visual diagram of the Advanced RAG pipeline.
+- `[3.0]_structured_output.py`: Structured outputs with Pydantic validation.
+- `[4.0]_rag_agent.py`: Final agent integrating all components.
+- `07_Advanced_RAG_and_Search_architecture.mmd`: Visual diagram of the Advanced RAG pipeline.
 
 ## Architecture Breakdown
 This pipeline is designed for high-accuracy retrieval by combining multiple optimization layers.
@@ -75,11 +75,11 @@ Combines all previous steps into a single autonomous pipeline.
 ### Run the Advanced RAG Agent
 This script launches the final agent integrating Hybrid Search, Reranking, and Structured Outputs.
 ```bash
-python week7/[4.0]_rag_agent.py
+python 07_Advanced_RAG_and_Search/[4.0]_rag_agent.py
 ```
 
 ### Test Hybrid Search
 Test the keyword and vector search components individually.
 ```bash
-python week7/[1.0]_hybrid_search.py
+python 07_Advanced_RAG_and_Search/[1.0]_hybrid_search.py
 ```

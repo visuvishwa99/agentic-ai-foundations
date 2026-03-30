@@ -51,12 +51,12 @@
 ### Run the Self-Correcting Agent
 This script demonstrates the response -> critique -> regenerate loop.
 ```bash
-python week12/[3.0]_self_correcting_agent.py
+python 12_Self_Correcting_Agent_and_Eval/[3.0]_self_correcting_agent.py
 ```
 
 ### Run Red Teaming Attacks
 Generate and evaluate adversarial prompts.
 ```bash
-python week12/[1.0]_red_teamer.py
-python week12/[2.0]_evaluator.py
+python 12_Self_Correcting_Agent_and_Eval/[1.0]_red_teamer.py
+python 12_Self_Correcting_Agent_and_Eval/[2.0]_evaluator.py
 ```

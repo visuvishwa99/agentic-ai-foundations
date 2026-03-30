@@ -48,12 +48,12 @@ Integrates the guards into the agent workflow.
 ### Run the Secure SQL Agent
 This script demonstrates the agent with Input and Output Guardrails active.
 ```bash
-python week9/[3.0]_secure_agent.py
+python 09_Secure_Agent_and_Guards/[3.0]_secure_agent.py
 ```
 
 ### Test Guardrails
 Run scripts to test specific security components.
 ```bash
-python week9/[1.0]_input_guard.py
-python week9/[2.0]_output_guard.py
+python 09_Secure_Agent_and_Guards/[1.0]_input_guard.py
+python 09_Secure_Agent_and_Guards/[2.0]_output_guard.py
 ```

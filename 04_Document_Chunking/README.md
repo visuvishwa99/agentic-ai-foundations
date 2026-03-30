@@ -79,11 +79,11 @@ A text-based format for tables (e.g., `| Header |`). This format is much easier 
 ### Option 1: Run the Advanced Chunking System (Recommended)
 This script demonstrates element-aware chunking and contextual boosting.
 ```bash
-python week4/[1.1]_advancedchunkingsystem.py
+python 04_Document_Chunking/[1.1]_advancedchunkingsystem.py
 ```
 
 ### Option 2: Run the Base Chunking Logic
 Test the core chunking and validation functions.
 ```bash
-python week4/[0.1]_chunk_system.py
+python 04_Document_Chunking/[0.1]_chunk_system.py
 ```

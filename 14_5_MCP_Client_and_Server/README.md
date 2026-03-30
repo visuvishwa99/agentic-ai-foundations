@@ -58,13 +58,13 @@
 ### Option 1: Run the Automated Client (Recommended)
 This script simulates an agent. It automatically launches the server and performs a sequence of tasks (Listing resources, reading catalog, querying data).
 ```bash
-python week14_5/[1.0]_mcp_client.py
+python 14_5_MCP_Client_and_Server/[1.0]_mcp_client.py
 ```
 
 ### Option 2: Run the Interactive Inspector (Debugging)
 This launches a web UI where you can manually click buttons to test your server's tools and resources.
 ```bash
-python week14_5/[3.0]_inspector.py
+python 14_5_MCP_Client_and_Server/[3.0]_inspector.py
 ```
 *Note: This requires Node.js/npx installed.*
 

@@ -7,7 +7,7 @@ This project explores the foundations of modern AI applications, focusing on how
 ## 🗺️ System Architecture
 The following diagram illustrates the workflow from user query to cached results or a full RAG pipeline:
 
-[Refer to week3_architecture.mmd]
+[Refer to 03_Vector_DBs_and_Embeddings_architecture.mmd]
 
 ## 🏗️ Architecture Breakdown
 
@@ -69,11 +69,11 @@ pip install -r requirements.txt
 ### Option 1: Run the RAG Pipeline (Recommended)
 This script demonstrates the full workflow: loading data, creating embeddings, searching, and generating an answer.
 ```bash
-python week3/[4.1]_capstone_RAG.py
+python 03_Vector_DBs_and_Embeddings/[4.1]_capstone_RAG.py
 ```
 
 ### Option 2: Test Semantic Caching
 Test how the system reuses previous results.
 ```bash
-python week3/[3.1]_semantic_cache.py
+python 03_Vector_DBs_and_Embeddings/[3.1]_semantic_cache.py
 ```

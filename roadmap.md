@@ -162,7 +162,7 @@
 - `[2.0]_reranking.py`: Cross-encoder/Cohere re-ranking of retrieval results
 - `[3.0]_structured_output.py`: Pydantic-validated structured outputs
 - `[4.0]_rag_agent.py`: Final agent integrating all components
-- `week7_architecture.mmd`: Advanced RAG pipeline diagram
+- `07_Advanced_RAG_and_Search_architecture.mmd`: Advanced RAG pipeline diagram
 
 -----
 
@@ -186,7 +186,7 @@
 - `[2.0]_semantic_cache.py`: Vector-based semantic caching to reduce redundant API calls
 - `[3.0]_sql_agent.py`: Core SQL agent translating natural language to SQL
 - `[4.0]_cost_monitor.py`: Token usage tracking, cost calculation, and budget alerts
-- `week8_architecture.mmd`: Cost-optimized architecture diagram
+- `08_Model_Routing_and_SQL_Agent_architecture.mmd`: Cost-optimized architecture diagram
 
 **Deliverable:** Cost optimization report (target: >50% reduction via caching + routing)
 
@@ -214,7 +214,7 @@
 - `[1.0]_input_guard.py`: Input inspection for jailbreak attempts, malicious intent, PII
 - `[2.0]_output_guard.py`: SQL/code inspection for destructive commands and authorized schemas
 - `[3.0]_secure_agent.py`: Integrated secure agent workflow
-- `week9_architecture.mmd`: Secure agent architecture diagram
+- `09_Secure_Agent_and_Guards_architecture.mmd`: Secure agent architecture diagram
 
 -----
 
@@ -246,7 +246,7 @@
 - `lineage_graph.html`: Visual graph output
 - `graph_data.json`: Graph data store
 - `sql/`: Sample SQL files for lineage extraction
-- `week10_architecture.mmd`: Lineage agent architecture diagram
+- `10_Graph_Agent_and_Lineage_architecture.mmd`: Lineage agent architecture diagram
 
 -----
 
@@ -268,7 +268,7 @@
 - `[1.0]_risk_analyzer.py`: SQL risk classification (Low/Medium/High)
 - `[2.0]_human_review.py`: Simulated human approval interface (CLI/Streamlit)
 - `[3.0]_interactive_agent.py`: Orchestrator combining SQL Agent + Risk Analyzer + Reviewer
-- `week11_architecture.mmd`: Interactive agent architecture diagram
+- `11_Interactive_Agent_and_Human_Review_architecture.mmd`: Interactive agent architecture diagram
 
 -----
 
@@ -290,7 +290,7 @@
 - `[1.0]_red_teamer.py`: Automatic adversarial prompt generation
 - `[2.0]_evaluator.py`: Attack scoring (refusal rate, safety score)
 - `[3.0]_self_correcting_agent.py`: Response -> critique -> regenerate pipeline
-- `week12_architecture.mmd`: Resilient agent architecture diagram
+- `12_Self_Correcting_Agent_and_Eval_architecture.mmd`: Resilient agent architecture diagram
 
 -----
 
@@ -316,7 +316,7 @@
 - `[1.0]_observable_agent.py`: SQL agent wrapped with OpenInference tracers, exports to Phoenix
 - `[2.0]_regression_test.py`: Golden question test suite (relevance, correctness, latency)
 - `[3.0]_dashboard.py`: Local Phoenix server for trace visualization and cluster analysis
-- `week13_architecture.mmd`: Observable agent architecture diagram
+- `13_Observable_Agent_and_Dashboard_architecture.mmd`: Observable agent architecture diagram
 
 -----
 
@@ -338,7 +338,7 @@
 - `[1.0]_agent_api.py`: FastAPI server with `POST /chat` endpoint, Swagger docs, background logging
 - `[2.0]_api_client.py`: Client simulator for concurrency testing
 - `[3.0]_docker_example.md`: Dockerfile instructions for container deployment
-- `week14_architecture.mmd`: Agent microservice architecture diagram
+- `14_Agent_API_and_Docker_architecture.mmd`: Agent microservice architecture diagram
 
 -----
 
@@ -367,7 +367,7 @@
 - `[1.0]_mcp_client.py`: Automated agent client that launches server and performs tasks (list resources, read catalog, query data)
 - `[2.0]_mcp_server.py`: Custom MCP server exposing tools (`list_files`, `read_file`, `query_db`) via `stdio`
 - `[3.0]_inspector.py`: MCP Inspector for debugging server availability (requires Node.js)
-- `week14_5_architecture.mmd`: MCP architecture diagram
+- `14_5_MCP_Client_and_Server_architecture.mmd`: MCP architecture diagram
 
 **Note:** `[2.0]_mcp_server.py` uses `stdio` communication and should NOT be run directly. It is launched by the client or inspector.
 

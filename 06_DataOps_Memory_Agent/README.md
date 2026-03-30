@@ -72,13 +72,13 @@ pip install -r requirements.txt
 ### Interactive Demo (Recommended)
 This runs scenarios for schema drift, quality issues, and performance.
 ```bash
-python week6/demo_agent.py
+python 06_DataOps_Memory_Agent/demo_agent.py
 ```
 
 ### Run the Test Suite
 Validate accuracy against the golden dataset.
 ```bash
-python week6/test_agent.py
+python 06_DataOps_Memory_Agent/test_agent.py
 ```
 
 ### Basic Usage

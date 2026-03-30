@@ -51,11 +51,11 @@
 ### Run the Interactive Agent
 This script pauses for human approval on high-risk operations.
 ```bash
-python week11/[3.0]_interactive_agent.py
+python 11_Interactive_Agent_and_Human_Review/[3.0]_interactive_agent.py
 ```
 
 ### Test Risk Analysis
 Validate how queries are classified by risk level.
 ```bash
-python week11/[1.0]_risk_analyzer.py
+python 11_Interactive_Agent_and_Human_Review/[1.0]_risk_analyzer.py
 ```

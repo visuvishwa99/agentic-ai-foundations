@@ -53,11 +53,11 @@ Tracks token usage for every call, calculates the cost based on the model used, 
 ### Run the SQL Agent
 This script launches the main agent with Model Routing and Semantic Caching.
 ```bash
-python week8/[3.0]_sql_agent.py
+python 08_Model_Routing_and_SQL_Agent/[3.0]_sql_agent.py
 ```
 
 ### Test Semantic Cache
 Validate caching performance and cost savings.
 ```bash
-python week8/[2.0]_semantic_cache.py
+python 08_Model_Routing_and_SQL_Agent/[2.0]_semantic_cache.py
 ```

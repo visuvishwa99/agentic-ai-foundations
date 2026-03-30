@@ -55,17 +55,17 @@
 ### Start the Observability Dashboard
 This launches the local Phoenix server for trace visualization.
 ```bash
-python week13/[3.0]_dashboard.py
+python 13_Observable_Agent_and_Dashboard/[3.0]_dashboard.py
 ```
 
 ### Run the Observable Agent
 Launch the agent with instrumentation active.
 ```bash
-python week13/[1.0]_observable_agent.py
+python 13_Observable_Agent_and_Dashboard/[1.0]_observable_agent.py
 ```
 
 ### Run Regression Tests
 Execute the performance and correctness test suite.
 ```bash
-python week13/[2.0]_regression_test.py
+python 13_Observable_Agent_and_Dashboard/[2.0]_regression_test.py
 ```

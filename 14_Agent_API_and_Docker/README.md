@@ -48,13 +48,13 @@
 ### Start the API Server
 This launches the FastAPI application on localhost.
 ```bash
-python week14/[1.0]_agent_api.py
+python 14_Agent_API_and_Docker/[1.0]_agent_api.py
 ```
 
 ### Run the Client Simulator
 Test the API with concurrent requests.
 ```bash
-python week14/[2.0]_api_client.py
+python 14_Agent_API_and_Docker/[2.0]_api_client.py
 ```
 
 ### View API Documentation

@@ -50,12 +50,12 @@ An agent that has access to the Graph tool.
 ### Run the Graph Agent
 This script enables the agent to traverse relationships and answer lineage questions.
 ```bash
-python week10/[3.0]_graph_agent.py
+python 10_Graph_Agent_and_Lineage/[3.0]_graph_agent.py
 ```
 
 ### Build the Knowledge Graph
 Extract entities and visualize the data lineage.
 ```bash
-python week10/[1.0]_lineage_mapper.py
-python week10/[2.0]_graph_builder.py
+python 10_Graph_Agent_and_Lineage/[1.0]_lineage_mapper.py
+python 10_Graph_Agent_and_Lineage/[2.0]_graph_builder.py
 ```

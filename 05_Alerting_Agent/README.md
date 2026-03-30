@@ -76,5 +76,5 @@ If you're moving from simple Chains to Agents, here are the key concepts used in
 ### Run the Alerting Agent
 This script launches the LangGraph-based monitoring agent.
 ```bash
-python week5/AlertingAgent.py
+python 05_Alerting_Agent/AlertingAgent.py
 ```
