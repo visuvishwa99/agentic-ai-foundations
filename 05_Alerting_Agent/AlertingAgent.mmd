@@ -1,64 +1,27 @@
 flowchart TD
-    %% Start Interaction
-    Start(["Start Monitoring"]) --> AgentNode["Agent Reasoning<br/>(ChatOllama)"]
-    
-    %% Cyclic Workflow Subgraph
-    subgraph Agent_Loop [Workflow - Powered by LangGraph]
-        direction TB
-        AgentNode --> Router{"Tool Call?"}
-        
-        Router -- Yes --> ToolNode["Execute Tools<br/>(LangChain Node)"]
-        Router -- No --> EndNode(["End / Finish"])
-        
-        ToolNode --> RetryNode["Increment Retry"]
-        RetryNode -- Loop back --> AgentNode
-    end
+    Start[Start local demo]
+    Trace{LANGCHAIN_API_KEY set?}
+    State[LangGraph state: messages, retry count, webhook]
+    Model[ChatOllama Qwen]
+    Decision{Model requests a tool?}
+    Tools[ToolNode]
+    Logs[read_logs: hard-coded fixture]
+    Status[check_job_status: hard-coded fixture]
+    Discord[post_to_discord: optional real webhook]
+    Retry[Increment retry count]
+    End[Return final model response]
 
-    %% State Schema Subgraph
-    subgraph State_Schema ["State Schema (TypedDict)"]
-        direction TB
-        StateItems["<b>State Keys:</b><br/>Messages, Logs Content,<br/>Job Status, Retry Count"]
-    end
-
-    %% Tools Subgraph
-    subgraph Tools_Layer ["Tools - LangChain Core"]
-        direction LR
-        T1["read_logs"]
-        T2["check_job_status"]
-        T3["post_to_discord"]
-    end
-    
-    %% Technology Stack & Script Mapping
-    subgraph Tech_Stack [Technology Stack & Script Mapping]
-        Stack1["<b>LangGraph</b><br/>Complex Agents & Loops (like Airflow in DE)"]
-        Stack2["<b>LangSmith</b><br/>Observability & Tracing (like DataDog in DE)"]
-        Stack3["<b>LangChain</b><br/>Linear Chains & Integrations (like Pandas in DE)"]
-        AgentScript["<b>AlertingAgent.py</b><br/>Orchestrates Entire Agent"]
-    end
-
-    %% Visual Connections
-    Stack1 -.-> Agent_Loop
-    Stack3 -.-> Tools_Layer
-    Stack2 -.-> Start
-    
-    ToolNode -.-> T1
-    ToolNode -.-> T2
-    ToolNode -.-> T3
-
-    %% Script-to-Architecture Mapping
-    AgentScript -.-> Agent_Loop
-    
-    %% Apply Styles
-    class Start,EndNode user
-    class AgentNode,ToolNode,T1,T2,T3 process
-    class Router,RetryNode logic
-    class StateItems storage
-
-    style Tech_Stack fill:#2d3436,stroke:#dfe6e9,stroke-width:1px,color:#fff
-
-    %% Global Style Block
-    classDef logic fill:#5a3e00,stroke:#ffb300,stroke-width:2px,color:#fff
-    classDef storage fill:#1e3a5f,stroke:#4a9eda,stroke-width:2px,color:#fff
-    classDef process fill:#1e3a5f,stroke:#4a9eda,stroke-width:2px,color:#fff
-    classDef user fill:#3a1a1a,stroke:#cc4444,stroke-width:2px,color:#fff
-    classDef group fill:#2d3436,stroke:#dfe6e9,stroke-width:1px,color:#fff
+    Start --> Trace
+    Trace --> State
+    State --> Model
+    Model --> Decision
+    Decision -->|No| End
+    Decision -->|Yes| Tools
+    Tools --> Logs
+    Tools --> Status
+    Tools --> Discord
+    Logs --> Retry
+    Status --> Retry
+    Discord --> Retry
+    Retry -->|Below limit| Model
+    Retry -->|Limit reached| End

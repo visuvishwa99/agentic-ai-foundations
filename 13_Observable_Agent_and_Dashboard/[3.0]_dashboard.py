@@ -11,7 +11,9 @@ import time
 
 # Helper Load Agent
 import importlib.util
-week8_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "../week8"))
+week8_path = os.path.abspath(
+    os.path.join(os.path.dirname(__file__), "../08_Model_Routing_and_SQL_Agent")
+)
 if week8_path not in sys.path:
     sys.path.append(week8_path)
 
@@ -27,7 +29,7 @@ def load_agent():
         return None
 
 if __name__ == "__main__":
-    print("🚀 Stimulating Traffic for Dashboard Analysis...")
+    print(" Stimulating Traffic for Dashboard Analysis...")
     
     # Launch App (Persistent or New)
     session = px.launch_app()
@@ -50,7 +52,7 @@ if __name__ == "__main__":
         
         all_queries = topic_a + topic_b + topic_c
         
-        print(f"🧪 Sending {len(all_queries)} queries...")
+        print(f" Sending {len(all_queries)} queries...")
         for q in all_queries:
             try:
                 print(f"   Running: {q}")
@@ -65,7 +67,7 @@ if __name__ == "__main__":
         try:
              spans_df = px.active_session().get_spans_dataframe()
              if not spans_df.empty:
-                 print("\n📊 Dashboard Analytics:")
+                 print("\n Dashboard Analytics:")
                  print(f"   Total Spans Captured: {len(spans_df)}")
                  print(f"   Unique Trace IDs: {spans_df['trace_id'].nunique()}")
                  
@@ -73,13 +75,13 @@ if __name__ == "__main__":
                  errors = spans_df[spans_df['status_code'] == 'ERROR']
                  print(f"   Error Count: {len(errors)}")
                  
-                 print(f"\n✨ View Clusters in UI: {session.url}")
+                 print(f"\n View Clusters in UI: {session.url}")
                  print("   Navigate to 'Clusters' tab to see topic grouping!")
              else:
-                 print("⚠️ No spans captured yet. Check UI manually.")
+                 print("[WARN] No spans captured yet. Check UI manually.")
                  
         except Exception as e:
-             print(f"⚠️ Could not analyze local spans (might be async): {e}")
+             print(f"[WARN] Could not analyze local spans (might be async): {e}")
 
         # Keep server running
         print("\n(Press Ctrl+C to stop dashboard)")

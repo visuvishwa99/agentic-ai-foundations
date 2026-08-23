@@ -1,73 +1,27 @@
 flowchart TD
-    %% Input Layer
-    Start(["Pipeline Failure Event"]) --> InputData["<b>Failure Metadata</b><br/>Error Msg, Stack Trace,<br/>Table Names"]
+    Failure[PipelineFailure fixture]
+    Store[In-memory failure list]
+    TFIDF[TF-IDF vectors]
+    Similarity[Cosine similarity search]
+    Rules[Keyword classifier]
+    Pattern[Repeated-category check]
+    Suggestions[Rule-based suggestions]
+    Result[Analysis dictionary]
 
-    %% Core Agent Logic Subgraph
-    subgraph Agent_Core [DataOps Memory Agent]
-        direction TB
-        
-        %% Vectorization Step
-        Vectorize["TF-IDF Vectorization<br/>(Text to Embeddings)"]
-        
-        %% Memory Interaction
-        subgraph Memory_System [Vector Memory System]
-            direction LR
-            Storage[("Long-term Memory<br/>(Stored Failures)")]
-            Search["Semantic Search<br/>(Find Top-k Similar)"]
-        end
-        
-        %% Analysis
-        Classify["Error Classifier<br/>(Schema, Timeout, DQ, etc.)"]
-        Pattern["Pattern Recognition<br/>(Detect Recurring Issues)"]
-        Suggest["Remediation Engine<br/>(Generate Fixes)"]
-    end
+    Failure --> Store
+    Store --> TFIDF
+    Failure --> TFIDF
+    TFIDF --> Similarity
+    Failure --> Rules
+    Similarity --> Pattern
+    Rules --> Pattern
+    Pattern --> Suggestions
+    Suggestions --> Result
 
-    %% Output Layer
-    End(["<b>Actionable Alerts</b><br/>Root Cause & Suggestions"])
+    Tests[Repository-authored synthetic tests]
+    Tests -.-> Rules
+    Tests -.-> Pattern
+    Tests -.-> Suggestions
 
-    %% Connections
-    Start --> InputData
-    InputData --> Vectorize
-    Vectorize --> Search
-    Storage <--> Search
-    Search --> Pattern
-    InputData --> Classify
-    Classify --> Pattern
-    Pattern --> Suggest
-    Suggest --> End
-
-    %% Technology Stack & Script Mapping
-    subgraph Tech_Stack [Technology Stack & Script Mapping]
-        Stack1["<b>scikit-learn</b><br/>Vectorization & Similarity (like Spark ML in DE)"]
-        Stack2["<b>Python Dict/Pickle</b><br/>State Storage (like Redis in DE)"]
-        Stack3["<b>Custom Logic</b><br/>Pattern Matching (like UDFs in DE)"]
-        CoreScript["<b>dataops_memory_agent.py</b><br/>Core Agent Logic"]
-        TestScript["<b>test_agent.py</b><br/>Golden Dataset Validation"]
-        DemoScript["<b>demo_agent.py</b><br/>Interactive Scenarios"]
-    end
-
-    %% Tech Stack Connections
-    Stack1 -.-> Vectorize
-    Stack1 -.-> Search
-    Stack2 -.-> Storage
-    Stack3 -.-> Classify
-
-    %% Script-to-Architecture Mapping
-    CoreScript -.-> Agent_Core
-    TestScript -.-> End
-    DemoScript -.-> Start
-
-    %% Apply Styles
-    class Start,End user
-    class Vectorize,Classify,Suggest process
-    class Storage,InputData storage
-    class Search,Pattern logic
-
-    style Tech_Stack fill:#2d3436,stroke:#dfe6e9,stroke-width:1px,color:#fff
-
-    %% Global Style Block
-    classDef logic fill:#5a3e00,stroke:#ffb300,stroke-width:2px,color:#fff
-    classDef storage fill:#1e3a5f,stroke:#4a9eda,stroke-width:2px,color:#fff
-    classDef process fill:#1e3a5f,stroke:#4a9eda,stroke-width:2px,color:#fff
-    classDef user fill:#3a1a1a,stroke:#cc4444,stroke-width:2px,color:#fff
-    classDef group fill:#2d3436,stroke:#dfe6e9,stroke-width:1px,color:#fff
+    note1[No database, persistent vector store, or automated remediation]
+    note1 -.-> Store

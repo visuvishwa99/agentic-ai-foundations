@@ -1,46 +1,23 @@
-
 flowchart TD
-    %% User Interaction
-    User(["fa:fa-user User Request"]) --> AgentLoop{Secure SQL Agent}
-    
-    %% Agent Logic
-    AgentLoop -- Drafts SQL --> RiskAnalyzer{"Risk Analyzer<br/>(LLM + Regex)"}
-    
-    RiskAnalyzer -- Low/Medium Risk --> ApprovalGate{"🛑 Approval Gate"}
-    RiskAnalyzer -- High Risk (DROP) --> Blocked["❌ Blocked"]
-    
-    %% Human Component
-    ApprovalGate -- "Looks Good?" --> HumanReviewer(["fa:fa-user-check Human Reviewer<br/>(CLI/Slack)"])
-    
-    HumanReviewer -- "Approved" --> Execution["Execute SQL<br/>(Snowflake/DB)"]
-    HumanReviewer -- "Rejected" --> FeedbackLoop["Feedback Store<br/>(JSON/DB)"]
-    
-    %% Learning Loop
-    FeedbackLoop -.-> AgentLoop
-    
-    %% Technology Stack & Script Mapping
-    subgraph Tech_Stack [Technology Stack & Script Mapping]
-        Script1["<b>[1.0]_risk_analyzer.py</b><br/>Classifies Query Risk"]
-        Script2["<b>[2.0]_human_review.py</b><br/>Simulates Human Input"]
-        Script3["<b>[3.0]_interactive_agent.py</b><br/>Orchestrates Cycle"]
-    end
-    
-    %% Script Mapping
-    Script1 -.-> RiskAnalyzer
-    Script2 -.-> HumanReviewer
-    Script3 -.-> AgentLoop
-    
-    %% Styles
-    class User,HumanReviewer user
-    class Execution,FeedbackLoop storage
-    class AgentLoop,RiskAnalyzer,ApprovalGate process
-    class Blocked logic
-    
-    style Tech_Stack fill:#2d3436,stroke:#dfe6e9,stroke-width:1px,color:#fff
+    Query[User request]
+    Week8[Week 8 SQL text generator]
+    Extract[Heuristic SQL-block extraction]
+    Risk[Keyword risk analyzer]
+    Approval{Approval required?}
+    CLI[Terminal yes or no prompt]
+    Rejected[Return rejected message]
+    Simulated[Print simulated execution message]
+    Response[Return generated response]
 
-    %% Global Style Block
-    classDef logic fill:#5a3e00,stroke:#ffb300,stroke-width:2px,color:#fff
-    classDef storage fill:#1e3a5f,stroke:#4a9eda,stroke-width:2px,color:#fff
-    classDef process fill:#1e3a5f,stroke:#4a9eda,stroke-width:2px,color:#fff
-    classDef user fill:#3a1a1a,stroke:#cc4444,stroke-width:2px,color:#fff
-    classDef group fill:#2d3436,stroke:#dfe6e9,stroke-width:1px,color:#fff
+    Query --> Week8
+    Week8 --> Extract
+    Extract --> Risk
+    Risk --> Approval
+    Approval -->|No| Simulated
+    Approval -->|Yes| CLI
+    CLI -->|Rejected| Rejected
+    CLI -->|Approved| Simulated
+    Simulated --> Response
+
+    note1[No SQL is executed and no approval decision is stored]
+    note1 -.-> Simulated

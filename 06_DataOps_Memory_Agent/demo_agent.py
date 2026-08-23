@@ -232,7 +232,7 @@ def main():
     print("\n" + "="*70)
     print("DATAOPS MEMORY AGENT - INTERACTIVE DEMO")
     print("="*70)
-    print("\nThis demo showcases the agent's ability to:")
+    print("\nThis demo covers:")
     print("  1. Classify errors accurately")
     print("  2. Detect recurring patterns")
     print("  3. Provide actionable remediation suggestions")

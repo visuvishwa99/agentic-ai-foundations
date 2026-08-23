@@ -21,7 +21,7 @@ def load_module(file_path, module_name):
 
 graph_mod_path = os.path.join(os.path.dirname(__file__), "[2.0]_graph_builder.py")
 if not os.path.exists(graph_mod_path):
-    print("❌ Graph Builder module not found. Run [2.0] first.")
+    print("[ERROR] Graph Builder module not found. Run [2.0] first.")
     sys.exit(1)
 
 graph_mod = load_module(graph_mod_path, "graph_builder")
@@ -33,7 +33,7 @@ builder = GraphBuilder(json_path)
 if os.path.exists(json_path):
     builder.load_graph()
 else:
-    print("⚠️ Warning: graph_data.json not found. Tools will return empty results.")
+    print("[WARN] Warning: graph_data.json not found. Tools will return empty results.")
 
 # --- 2. Define Tools ---
 @tool
@@ -98,7 +98,7 @@ class ReActGraphAgent:
             HumanMessage(content=f"Question: {query}")
         ]
         
-        print(f"\n🤖 Processing: '{query}'")
+        print(f"\n Processing: '{query}'")
         
         # Max steps to prevent infinite loops
         for step in range(8):
@@ -109,14 +109,14 @@ class ReActGraphAgent:
             # Print thought process (cleaning up newlines for display)
             thought = content.split("Action:")[0].strip()
             if thought:
-                print(f"   💭 Thought: {thought[:100]}...")
+                print(f"    Thought: {thought[:100]}...")
             
             messages.append(AIMessage(content=content))
             
             # 2. Parse Action
             if "Final Answer:" in content:
                 final_answer = content.split("Final Answer:")[1].strip()
-                print(f"   ✅ Answer: {final_answer}")
+                print(f"   [OK] Answer: {final_answer}")
                 return final_answer
                 
             if "Action:" in content and "Action Input:" in content:
@@ -127,22 +127,22 @@ class ReActGraphAgent:
                     
                     # Execute Tool
                     if tool_name in self.tools:
-                        print(f"   🛠️ Executing: {tool_name}('{tool_input}')")
+                        print(f"   Executing: {tool_name}('{tool_input}')")
                         observation = self.tools[tool_name].invoke(tool_input)
                     else:
                         observation = f"Error: Tool '{tool_name}' not found. Available: {list(self.tools.keys())}"
                         
-                    print(f"   👀 Observation: {observation}")
+                    print(f"    Observation: {observation}")
                     
                     # Feed back to LLM
                     messages.append(HumanMessage(content=f"Observation: {observation}"))
                     
                 except Exception as e:
-                    print(f"   ⚠️ Parsing Error: {e}")
+                    print(f"   [WARN] Parsing Error: {e}")
                     messages.append(HumanMessage(content=f"Error parsing action. strict format: Action: [name]\\nAction Input: [input]"))
             else:
                 # LLM didn't follow format or is chatting
-                print(f"   ⚠️ Model didn't output an action. Retrying...")
+                print(f"   [WARN] Model didn't output an action. Retrying...")
                 messages.append(HumanMessage(content="Please use the format: Action: [tool] \n Action Input: [input] OR Final Answer: [answer]"))
 
         return "Agent Timeout"

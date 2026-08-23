@@ -27,7 +27,9 @@ review_mod = load_module(os.path.join(os.path.dirname(__file__), "[2.0]_human_re
 HumanReviewer = review_mod.HumanReviewer
 
 # Load Agent (Week 8)
-week8_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "../week8"))
+week8_path = os.path.abspath(
+    os.path.join(os.path.dirname(__file__), "../08_Model_Routing_and_SQL_Agent")
+)
 if week8_path not in sys.path:
     sys.path.append(week8_path)
     
@@ -36,7 +38,7 @@ BaseAgent = agent_mod.CostOptimizedSQLAgent
 
 class InteractiveSQLAgent(BaseAgent):
     def __init__(self):
-        print("\n🚀 Initializing INTERACTIVE Data Assistant (Week 11)...")
+        print("\n Initializing INTERACTIVE Data Assistant (Week 11)...")
         super().__init__()
         
         # New Components
@@ -44,7 +46,7 @@ class InteractiveSQLAgent(BaseAgent):
         self.human_reviewer = HumanReviewer()
         
     def run(self, user_query: str):
-        print(f"\n🗣️ User Request: '{user_query}'")
+        print(f"\n User Request: '{user_query}'")
         
         # 1. PLAN / GENERATE SQL (Using Week 8 Logic)
         print("   [1/3] Planning SQL (but pausing execution)...")
@@ -83,7 +85,7 @@ class InteractiveSQLAgent(BaseAgent):
                  sql_candidate = response # risky heuristic if user text contains SELECT
             else:
                  # No SQL found? Maybe conversational
-                 print("   ℹ️ No SQL block detected. Passing through.")
+                 print("   [INFO] No SQL block detected. Passing through.")
                  return response
                  
             # Step 3: Risk Analysis
@@ -92,7 +94,7 @@ class InteractiveSQLAgent(BaseAgent):
             
             # Step 4: Approval Gate
             if assessment.requires_approval:
-                print(f"   ⚠️ RISK DETECTED: {assessment.level}")
+                print(f"   [WARN] RISK DETECTED: {assessment.level}")
                 
                 approved = self.human_reviewer.request_approval(
                     query=sql_candidate,
@@ -101,21 +103,21 @@ class InteractiveSQLAgent(BaseAgent):
                 )
                 
                 if not approved:
-                    return f"🛑 Action Rejected by User. (Plan was: {assessment.reason})"
+                    return f"[BLOCKED] Action Rejected by User. (Plan was: {assessment.reason})"
                 
-                print("   ✅ Action Approved. Proceeding...")
+                print("   [OK] Action Approved. Proceeding...")
             else:
-                 print("   ✅ Low Risk. Auto-Approved.")
+                 print("   [OK] Low Risk. Auto-Approved.")
                  
             # Step 5: "Execute" (Simulated)
             print("   [3/3] Executing Query on Snowflake...")
             # In a real agent, here we calls: snowflake.execute(sql_candidate)
             print("   (Simulation: Query executed successfully)")
             
-            return f"{response}\n\n✅ Executed successfully."
+            return f"{response}\n\n[OK] Executed successfully."
             
         except Exception as e:
-            print(f"   ⚠️ Parsing/Risk Check Error: {e}")
+            print(f"   [WARN] Parsing/Risk Check Error: {e}")
             return response
 
 if __name__ == "__main__":

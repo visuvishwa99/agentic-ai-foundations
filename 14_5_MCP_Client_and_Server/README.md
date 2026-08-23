@@ -1,73 +1,61 @@
-# Week 14.5: Model Context Protocol (MCP)
+# Week 14.5: MCP client and server
 
-**Goal**: Build context-aware agents that can dynamically access your data stack (files, databases, tools) using Anthropic's Model Context Protocol (MCP).
+This started as a small MCP v1 example. By the time I reopened it, the Python SDK had moved to v2 and the old decorators no longer loaded. I kept the example small while migrating it: one resource, two tools, and one client that proves the pieces can talk to each other.
 
-## Weekly Goals
-1.  **Understand MCP**: Protocol architecture (Client, Host, Server).
-2.  **Build a Server**: Create a custom MCP server to expose local files or database schemas.
-3.  **Integrate Client**: Connect an LLM agent (LangChain) to your MCP server.
-4.  **Productionize**: Use MCP for code-aware data agents.
+The data is synthetic. Nothing connects to a real warehouse.
 
-## Resources
-- [Official MCP Documentation](https://modelcontextprotocol.io) - *Start here*
-- [Python SDK](https://github.com/modelcontextprotocol/python-sdk)
-- [Smithery.ai](https://smithery.ai) - *Catalog of MCP servers*
+## Files
 
-## Architecture: The Code-Aware Data Agent
+- `[2.0]_mcp_server.py` exposes one catalog resource and two tools with the MCP Python SDK v2.
+- `[1.0]_mcp_client.py` connects to the server, lists what is available, reads the catalog, and calls `get_table_schema`.
+- `data/catalog_metadata.json` is the small catalog fixture used by both examples.
+- `[3.0]_inspector.py` starts the MCP Inspector through `npx`.
 
-### 1. The MCP Client (Agent) - **Entry Point**
-**Implemented in:** `[1.0]_mcp_client.py`
--   **Role**: The "Brain" that uses the server.
--   **Tech**: LangChain `MCPClient`, Anthropic API.
--   **Flow**:
-    1.  User asks: "Why did the sales job fail?"
-    2.  Agent lists files -> finds `sales_job.py`.
-    3.  Agent reads logs -> finds error.
-    4.  Agent proposes fix.
+The server exposes:
 
-### 2. The MCP Server - **Backend**
-**Implemented in:** `[2.0]_mcp_server.py`
--   **Role**: Exposes tools and resources to the agent.
--   **Tech**: `mcp` Python SDK, `FastAPI` (for SSE) or `stdio`.
--   **Capabilities**:
-    -   `list_files`: Read local project structure.
-    -   `read_file`: Get file content.
-    -   `query_db`: Execute valid SQL.
+- `catalog://metadata`
+- `get_table_schema`
+- `query_sample_data`
 
-### 3. Configuration & Testing
-**Implemented in:** `[3.0]_inspector.py` or straight text config.
--   **Debugging**: Use the [MCP Inspector](https://github.com/modelcontextprotocol/inspector) to test server availability.
+`query_sample_data` returns labeled mock rows. It does not execute SQL.
 
-## Jargon Buster
+## Install
 
-| Term | Simple Definition | Technical Context | DE Equivalent |
-| :--- | :--- | :--- | :--- |
-| **MCP** | USB-C for AI apps. | Standard protocol for tool/context exchange. | **ODBC/JDBC Driver** |
-| **Resource** | Data the AI can read. | File contents, database rows, logs. | **Read-Only View** |
-| **Tool** | Functions the AI can call. | `execute_query(sql)`, `api_post()`. | **Stored Procedure** |
-| **Prompt** | Pre-defined templates. | "Review this PR", "Debug this error". | **Jinja Template** |
-| **Transport** | How they talk. | `stdio` (pipe) or `SSE` (HTTP). | **TCP/IP or Pipe** |
+From the repository root:
 
-## Experiments & Deliverables
--   [ ] **Simple Server**: Build a "File System" MCP server.
--   [ ] **Connect Claude**: Configure Claude Desktop to use your server.
--   [ ] **Agent Client**: Build a python script that queries your server.
-
-## How to Run
-
-### Option 1: Run the Automated Client (Recommended)
-This script simulates an agent. It automatically launches the server and performs a sequence of tasks (Listing resources, reading catalog, querying data).
 ```bash
-python 14_5_MCP_Client_and_Server/[1.0]_mcp_client.py
+pip install -r 14_5_MCP_Client_and_Server/requirements.txt
 ```
 
-### Option 2: Run the Interactive Inspector (Debugging)
-This launches a web UI where you can manually click buttons to test your server's tools and resources.
-```bash
-python 14_5_MCP_Client_and_Server/[3.0]_inspector.py
-```
-*Note: This requires Node.js/npx installed.*
+The dependency stays on MCP v2:
 
-### [IMPORTANT]
-**Do NOT run `[2.0]_mcp_server.py` directly.**
-It uses `stdio` communication and will just hang waiting for a machine to talk to it. It is meant to be launched *by* the client or inspector.
+```text
+mcp>=2,<3
+```
+
+The original version used the v1 low-level decorators. `pip install mcp` now installs v2, so the server uses `MCPServer` and the client uses the v2 `Client` API.
+
+## Run the client
+
+```bash
+python "14_5_MCP_Client_and_Server/[1.0]_mcp_client.py"
+```
+
+The client should print both tool names, the catalog resource URI, and the schema for `sales_transactions`.
+
+## Use the Inspector
+
+```bash
+python "14_5_MCP_Client_and_Server/[3.0]_inspector.py"
+```
+
+The Inspector needs Node.js and `npx`.
+
+Running `[2.0]_mcp_server.py` directly starts a stdio server and waits for an MCP client. That is expected.
+
+## Things I tend to forget
+
+- Can the client discover the resource and both tools?
+- Does `get_table_schema` reject an unknown table cleanly?
+- Is every returned value clearly labeled as synthetic?
+- Am I testing through an MCP client instead of calling only the Python function?

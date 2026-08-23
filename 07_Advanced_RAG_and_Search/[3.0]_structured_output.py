@@ -38,7 +38,7 @@ def extract_structured_data(log_message: str):
     """
     Demonstrates Structured Output: Forcing a small model to produce valid JSON.
     """
-    print(f"\n📄 Processing Log:\n'{log_message}'")
+    print(f"\n Processing Log:\n'{log_message}'")
     print("   [1] Invoking LLM with JSON Schema enforcement...")
     
     try:
@@ -48,7 +48,7 @@ def extract_structured_data(log_message: str):
             "format_instructions": parser.get_format_instructions()
         })
         
-        print("\n✅ Structured Output (Parsed JSON):")
+        print("\n[OK] Structured Output (Parsed JSON):")
         print(f"   PLEASE FIX:    {result['issue_summary']}")
         print(f"   PRIORITY:      {result['priority']}")
         print(f"   SYSTEMS:       {result['affected_systems']}")
@@ -56,7 +56,7 @@ def extract_structured_data(log_message: str):
         return result
         
     except Exception as e:
-        print(f"❌ Error parsing output: {e}")
+        print(f"[ERROR] Error parsing output: {e}")
 
 if __name__ == "__main__":
     # Test Case 1: Database Failure

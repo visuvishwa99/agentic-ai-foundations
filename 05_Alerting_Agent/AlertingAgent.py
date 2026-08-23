@@ -1,6 +1,6 @@
 """
-PRODUCTION AGENT: Log Checker → Job Status → Discord Notifier
-Features: LangGraph + Tools + Memory + Full Tracing
+LEARNING PROTOTYPE: Log Checker → Job Status → Discord Notifier
+Features: LangGraph + tools + memory + optional tracing
 """
 
 import os
@@ -22,12 +22,16 @@ from langchain_core.tools import tool
 
 def setup_tracing():
     """Configure LangSmith tracing"""
+    if not os.getenv("LANGCHAIN_API_KEY"):
+        os.environ["LANGCHAIN_TRACING_V2"] = "false"
+        print("[INFO] LangSmith tracing disabled (LANGCHAIN_API_KEY is not set)\n")
+        return False
+
     os.environ["LANGCHAIN_TRACING_V2"] = "true"
     os.environ["LANGCHAIN_PROJECT"] = "log-checker-discord-agent"
-    # os.environ["LANGCHAIN_API_KEY"] = "lsv2_pt_..."  # ADD YOUR KEY
-    
     print("[SUCCESS] Tracing enabled: https://smith.langchain.com")
     print(f"[PROJECT] {os.environ['LANGCHAIN_PROJECT']}\n")
+    return True
 
 # ============================================
 # STEP 2: DEFINE TOOLS
@@ -102,6 +106,10 @@ def post_to_discord(webhook_url: str, message: str, severity: str = "info") -> s
         Confirmation message
     """
     print(f"[TOOL] Posting to Discord (severity: {severity})")
+
+    if not webhook_url:
+        print("       Skipped: DISCORD_WEBHOOK_URL is not set")
+        return "Discord notification skipped: webhook is not configured"
     
     # Color codes for embed
     color_map = {
@@ -390,16 +398,13 @@ if __name__ == "__main__":
     
     print("""
     ============================================================
-           PRODUCTION LOG MONITORING AGENT                      
+           LOG MONITORING AGENT LEARNING DEMO
       Features: LangGraph + Tools + Memory + Discord + Tracing       
     ============================================================
     """)
     
-    # Example usage with Discord
-    DISCORD_WEBHOOK = "https://discord.com/api/webhooks/YOUR_WEBHOOK_ID/YOUR_WEBHOOK_TOKEN"
-    
-    # Or set as environment variable:
-    # export DISCORD_WEBHOOK_URL="https://discord.com/api/webhooks/..."
+    # Discord is optional for local revision runs.
+    DISCORD_WEBHOOK = os.getenv("DISCORD_WEBHOOK_URL", "")
     
     run_agent_with_tracing(
         service_name="api",

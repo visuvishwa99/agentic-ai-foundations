@@ -3,7 +3,7 @@ import sys
 
 class HumanReviewer:
     def __init__(self):
-        print("👤 Initializing Human Reviewer Interface...")
+        print("Initializing terminal reviewer...")
         
     def request_approval(self, query: str, risk: str, reason: str) -> bool:
         """
@@ -11,7 +11,7 @@ class HumanReviewer:
         Returns True if approved, False if rejected.
         """
         print("\n" + "="*50)
-        print(f"🛑 CRITICAL ACTION REQUIRED")
+        print(f"[BLOCKED] CRITICAL ACTION REQUIRED")
         print(f"   Query:  {query}")
         print(f"   Risk:   {risk}")
         print(f"   Reason: {reason}")
@@ -25,20 +25,20 @@ class HumanReviewer:
             # Check for override flag (Environment Variable)
             override = os.getenv("AUTO_APPROVE_RISK", "FALSE")
             if override == "TRUE":
-                print(f"   🤖 AUTO-APPROVED by Environment Policy.")
+                print(f"    AUTO-APPROVED by Environment Policy.")
                 return True
                 
             response = input("   Do you approve this action? (yes/no): ").lower().strip()
             
             if response in ["yes", "y", "approve"]:
-                print(f"   ✅ APPROVED by Human Operator.")
+                print(f"   [OK] APPROVED by Human Operator.")
                 return True
             else:
-                print(f"   ❌ REJECTED by Human Operator.")
+                print(f"   [ERROR] REJECTED by Human Operator.")
                 return False
         except EOFError:
              # Handle non-interactive run (e.g., CI/CD or Agent background)
-             print("   ⚠️ Non-interactive shell detected. Auto-Rejecting risky action.")
+             print("   [WARN] Non-interactive shell detected. Auto-Rejecting risky action.")
              return False
 
 if __name__ == "__main__":

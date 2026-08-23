@@ -20,7 +20,9 @@ app = FastAPI(
 # However, Week 13 script launches Phoenix inline. We want just the Agent Class.
 # Ideally, we reuse the Week 8 Agent class directly but wrap it with OpenTelemetry.
 
-week8_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "../week8"))
+week8_path = os.path.abspath(
+    os.path.join(os.path.dirname(__file__), "../08_Model_Routing_and_SQL_Agent")
+)
 if week8_path not in sys.path:
     sys.path.append(week8_path)
 

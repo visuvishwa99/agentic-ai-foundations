@@ -1,35 +1,29 @@
-graph TD
-    %% Base Styles
+flowchart TD
+    Client[MCP v2 Client]
+    Server[MCPServer instance]
+    Resource[catalog://metadata]
+    SchemaTool[get_table_schema]
+    SampleTool[query_sample_data]
+    Fixture[Module-local synthetic catalog JSON]
+    Result[Discovery and schema summary]
 
-    %% Nodes
-    User([User]) -->|Query| Client[MCP Client / Agent]:::logic
-    
-    subgraph "Tech_Stack [Technology Stack]"
-        direction TB
-        ServerScript["<b>[2.0]_mcp_server.py</b><br/>Exposes Tools & Resources"]:::process
-        ClientScript["<b>[1.0]_mcp_client.py</b><br/>Consumes Context"]:::logic
-    end
+    Client -->|List resources and tools| Server
+    Client -->|Read resource| Resource
+    Client -->|Call tool| SchemaTool
+    Client -->|Call tool| SampleTool
+    Server --> Resource
+    Server --> SchemaTool
+    Server --> SampleTool
+    Fixture --> Resource
+    Fixture --> SchemaTool
+    Fixture --> SampleTool
+    Resource --> Client
+    SchemaTool --> Client
+    SampleTool --> Client
+    Client --> Result
 
-    subgraph "MCP Ecosystem"
-        direction TB
-        Client -->|JSON-RPC Request| Transport["Transport Layer<br/>(stdio / SSE)"]:::group
-        Transport -->|JSON-RPC Response| Server[MCP Server]:::process
-        
-        Server -->|Read| Files[(Local Files)]:::storage
-        Server -->|Query| DB[(Database / Warehouse)]:::storage
-    end
+    Stdio[Direct server entry point uses stdio]
+    Stdio -.-> Server
 
-    %% Mappings
-    ServerScript -.-> Server
-    ClientScript -.-> Client
-
-    %% Explanations
-    Transport -- Like a Pipe/Socket --> User
-    Server -- Like a Driver --> DB
-
-    %% Global Style Block
-    classDef logic fill:#5a3e00,stroke:#ffb300,stroke-width:2px,color:#fff
-    classDef storage fill:#1e3a5f,stroke:#4a9eda,stroke-width:2px,color:#fff
-    classDef process fill:#1e3a5f,stroke:#4a9eda,stroke-width:2px,color:#fff
-    classDef user fill:#3a1a1a,stroke:#cc4444,stroke-width:2px,color:#fff
-    classDef group fill:#2d3436,stroke:#dfe6e9,stroke-width:1px,color:#fff
+    note1[No warehouse, file-system browser, LLM, or external API]
+    note1 -.-> Fixture

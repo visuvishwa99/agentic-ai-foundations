@@ -15,14 +15,16 @@ def load_module(file_path, module_name):
     spec.loader.exec_module(module)
     return module
 
-print("⚙️ Loading Security Modules...")
+print(" Loading Security Modules...")
 
 # Load Input/Output Guards (Week 9)
 input_guard_mod = load_module(os.path.join(os.path.dirname(__file__), "[1.0]_input_guard.py"), "input_guard_week9")
 output_guard_mod = load_module(os.path.join(os.path.dirname(__file__), "[2.0]_output_guard.py"), "output_guard_week9")
 
 # Load Week 8 Agent (CostOptimizedSQLAgent) from parent directory
-week8_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "../week8"))
+week8_dir = os.path.abspath(
+    os.path.join(os.path.dirname(__file__), "../08_Model_Routing_and_SQL_Agent")
+)
 if week8_dir not in sys.path:
     # Append week8 to path so its internal imports work
     sys.path.append(week8_dir)
@@ -37,7 +39,7 @@ BaseAgent = agent_mod.CostOptimizedSQLAgent # Inherit from Cost-Optimized Agent
 
 class SecureSQLAgent(BaseAgent):
     def __init__(self):
-        print("\n🚀 Initializing SECURE Data Assistant (Week 9)...")
+        print("\n Initializing SECURE Data Assistant (Week 9)...")
         # Initialize parent (Router, Cache, CostMonitor)
         super().__init__()
         
@@ -46,7 +48,7 @@ class SecureSQLAgent(BaseAgent):
         self.output_guard = OutputGuard()
         
     def run(self, user_query: str):
-        print(f"\n🔐 Secure Processing: '{user_query}'")
+        print(f"\n Secure Processing: '{user_query}'")
         print("-" * 50)
         
         # 1. INPUT GUARD (Jailbreak Detection & PII Masking)
@@ -63,7 +65,7 @@ class SecureSQLAgent(BaseAgent):
             # Call parent run method - returns the JSON/SQL response string
             response = super().run(clean_query) 
         except Exception as e:
-            print(f"   ⚠️ Agent Error: {e}")
+            print(f"   [WARN] Agent Error: {e}")
             return "Agent Error detected."
 
         # Debug: Check response type to prevent Spacy crashes
@@ -88,7 +90,7 @@ class SecureSQLAgent(BaseAgent):
             # Human-in-the-Loop Simulation (Goal 4)
             # In a real app, we would pause here and ask for Slack/Email approval.
             # For this agent, we strictly block destructive/risky actions.
-            print("   🛡️ Human Approval: Auto-Rejected Risky Action.")
+            print("    Human Approval: Auto-Rejected Risky Action.")
             return "I cannot fulfill this request. The generated query was deemed unsafe."
             
         # 4. PII FILTER (Final Output Sanitization)
@@ -97,10 +99,10 @@ class SecureSQLAgent(BaseAgent):
         try:
             safe_response = self.input_guard.anonymize_pii(str(response))
         except Exception as e:
-             print(f"   ⚠️ PII Scan Error: {e}. Returning raw response.")
+             print(f"   [WARN] PII Scan Error: {e}. Returning raw response.")
              safe_response = str(response)
 
-        print("\n✅ Final Secure Result:")
+        print("\n[OK] Final Secure Result:")
         # Print snippet to avoid clutter
         print(safe_response[:300] + "..." if len(safe_response) > 300 else safe_response)
         return safe_response

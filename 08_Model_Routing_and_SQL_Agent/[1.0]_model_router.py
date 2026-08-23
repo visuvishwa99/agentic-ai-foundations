@@ -1,10 +1,9 @@
 import os
-import json
 from typing import Literal
 from dotenv import load_dotenv
 from langchain_core.prompts import ChatPromptTemplate
-from langchain_ollama import ChatOllama
 from pydantic import BaseModel, Field
+from lm_studio_backend import CHAT_MODEL, create_chat_model, parse_json_object
 
 # Load settings from root .env file
 # We look for .env in the parent directory (project root)
@@ -12,9 +11,9 @@ load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), "../.env"))
 
 # --- configuration ---
 # Use the environment variable, default to 'qwen2.5-coder:1.5b' if missing
-ROUTER_MODEL = os.getenv("ROUTER_MODEL", "qwen2.5-coder:1.5b")
-MAIN_LLM = os.getenv("MAIN_LLM", "codellama:7b-instruct-q4_0") # Complex Logic
-SMALL_LLM = os.getenv("SMALL_LLM", "qwen2.5-coder:1.5b")      # Simple Tasks
+ROUTER_MODEL = os.getenv("ROUTER_MODEL", CHAT_MODEL)
+MAIN_LLM = os.getenv("MAIN_LLM", CHAT_MODEL)
+SMALL_LLM = os.getenv("SMALL_LLM", CHAT_MODEL)
 
 # --- 1. Define Output Schema ---
 class RouteDecision(BaseModel):
@@ -26,8 +25,8 @@ class RouteDecision(BaseModel):
 # --- 2. The Model Router Class ---
 class ModelRouter:
     def __init__(self, model_name=ROUTER_MODEL):
-        print(f"🚦 Initializing Cost-Optimized Router (using {model_name})...")
-        self.llm = ChatOllama(model=model_name, format="json", temperature=0)
+        print(f"Initializing model router with {model_name}...")
+        self.llm = create_chat_model(model_name)
         
         # The Cost-Saving Map
         # Routes dynamically based on .env configuration
@@ -36,7 +35,7 @@ class ModelRouter:
             "COMPLEX": MAIN_LLM       # Powerful / Reasoning Model
         }
         
-        print(f"   📋 API Routing Table:")
+        print(f"    API Routing Table:")
         print(f"      - SIMPLE  -> {self.routing_table['SIMPLE']}")
         print(f"      - COMPLEX -> {self.routing_table['COMPLEX']}")
 
@@ -63,22 +62,22 @@ class ModelRouter:
             # Invoke local model
             response = chain.invoke({"query": query})
             # Parse JSON
-            data = json.loads(response.content)
+            data = parse_json_object(str(response.content))
             return RouteDecision(**data)
         except Exception as e:
-            print(f"   ⚠️ Router Error: {e}. Defaulting to COMPLEX (Safe Mode).")
+            print(f"   [WARN] Router Error: {e}. Defaulting to COMPLEX (Safe Mode).")
             return RouteDecision(complexity="COMPLEX", reasoning="Router failed, default safe choice.")
 
     def route_request(self, query: str):
         """Public method to get the recommended model for a query."""
-        print(f"\n🔍 Analyzing Query: '{query}'")
+        print(f"\n Analyzing Query: '{query}'")
         decision = self.classify(query)
         
         model_id = self.routing_table.get(decision.complexity, MAIN_LLM)
         
-        print(f"   ✅ Classification: {decision.complexity}")
-        print(f"   📝 Reasoning:      {decision.reasoning}")
-        print(f"   🚀 Routed To:      {model_id}")
+        print(f"   [OK] Classification: {decision.complexity}")
+        print(f"    Reasoning:      {decision.reasoning}")
+        print(f"    Routed To:      {model_id}")
         
         return model_id, decision
 
@@ -96,7 +95,7 @@ if __name__ == "__main__":
     ]
     
     print("-" * 50)
-    print("🧪 STARTING ROUTING TEST")
+    print(" STARTING ROUTING TEST")
     print("-" * 50)
     
     for q in test_queries:

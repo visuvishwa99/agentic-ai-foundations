@@ -14,7 +14,7 @@ class RiskAssessment(BaseModel):
 
 class RiskAnalyzer:
     def __init__(self):
-        print("🚦 Initializing SQL Risk Analyzer...")
+        print("Initializing SQL risk analyzer...")
         
         # Keywords
         self.high_risk_keywords = [
@@ -63,9 +63,8 @@ if __name__ == "__main__":
         "INSERT INTO logs VALUES (1, 'test')"
     ]
     
-    print(f"\n🧪 Running Risk Tests:")
+    print(f"\n Running Risk Tests:")
     for q in queries:
         result = analyzer.analyze(q)
-        icon = "🟢" if result.level == "LOW" else "🟠" if result.level == "MEDIUM" else "🔴"
-        print(f"{icon} Query: '{q}'")
+        print(f"[{result.level}] Query: '{q}'")
         print(f"   Level: {result.level} | Approval: {result.requires_approval} | Reason: {result.reason}\n")

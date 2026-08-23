@@ -1,0 +1,46 @@
+{
+  "tables": [
+    {
+      "name": "sales_transactions",
+      "description": "Synthetic daily sales records from point-of-sale systems",
+      "columns": [
+        {
+          "name": "transaction_id",
+          "type": "string",
+          "description": "Synthetic transaction identifier"
+        },
+        {
+          "name": "amount",
+          "type": "float",
+          "description": "Synthetic transaction value"
+        },
+        {
+          "name": "store_id",
+          "type": "string",
+          "description": "Synthetic store identifier"
+        }
+      ]
+    },
+    {
+      "name": "customer_profiles",
+      "description": "Synthetic registered-customer metadata",
+      "columns": [
+        {
+          "name": "customer_id",
+          "type": "string",
+          "description": "Synthetic customer identifier"
+        },
+        {
+          "name": "email",
+          "type": "string",
+          "description": "Synthetic contact-email field"
+        },
+        {
+          "name": "signup_date",
+          "type": "date",
+          "description": "Synthetic registration date"
+        }
+      ]
+    }
+  ]
+}

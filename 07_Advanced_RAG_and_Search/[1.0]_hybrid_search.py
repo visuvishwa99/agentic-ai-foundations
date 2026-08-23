@@ -60,7 +60,7 @@ def implement_hybrid_search(query: str):
     """
     Demonstrates Hybrid Search: BM25 (Keywords) + FAISS (Semantics)
     """
-    print(f"\n🔍 Processing Query: '{query}'")
+    print(f"\n Processing Query: '{query}'")
     
     # --- Step 1: Initialize Keyword Retriever (BM25) ---
     print("   [1] Running Keyword Search (BM25)...")
@@ -83,7 +83,7 @@ def implement_hybrid_search(query: str):
     # --- Step 4: Execute ---
     results = hybrid_retriever.invoke(query)
     
-    print(f"\n✅ Found {len(results)} relevant documents:")
+    print(f"\n[OK] Found {len(results)} relevant documents:")
     for i, doc in enumerate(results):
         print(f"   {i+1}. {doc.page_content[:80]}... (Source: {doc.metadata['source']})")
 

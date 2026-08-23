@@ -6,6 +6,7 @@ Generates reports and charts showing agent performance
 from dataops_memory_agent import DataOpsMemoryAgent, PipelineFailure
 from datetime import datetime, timedelta
 import json
+from pathlib import Path
 
 
 def generate_metrics_report(agent: DataOpsMemoryAgent, test_results: dict) -> str:
@@ -45,7 +46,7 @@ def generate_metrics_report(agent: DataOpsMemoryAgent, test_results: dict) -> st
     report.append("-"*70)
     report.append(f"Target: 90%+ Classification Accuracy  Status: {'PASS' if test_results['classification_accuracy'] >= 90 else 'FAIL'}")
     report.append(f"Target: 80%+ Pattern Detection        Status: {'PASS' if test_results['pattern_accuracy'] >= 80 else 'FAIL'}")
-    report.append(f"Target: 80%+ Suggestion Quality       Status: {'PASS' if test_results['suggestion_quality'] >= 80 else 'PASS'}")
+    report.append(f"Target: 80%+ Suggestion Quality       Status: {'PASS' if test_results['suggestion_quality'] >= 80 else 'FAIL'}")
     report.append(f"Target: 85%+ Overall Score            Status: {'PASS' if test_results['overall_score'] >= 85 else 'FAIL'}")
     report.append("")
     
@@ -238,7 +239,7 @@ def generate_html_dashboard(agent: DataOpsMemoryAgent, test_results: dict) -> st
                 <div class="metric-label">Overall Score</div>
                 <div class="metric-value">{test_results['overall_score']:.0f}%</div>
                 <span class="metric-status status-{'pass' if test_results['overall_score'] >= 85 else 'fail'}">
-                    {'PRODUCTION READY' if test_results['overall_score'] >= 85 else 'NEEDS TUNING'}
+                    {'MEETS SYNTHETIC TEST THRESHOLD' if test_results['overall_score'] >= 85 else 'NEEDS TUNING'}
                 </span>
             </div>
         </div>
@@ -354,20 +355,28 @@ def create_performance_report():
     return text_report, html_dashboard
 
 
+def write_reports(output_dir: Path, text_report: str, html_dashboard: str):
+    """Write generated revision artifacts to a caller-selected directory."""
+    output_dir.mkdir(parents=True, exist_ok=True)
+    text_path = output_dir / "metrics_report.txt"
+    html_path = output_dir / "dashboard.html"
+    text_path.write_text(text_report, encoding="utf-8")
+    html_path.write_text(html_dashboard, encoding="utf-8")
+    return text_path, html_path
+
+
 if __name__ == '__main__':
     print("Generating performance reports...")
     
     text_report, html_dashboard = create_performance_report()
     
-    # Save text report
-    with open('/home/claude/metrics_report.txt', 'w') as f:
-        f.write(text_report)
-    print("Text report saved to: metrics_report.txt")
-    
-    # Save HTML dashboard
-    with open('/home/claude/dashboard.html', 'w') as f:
-        f.write(html_dashboard)
-    print("HTML dashboard saved to: dashboard.html")
+    text_path, html_path = write_reports(
+        Path(__file__).resolve().parent,
+        text_report,
+        html_dashboard,
+    )
+    print(f"Text report saved to: {text_path}")
+    print(f"HTML dashboard saved to: {html_path}")
     
     # Print text report
     print("\n" + text_report)

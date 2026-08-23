@@ -17,7 +17,7 @@ def implement_reranking(query: str):
     Unlike Embeddings (Bi-Encoder) which are fast but approximate,
     Cross-Encoders are slower but much more accurate for final ranking.
     """
-    print(f"\n🔍 Query: '{query}'")
+    print(f"\n Query: '{query}'")
     
     # --- Step 1: Initialize Cross-Encoder ---
     # We use a model specifically trained to score relevance
@@ -42,7 +42,7 @@ def implement_reranking(query: str):
     ranked_docs = sorted(ranked_docs, key=lambda x: x["score"], reverse=True)
     
     # --- Step 5: Display Results ---
-    print("\n✅ Reranked Results (Top 3):")
+    print("\n[OK] Reranked Results (Top 3):")
     for i, doc in enumerate(ranked_docs[:3]):
         print(f"   {i+1}. [Score: {doc['score']:.4f}] {doc['content']} (Source: {doc['source']})")
 

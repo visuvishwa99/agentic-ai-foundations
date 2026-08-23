@@ -5,7 +5,7 @@ from presidio_anonymizer.entities import OperatorConfig
 
 class InputGuard:
     def __init__(self):
-        print("🛡️ Initializing Input Guard (PII & Injection Defense)...")
+        print(" Initializing Input Guard (PII & Injection Defense)...")
         # Load Presidio Engines
         self.analyzer = AnalyzerEngine() 
         self.anonymizer = AnonymizerEngine()
@@ -59,23 +59,23 @@ class InputGuard:
 
     def validate(self, text: str):
         """Main entry point: Check Injection -> Mask PII."""
-        print(f"\n🔍 Inspecting: '{text}'")
+        print(f"\n Inspecting: '{text}'")
         
         # Step 1: Check for Prompt Injection / Malicious Intent
         is_unsafe, reason = self.check_injection(text)
         if is_unsafe:
-            print(f"   🚨 SECURITY ALERT: {reason}")
+            print(f"   [BLOCKED] {reason}")
             return None  # Block the request entirely
         
         # Step 2: Mask PII
         clean_text = self.anonymize_pii(text)
         
         if clean_text != text:
-             print(f"   🎭 PII Detected. Masking sensitive data...")
-             print(f"   📝 Original:  {text}")
-             print(f"   🔒 Sanitized: {clean_text}")
+             print(f"    PII Detected. Masking sensitive data...")
+             print(f"    Original:  {text}")
+             print(f"    Sanitized: {clean_text}")
         else:
-             print("   ✅ Input Safe & Clean.")
+             print("   [OK] Input Safe & Clean.")
              
         return clean_text
 

@@ -1,137 +1,76 @@
+"""Synthetic data-catalog MCP server for revision exercises."""
 
-import asyncio
+from __future__ import annotations
+
 import json
-import logging
-import os
-from datetime import datetime
+from pathlib import Path
 
-# Import MCP SDK
-from mcp.server.models import InitializationOptions
-import mcp.types as types
-from mcp.server import NotificationOptions, Server
-from mcp.server.stdio import stdio_server
+from mcp.server import MCPServer
 
-# Configure logging
-logging.basicConfig(filename="server.log", level=logging.INFO, format='%(asctime)s - %(message)s')
-logger = logging.getLogger("mcp_server")
 
-# Initialize the server
-server = Server("data-catalog-server")
+server = MCPServer(
+    name="data-catalog-server",
+    version="0.2.0",
+    instructions=(
+        "Use the catalog resource and tools to inspect the synthetic warehouse. "
+        "All returned records and schemas are learning fixtures."
+    ),
+)
 
-# Define our mock data source
-CATALOG_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), "../data/catalog_metadata.json"))
+CATALOG_PATH = Path(__file__).resolve().parent / "data" / "catalog_metadata.json"
 
-def load_catalog():
-    """Helper to load the mock catalog"""
-    if not os.path.exists(CATALOG_PATH):
-        return {"error": "Catalog file not found"}
-    with open(CATALOG_PATH, "r") as f:
-        return json.load(f)
 
-# ---------------------------------------------------------------------
-# Resource Handlers
-# Resources are like "Files" the LLM can read
-# ---------------------------------------------------------------------
+def load_catalog() -> dict:
+    """Load the module-local synthetic catalog fixture."""
+    if not CATALOG_PATH.is_file():
+        raise FileNotFoundError(f"Synthetic catalog fixture not found: {CATALOG_PATH}")
+    return json.loads(CATALOG_PATH.read_text(encoding="utf-8"))
 
-@server.list_resources()
-async def handle_list_resources() -> list[types.Resource]:
-    """List available resources (our catalog file)"""
-    return [
-        types.Resource(
-            uri="catalog://metadata",
-            name="Data Catalog Metadata",
-            description="The full JSON schema of our simulated Data Warehouse",
-            mimeType="application/json",
-        )
-    ]
 
-@server.read_resource()
-async def handle_read_resource(uri: str) -> str | bytes:
-    """Allow the LLM to read the full catalog"""
-    logger.info(f"Read request for URI: '{uri}' (type: {type(uri)})")
-    if str(uri) == "catalog://metadata":
-        catalog = load_catalog()
-        return json.dumps(catalog, indent=2)
-    raise ValueError(f"Resource not found: {uri}")
-
-# ---------------------------------------------------------------------
-# Tool Handlers
-# Tools are functions the LLM can call
-# ---------------------------------------------------------------------
-
-@server.list_tools()
-async def handle_list_tools() -> list[types.Tool]:
-    """List tools available to the LLM"""
-    return [
-        types.Tool(
-            name="get_table_schema",
-            description="Get the schema (columns, types) for a specific table",
-            inputSchema={
-                "type": "object",
-                "properties": {
-                    "table_name": {"type": "string", "description": "Name of the table (e.g., 'sales_transactions')"}
-                },
-                "required": ["table_name"],
-            },
-        ),
-        types.Tool(
-            name="query_sample_data",
-            description="Get 5 sample rows from a table",
-            inputSchema={
-                "type": "object",
-                "properties": {
-                    "table_name": {"type": "string", "description": "Name of the table"}
-                },
-                "required": ["table_name"],
-            },
-        )
-    ]
-
-@server.call_tool()
-async def handle_call_tool(name: str, arguments: dict | None) -> list[types.TextContent | types.ImageContent | types.EmbeddedResource]:
-    """Handle actual tool execution"""
-    if not arguments:
-        return [types.TextContent(type="text", text="Missing arguments")]
-    
-    table_name = arguments.get("table_name")
+def find_table(table_name: str) -> dict | None:
+    """Return one table definition by exact synthetic catalog name."""
     catalog = load_catalog()
-    table = next((t for t in catalog.get("tables", []) if t["name"] == table_name), None)
+    return next(
+        (table for table in catalog.get("tables", []) if table["name"] == table_name),
+        None,
+    )
 
-    if not table:
-        return [types.TextContent(type="text", text=f"Table '{table_name}' not found in catalog.")]
 
-    if name == "get_table_schema":
-        # Format the schema nicely
-        schema_str = f"Schema for {table_name}:\n"
-        for col in table["columns"]:
-            schema_str += f"- {col['name']} ({col['type']}): {col['description']}\n"
-        return [types.TextContent(type="text", text=schema_str)]
+@server.resource(
+    "catalog://metadata",
+    name="Data Catalog Metadata",
+    description="JSON schema for the synthetic data warehouse",
+    mime_type="application/json",
+)
+def catalog_metadata() -> str:
+    """Return the complete synthetic catalog as formatted JSON."""
+    return json.dumps(load_catalog(), indent=2)
 
-    elif name == "query_sample_data":
-        # Mocking some sample data dynamically
-        return [types.TextContent(type="text", text=f"Sample Data for {table_name}:\n[Row 1, Row 2, Row 3] (Mock data)")]
 
-    raise ValueError(f"Tool not found: {name}")
+@server.tool()
+def get_table_schema(table_name: str) -> str:
+    """Return column names, types, and descriptions for a synthetic table."""
+    table = find_table(table_name)
+    if table is None:
+        return f"Table '{table_name}' not found in synthetic catalog."
 
-# ---------------------------------------------------------------------
-# Main Enty Point
-# ---------------------------------------------------------------------
+    columns = "\n".join(
+        f"- {column['name']} ({column['type']}): {column['description']}"
+        for column in table["columns"]
+    )
+    return f"Schema for {table_name}:\n{columns}"
 
-async def main():
-    # Run the server using stdin/stdout streams
-    async with stdio_server() as (read_stream, write_stream):
-        await server.run(
-            read_stream,
-            write_stream,
-            InitializationOptions(
-                server_name="data-catalog",
-                server_version="0.1.0",
-                capabilities=server.get_capabilities(
-                    notification_options=NotificationOptions(),
-                    experimental_capabilities={},
-                ),
-            ),
-        )
+
+@server.tool()
+def query_sample_data(table_name: str) -> str:
+    """Return a clearly labeled mock sample for a synthetic catalog table."""
+    if find_table(table_name) is None:
+        return f"Table '{table_name}' not found in synthetic catalog."
+    return (
+        f"Synthetic sample data for {table_name}:\n"
+        "[Row 1, Row 2, Row 3] (mock values; no database query executed)"
+    )
+
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    server.run(transport="stdio")

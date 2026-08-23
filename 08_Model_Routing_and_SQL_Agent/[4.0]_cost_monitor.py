@@ -1,14 +1,14 @@
 import os
-import json
 from datetime import datetime
 from dotenv import load_dotenv
+from lm_studio_backend import CHAT_MODEL
 
 # Load env variables
 load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), "../.env"))
 
 # Load Models from ENV
-MAIN_LLM = os.getenv("MAIN_LLM", "codellama:7b-instruct-q4_0")
-SMALL_LLM = os.getenv("SMALL_LLM", "qwen2.5-coder:1.5b")
+MAIN_LLM = os.getenv("MAIN_LLM", CHAT_MODEL)
+SMALL_LLM = os.getenv("SMALL_LLM", CHAT_MODEL)
 
 # Pricing Configuration (Per 1M Tokens)
 # simulating virtual API costs for our local models
@@ -28,7 +28,7 @@ class CostMonitor:
         self.budget_limit = float(os.getenv("BUDGET_LIMIT", budget_limit))
         self.total_cost = 0.0
         self.usage_log = []
-        print(f"💰 Cost Monitor Initialized (Budget: ${self.budget_limit:.2f})")
+        print(f" Cost Monitor Initialized (Budget: ${self.budget_limit:.2f})")
  
     def track_request(self, model: str, input_tokens: int, output_tokens: int):
         """Calculates cost for a request and updates the ledger."""
@@ -64,10 +64,10 @@ class CostMonitor:
         self.usage_log.append(entry)
         
         # Print status
-        print(f"   💸 Cost: ${total_request_cost:.6f} | Total: ${self.total_cost:.6f} | Budget Used: {(self.total_cost/self.budget_limit)*100:.1f}%")
+        print(f"    Cost: ${total_request_cost:.6f} | Total: ${self.total_cost:.6f} | Budget Used: {(self.total_cost/self.budget_limit)*100:.1f}%")
         
         if self.total_cost > self.budget_limit:
-            print("   🚨 ALERT: DAILY BUDGET EXCEEDED!")
+            print("   [ALERT] Synthetic budget exceeded")
 
     def get_report(self):
         return {

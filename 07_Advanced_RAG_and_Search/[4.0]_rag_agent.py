@@ -43,7 +43,7 @@ class SimpleEnsembleRetriever:
 # --- 3. The RAG Agent Class ---
 class AdvancedRAGAgent:
     def __init__(self, docs: List[Document]):
-        print("🚀 Initializing Advanced RAG Agent...")
+        print(" Initializing Advanced RAG Agent...")
         
         # A. Hybrid Search Setup
         print("   [1/4] Building Search Indexes (BM25 + FAISS)...")
@@ -74,7 +74,7 @@ class AdvancedRAGAgent:
         print("   [4/4] Agent Ready!")
 
     def run(self, query: str):
-        print(f"\n🔎 Processing: '{query}'")
+        print(f"\n Processing: '{query}'")
         
         # 1. Retrieval (Hybrid)
         print("   Step 1: Hybrid Retrieval...")
@@ -95,7 +95,7 @@ class AdvancedRAGAgent:
         context_text = "\n\n".join([f"[Source: {d.metadata.get('source', 'unknown')}] {d.page_content}" for d in top_docs])
         
         if not top_docs:
-            print("   ⚠️ No relevant context found. Returning fallback.")
+            print("   [WARN] No relevant context found. Returning fallback.")
             return {"answer": "I couldn't find relevant information in the knowledge base.", "sources": [], "confidence": "LOW"}
 
         # 4. Generation
@@ -132,7 +132,7 @@ if __name__ == "__main__":
     
     for q in queries:
         result = agent.run(q)
-        print("\n🤖 AGENT RESPONSE:")
+        print("\n AGENT RESPONSE:")
         print(f"   Answer:     {result['answer']}")
         print(f"   Sources:    {result['sources']}")
         print(f"   Confidence: {result['confidence']}")

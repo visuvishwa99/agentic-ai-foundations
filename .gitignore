@@ -4,8 +4,15 @@ __pycache__/
 .env
 .ipynb_checkpoints/
 server.log
+*.log
+06_DataOps_Memory_Agent/dashboard.html
+06_DataOps_Memory_Agent/metrics_report.txt
+10_Graph_Agent_and_Lineage/lineage_graph.html
 .venv
 .agent
 agentic-ai-foundations/
 data/
+!14_5_MCP_Client_and_Server/data/
+!14_5_MCP_Client_and_Server/data/catalog_metadata.json
+15_LLM_optimizations/
 lib/

@@ -1,9 +1,9 @@
 import os
 import sys
 import time
-from langchain_ollama import ChatOllama
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
+from lm_studio_backend import create_chat_model
 
 # Import custom modules
 from dotenv import load_dotenv
@@ -24,7 +24,7 @@ def load_module(file_name, module_name):
     return module
 
 # Load the Week 8 components
-print("⚙️ Loading Week 8 Modules...")
+print("Loading Week 8 modules...")
 router_mod = load_module("[1.0]_model_router.py", "model_router")
 cache_mod = load_module("[2.0]_semantic_cache.py", "semantic_cache")
 monitor_mod = load_module("[4.0]_cost_monitor.py", "cost_monitor")
@@ -36,7 +36,7 @@ CostMonitor = monitor_mod.CostMonitor
 
 class CostOptimizedSQLAgent:
     def __init__(self):
-        print("\n🚀 Initializing Cost-Optimized Data Assistant...")
+        print("\nInitializing SQL generation exercise...")
         self.router = ModelRouter()
         self.cache = SemanticCache()
         self.monitor = CostMonitor()
@@ -47,9 +47,9 @@ class CostOptimizedSQLAgent:
         start_time = time.time()
         
         # Initialize LLM
-        # The router returns the exact model ID from .env (e.g., codellama:7b-instruct-q4_0)
-        
-        llm = ChatOllama(model=model_name, temperature=0, format="json")
+        # The router returns the model ID configured for the selected route.
+
+        llm = create_chat_model(model_name)
         
         prompt = ChatPromptTemplate.from_messages([
             ("system", "You are a SQL Expert. Return JSON with 'sql' and 'explanation' fields."),
@@ -61,7 +61,7 @@ class CostOptimizedSQLAgent:
         try:
             response = chain.invoke({"query": query})
         except Exception as e:
-            print(f"   ❌ LLM Error: {e}")
+            print(f"   [ERROR] LLM call failed: {e}")
             return "Error Generating SQL"
             
         end_time = time.time()
@@ -102,7 +102,7 @@ class CostOptimizedSQLAgent:
         # 4. Update Cache
         self.cache.cache_response(user_query, result)
         
-        print("\n✅ Final Result:")
+        print("\nFinal result:")
         print(result[:200] + "..." if len(result) > 200 else result)
         return result
 
@@ -118,10 +118,10 @@ if __name__ == "__main__":
     agent.run(q2)
     
     # 3. Third Run: Repeat Complex Query (Should HIT Cache)
-    print("\n🔁 REPEATING QUERY (Expecting Cache Hit)...")
+    print("\nREPEATING QUERY (Expecting Cache Hit)...")
     agent.run(q1)
     
     # 4. Fourth Run: Semantically Similar (Should HIT Cache)
-    print("\n🔁 ASKING SIMILAR QUERY (Expecting Semantic Cache Hit)...")
+    print("\nASKING SIMILAR QUERY (Expecting Semantic Cache Hit)...")
     q1_similar = "Compute rolling 7-day active user count from events."
     agent.run(q1_similar)
